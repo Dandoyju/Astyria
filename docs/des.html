@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lanceur de Dés — Astyria</title>
+<style>
+:root {
+  --parch: #f5edd6;
+  --parch-dark: #e8d9b5;
+  --ink: #2c1810;
+  --ink-light: #5c3a1e;
+  --gold: #c9a84c;
+  --gold-dark: #8b6914;
+  --red: #8b1a1a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1a0f08;
+  color: var(--ink);
+  font-family: 'Georgia', serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+h1 {
+  color: var(--gold);
+  font-variant: small-caps;
+  font-size: 2rem;
+  text-shadow: 1px 1px 6px #000;
+  margin: 20px 0 4px;
+}
+.subtitle { color: #c8b48a; font-style: italic; font-size: 0.9rem; margin-bottom: 24px; }
+
+.box {
+  background: var(--parch);
+  border: 2px solid var(--gold-dark);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 520px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+/* Dés rapides */
+.dice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.die-btn {
+  width: 68px; height: 68px;
+  border: 2px solid var(--gold-dark);
+  border-radius: 8px;
+  background: #fdf7e8;
+  color: var(--red);
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  font-variant: small-caps;
+  cursor: pointer;
+  transition: all 0.1s;
+  position: relative;
+}
+.die-btn .die-emoji { font-size: 1.5rem; display: block; line-height: 1.2; }
+.die-btn:hover { background: var(--parch-dark); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.die-btn:active { transform: translateY(0); }
+.die-btn.active { border-color: var(--red); background: #fff0f0; }
+
+/* Formule */
+.formula-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.formula-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  background: #fdf7e8;
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  color: var(--ink);
+  outline: none;
+}
+.formula-row input:focus { border-color: var(--red); }
+.roll-btn {
+  padding: 10px 20px;
+  background: var(--red);
+  color: var(--parch);
+  border: none;
+  border-radius: 4px;
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  font-variant: small-caps;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.roll-btn:hover { background: #6b1414; }
+
+/* Résultat */
+.result-area {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+.result-total {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--red);
+  line-height: 1;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+  animation: popIn 0.2s ease;
+}
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.result-detail {
+  color: var(--ink-light);
+  font-size: 0.9rem;
+  margin-top: 6px;
+  font-style: italic;
+}
+.result-formula {
+  color: var(--ink-light);
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+.result-crit {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-family: sans-serif;
+  font-variant: small-caps;
+  margin-top: 6px;
+}
+.crit-max { background: #c9a84c22; color: #8b6914; border: 1px solid #c9a84c66; }
+.crit-min { background: #8b1a1a22; color: #8b1a1a; border: 1px solid #8b1a1a66; }
+
+/* Historique */
+.history-section h2 {
+  font-variant: small-caps;
+  font-size: 1rem;
+  color: var(--red);
+  border-bottom: 1px solid var(--gold-dark);
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.clear-btn {
+  font-size: 0.72rem;
+  color: var(--ink-light);
+  background: none;
+  border: 1px solid var(--gold-dark);
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: sans-serif;
+}
+.clear-btn:hover { background: var(--parch-dark); }
+.hist-list { max-height: 220px; overflow-y: auto; padding-right: 4px; }
+.hist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(139,105,20,0.12);
+  font-size: 0.84rem;
+}
+.hist-total {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--red);
+  min-width: 32px;
+  text-align: center;
+}
+.hist-formula { flex: 1; color: var(--ink-light); }
+.hist-detail { color: var(--ink-light); font-size: 0.75rem; font-style: italic; }
+
+.back-link { color: #c8b48a; font-size: 0.82rem; text-decoration: none; margin-bottom: 8px; display: block; }
+.back-link:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<a class="back-link" href="index.html">← Accueil</a>
+<h1>🎲 Lanceur de Dés</h1>
+<p class="subtitle">D&amp;D 5e — marche hors-ligne</p>
+
+<!-- Dés rapides + formule -->
+<div class="box">
+  <div class="dice-row" id="dice-row">
+    <button class="die-btn" onclick="quickRoll(4)"  title="d4">  <span class="die-emoji">🔺</span>d4</button>
+    <button class="die-btn" onclick="quickRoll(6)"  title="d6">  <span class="die-emoji">🎲</span>d6</button>
+    <button class="die-btn" onclick="quickRoll(8)"  title="d8">  <span class="die-emoji">💎</span>d8</button>
+    <button class="die-btn" onclick="quickRoll(10)" title="d10"> <span class="die-emoji">🔷</span>d10</button>
+    <button class="die-btn" onclick="quickRoll(12)" title="d12"> <span class="die-emoji">🔮</span>d12</button>
+    <button class="die-btn" onclick="quickRoll(20)" title="d20"> <span class="die-emoji">⚡</span>d20</button>
+    <button class="die-btn" onclick="quickRoll(100)" title="d100"><span class="die-emoji">💯</span>d%</button>
+  </div>
+
+  <div class="formula-row">
+    <input type="text" id="formula-input" placeholder="ex: 2d6+3, 1d20-1, 4d6kh3" value=""
+      onkeydown="if(event.key==='Enter') rollFormula()">
+    <button class="roll-btn" onclick="rollFormula()">🎲 Lancer</button>
+  </div>
+
+  <div class="result-area" id="result-area" style="display:none">
+    <div class="result-total" id="result-total">—</div>
+    <div class="result-detail" id="result-detail"></div>
+    <div class="result-formula" id="result-formula"></div>
+    <div id="result-crit"></div>
+  </div>
+</div>
+
+<!-- Historique -->
+<div class="box history-section">
+  <h2>
+    Historique
+    <button class="clear-btn" onclick="clearHistory()">Effacer</button>
+  </h2>
+  <div class="hist-list" id="hist-list">
+    <p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucun lancer pour l'instant.</p>
+  </div>
+</div>
+
+<script>
+const history = [];
+
+function rand(faces) {
+  return Math.floor(Math.random() * faces) + 1;
+}
+
+function quickRoll(faces) {
+  const result = rand(faces);
+  display({total: result, detail: `[${result}]`, formula: `1d${faces}`, dice: [result], faces});
+  document.getElementById('formula-input').value = `1d${faces}`;
+}
+
+function rollFormula() {
+  const raw = document.getElementById('formula-input').value.trim();
+  if (!raw) return;
+  try {
+    const r = parseAndRoll(raw);
+    display(r);
+  } catch(e) {
+    alert('Formule non reconnue. Exemples : 2d6, 1d20+5, 4d6kh3');
+  }
+}
+
+/**
+ * Parse et évalue une formule de dés.
+ * Supporte : NdF, NdFkhK (keep highest), NdFklK (keep lowest), ±modificateur
+ */
+function parseAndRoll(formula) {
+  formula = formula.toLowerCase().replace(/\s/g, '');
+  let totalMod = 0;
+  let allParts = [];
+  let allRolls = [];
+
+  // Split sur + et - en gardant le signe
+  const parts = formula.match(/[+\-]?[^+\-]+/g) || [formula];
+
+  parts.forEach(part => {
+    const diceMatch = part.match(/^([+\-]?)(\d*)d(\d+)(?:(k[hl])(\d+))?$/);
+    if (diceMatch) {
+      const sign   = diceMatch[1] === '-' ? -1 : 1;
+      const count  = parseInt(diceMatch[2] || '1', 10);
+      const faces  = parseInt(diceMatch[3], 10);
+      const keepOp = diceMatch[4]; // 'kh' or 'kl'
+      const keepN  = diceMatch[5] ? parseInt(diceMatch[5], 10) : null;
+
+      let rolls = [];
+      for (let i = 0; i < count; i++) rolls.push(rand(faces));
+
+      let kept = [...rolls];
+      if (keepOp && keepN !== null) {
+        const sorted = [...rolls].sort((a,b) => a - b);
+        kept = keepOp === 'kh'
+          ? sorted.slice(-keepN)
+          : sorted.slice(0, keepN);
+      }
+
+      const subtotal = kept.reduce((s, v) => s + v, 0) * sign;
+      totalMod += subtotal;
+
+      const rollStr = rolls.map((v, i) => {
+        const isKept = !keepOp || kept.includes(v);
+        return isKept ? String(v) : `~~${v}~~`;
+      }).join(', ');
+
+      allParts.push(`${sign < 0 ? '-' : ''}${count}d${faces}${keepOp||''}${keepN||''}: [${rollStr}]=${subtotal}`);
+      allRolls.push(...rolls);
+    } else {
+      const numMatch = part.match(/^([+\-]?\d+)$/);
+      if (numMatch) {
+        const v = parseInt(numMatch[1], 10);
+        totalMod += v;
+        allParts.push(`${v > 0 ? '+' : ''}${v}`);
+      } else {
+        throw new Error('Invalid part: ' + part);
+      }
+    }
+  });
+
+  return {
+    total: totalMod,
+    detail: allParts.join(' | '),
+    formula: formula,
+    dice: allRolls,
+  };
+}
+
+function display({ total, detail, formula, dice, faces }) {
+  const area = document.getElementById('result-area');
+  area.style.display = 'block';
+  area.querySelector('.result-total').textContent = total;
+  area.querySelector('.result-total').style.animation = 'none';
+  void area.querySelector('.result-total').offsetWidth; // reflow
+  area.querySelector('.result-total').style.animation = '';
+
+  document.getElementById('result-detail').textContent = detail;
+  document.getElementById('result-formula').textContent = formula;
+
+  // Critique sur d20
+  const critEl = document.getElementById('result-crit');
+  critEl.innerHTML = '';
+  if (faces === 20 && dice.length === 1) {
+    if (dice[0] === 20) critEl.innerHTML = '<span class="result-crit crit-max">⭐ Critique!</span>';
+    if (dice[0] === 1)  critEl.innerHTML = '<span class="result-crit crit-min">💀 Échec critique</span>';
+  }
+
+  addHistory(total, detail, formula);
+}
+
+function addHistory(total, detail, formula) {
+  history.unshift({ total, detail, formula });
+  if (history.length > 50) history.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('hist-list');
+  if (history.length === 0) {
+    el.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucun lancer pour l\'instant.</p>';
+    return;
+  }
+  el.innerHTML = history.map(h => `
+    <div class="hist-item">
+      <div class="hist-total">${h.total}</div>
+      <div>
+        <div class="hist-formula">${h.formula}</div>
+        <div class="hist-detail">${h.detail}</div>
+      </div>
+    </div>`).join('');
+}
+
+function clearHistory() {
+  history.length = 0;
+  renderHistory();
+  document.getElementById('result-area').style.display = 'none';
+}
+</script>
+</body>
+</html>

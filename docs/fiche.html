@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche Personnage — Astyria</title>
+<style>
+:root {
+  --parch: #f5edd6;
+  --parch-dark: #e8d9b5;
+  --ink: #2c1810;
+  --ink-light: #5c3a1e;
+  --gold: #c9a84c;
+  --gold-dark: #8b6914;
+  --red: #8b1a1a;
+  --green: #1a5c1a;
+  --blue: #1a2a6c;
+  --shadow: rgba(44,24,16,0.18);
+  --bar-hp: #c0392b;
+  --bar-bg: #d4c4a0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1a0f08;
+  color: var(--ink);
+  font-family: 'Georgia', serif;
+  min-height: 100vh;
+}
+
+/* ── Ecran de connexion ── */
+#login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.login-box {
+  background: var(--parch);
+  border: 2px solid var(--gold-dark);
+  border-radius: 6px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+.login-box .rune { font-size: 3rem; display: block; margin-bottom: 12px; }
+.login-box h1 {
+  font-size: 1.6rem;
+  color: var(--red);
+  font-variant: small-caps;
+  margin-bottom: 6px;
+}
+.login-box p.subtitle {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.login-box label {
+  display: block;
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  margin-bottom: 5px;
+  font-variant: small-caps;
+}
+.login-box input[type="password"] {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  background: #fdf7e8;
+  font-size: 1rem;
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 16px;
+}
+.login-box input[type="password"]:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(139,26,26,0.15); }
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--red);
+  color: var(--parch);
+  border: none;
+  border-radius: 4px;
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-primary:hover { background: #6b1414; }
+.btn-primary:disabled { background: #aaa; cursor: wait; }
+.error-msg {
+  color: var(--red);
+  font-size: 0.85rem;
+  margin-top: 10px;
+  min-height: 20px;
+}
+.spinner {
+  display: none;
+  width: 20px; height: 20px;
+  border: 2px solid #fff4;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Fiche ── */
+#fiche-screen { display: none; }
+.fiche-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* En-tête */
+.fiche-header {
+  background: var(--parch);
+  border: 2px solid var(--gold-dark);
+  border-radius: 6px 6px 0 0;
+  padding: 20px 24px 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--gold-dark);
+  object-fit: cover;
+  background: var(--parch-dark);
+  font-size: 2.5rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.header-info h1 {
+  font-size: 1.8rem;
+  color: var(--red);
+  font-variant: small-caps;
+}
+.header-info .meta {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  font-style: italic;
+  margin-top: 2px;
+}
+.header-info .level-xp {
+  font-size: 0.9rem;
+  color: var(--ink);
+  margin-top: 6px;
+}
+
+/* HP bar */
+.hp-section {
+  background: var(--parch);
+  border: 2px solid var(--gold-dark);
+  border-top: none;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hp-label { font-variant: small-caps; font-size: 0.85rem; color: var(--ink-light); min-width: 90px; }
+.hp-bar-wrap { flex: 1; height: 20px; background: var(--bar-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--gold-dark); }
+.hp-bar { height: 100%; background: var(--bar-hp); transition: width 0.4s; border-radius: 10px; }
+.hp-numbers { font-size: 0.95rem; color: var(--ink); font-variant: small-caps; min-width: 80px; text-align: right; }
+.hp-numbers span { color: var(--red); font-size: 1.1rem; font-weight: bold; }
+
+/* Tabs */
+.tabs-nav {
+  display: flex;
+  background: #2a1a08;
+  border: 2px solid var(--gold-dark);
+  border-top: none;
+  border-bottom: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 10px 18px;
+  color: #c8b48a;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: Georgia, serif;
+  font-size: 0.85rem;
+  font-variant: small-caps;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  border-bottom: 3px solid transparent;
+}
+.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab-btn:hover:not(.active) { background: rgba(255,255,255,0.05); }
+
+.tab-panel {
+  display: none;
+  background: var(--parch);
+  border: 2px solid var(--gold-dark);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 20px 24px 28px;
+}
+.tab-panel.active { display: block; }
+
+/* Traits (stats) */
+.traits-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 600px) { .traits-grid { grid-template-columns: repeat(3, 1fr); } }
+.trait-box {
+  text-align: center;
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  padding: 10px 6px 8px;
+  background: #fdf7e8;
+}
+.trait-name { font-size: 0.65rem; font-variant: small-caps; color: var(--ink-light); letter-spacing: 0.05em; }
+.trait-value { font-size: 1.5rem; font-weight: bold; color: var(--ink); line-height: 1.2; }
+.trait-mod { font-size: 0.8rem; color: var(--red); }
+
+/* Compétences */
+.section-title {
+  font-variant: small-caps;
+  font-size: 1rem;
+  color: var(--red);
+  border-bottom: 1px solid var(--gold-dark);
+  padding-bottom: 4px;
+  margin: 18px 0 10px;
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+}
+@media (max-width: 500px) { .skills-grid { grid-template-columns: 1fr; } }
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(139,105,20,0.12);
+}
+.skill-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-dark);
+  background: transparent;
+  flex-shrink: 0;
+}
+.skill-dot.trained { background: var(--gold-dark); }
+.skill-name { flex: 1; color: var(--ink-light); }
+.skill-bonus { font-weight: bold; color: var(--ink); min-width: 28px; text-align: right; }
+
+/* Inventaire */
+.inv-list { list-style: none; }
+.inv-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(139,105,20,0.15);
+  font-size: 0.88rem;
+}
+.inv-item:last-child { border-bottom: none; }
+.inv-qty {
+  background: var(--gold-dark);
+  color: var(--parch);
+  font-size: 0.72rem;
+  padding: 1px 5px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.inv-name { flex: 1; color: var(--ink); }
+.inv-desc { font-size: 0.78rem; color: var(--ink-light); font-style: italic; margin-top: 1px; }
+
+/* Capacités & sorts */
+.ability-block {
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #fdf7e8;
+}
+.ability-name {
+  font-variant: small-caps;
+  font-size: 0.95rem;
+  color: var(--red);
+  margin-bottom: 4px;
+}
+.ability-desc { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; }
+.ability-tags {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;
+}
+.tag {
+  font-size: 0.68rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-variant: small-caps;
+}
+.tag-slot { background: #1a2a6c22; color: #1a2a6c; border: 1px solid #1a2a6c44; }
+.tag-portee { background: #1a5c1a22; color: #1a5c1a; border: 1px solid #1a5c1a44; }
+.tag-duree { background: #5c1a1a22; color: #5c1a1a; border: 1px solid #5c1a1a44; }
+
+/* Sorts slots */
+.spell-slots {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.slot-level {
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  padding: 8px 12px;
+  text-align: center;
+  background: #fdf7e8;
+  min-width: 70px;
+}
+.slot-level .slot-num { font-size: 0.7rem; color: var(--ink-light); font-variant: small-caps; }
+.slot-level .slot-pips { display: flex; gap: 3px; justify-content: center; margin-top: 4px; }
+.pip { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
+.pip.used { background: var(--bar-bg); border: 1px solid var(--gold-dark); }
+
+/* Quêtes */
+.quest-block {
+  border: 1px solid var(--gold-dark);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #fdf7e8;
+}
+.quest-title { font-variant: small-caps; color: var(--red); font-size: 0.95rem; margin-bottom: 4px; }
+.quest-desc { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; }
+.quest-status {
+  display: inline-block;
+  font-size: 0.68rem;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-variant: small-caps;
+  margin-top: 6px;
+}
+.status-active { background: #1a5c1a22; color: #1a5c1a; border: 1px solid #1a5c1a44; }
+.status-complete { background: #c9a84c22; color: #8b6914; border: 1px solid #c9a84c44; }
+.status-failed { background: #8b1a1a22; color: #8b1a1a; border: 1px solid #8b1a1a44; }
+
+/* Jets de sauvegarde */
+.saves-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+@media (max-width: 500px) { .saves-grid { grid-template-columns: repeat(2, 1fr); } }
+.save-box {
+  display: flex; align-items: center; gap: 7px;
+  border: 1px solid var(--gold-dark); border-radius: 4px;
+  padding: 7px 10px; background: #fdf7e8; font-size: 0.82rem;
+}
+.save-box .skill-dot { width: 9px; height: 9px; }
+.save-name { flex: 1; color: var(--ink-light); font-variant: small-caps; font-size: 0.75rem; }
+.save-val { font-weight: bold; color: var(--ink); }
+
+/* Death saves */
+.death-saves {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  border: 1px solid var(--red); border-radius: 4px; padding: 10px 14px;
+  background: #fff4f4; margin-top: 12px;
+}
+.death-label { font-variant: small-caps; font-size: 0.8rem; color: var(--red); }
+.death-pips { display: flex; gap: 4px; }
+.death-pip { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid; }
+.death-pip.success { border-color: var(--green); background: transparent; }
+.death-pip.success.filled { background: var(--green); }
+.death-pip.fail { border-color: var(--red); background: transparent; }
+.death-pip.fail.filled { background: var(--red); }
+
+/* Misc info */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
+.info-cell {
+  border: 1px solid var(--gold-dark); border-radius: 4px; padding: 8px 10px;
+  background: #fdf7e8; text-align: center;
+}
+.info-cell .ic-label { font-size: 0.65rem; color: var(--ink-light); font-variant: small-caps; display: block; }
+.info-cell .ic-value { font-size: 1.1rem; font-weight: bold; color: var(--ink); }
+
+.back-link {
+  display: inline-block;
+  margin: 12px 0 0 24px;
+  color: #c8b48a;
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+.back-link:hover { color: var(--gold); }
+
+/* Conditions */
+.conditions-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.condition-tag {
+  padding: 3px 10px; border-radius: 12px; font-size: 0.75rem;
+  font-family: sans-serif; font-variant: small-caps;
+  background: #8b1a1a22; color: #8b1a1a; border: 1px solid #8b1a1a55;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ ECRAN DE CONNEXION ══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <span class="rune">🔮</span>
+    <h1>Fiche Personnage</h1>
+    <p class="subtitle">Entre le mot de passe que ton MJ t'a communiqué.</p>
+    <label for="pwd-input">Mot de passe</label>
+    <input type="password" id="pwd-input" placeholder="••••••••" autocomplete="current-password">
+    <button class="btn-primary" id="unlock-btn" onclick="unlockFiche()">
+      <span id="btn-text">Accéder à ma fiche</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+</div>
+
+<!-- ══ FICHE ══ -->
+<div id="fiche-screen">
+  <a class="back-link" href="index.html">← Accueil</a>
+  <div class="fiche-wrapper">
+
+    <!-- En-tête -->
+    <div class="fiche-header">
+      <div class="avatar" id="f-avatar">🧙</div>
+      <div class="header-info">
+        <h1 id="f-nom">—</h1>
+        <div class="meta" id="f-meta">—</div>
+        <div class="level-xp" id="f-level-xp"></div>
+      </div>
+    </div>
+
+    <!-- HP -->
+    <div class="hp-section">
+      <div class="hp-label">Points de vie</div>
+      <div class="hp-bar-wrap"><div class="hp-bar" id="f-hp-bar" style="width:100%"></div></div>
+      <div class="hp-numbers"><span id="f-hp-current">—</span> / <span id="f-hp-max">—</span></div>
+    </div>
+
+    <!-- Tabs nav -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('stats', this)">📊 Stats</button>
+      <button class="tab-btn" onclick="switchTab('compet', this)">🎯 Compétences</button>
+      <button class="tab-btn" onclick="switchTab('inventaire', this)">🎒 Inventaire</button>
+      <button class="tab-btn" onclick="switchTab('capacites', this)">⚡ Capacités</button>
+      <button class="tab-btn" onclick="switchTab('sorts', this)">🔮 Sorts</button>
+      <button class="tab-btn" onclick="switchTab('quetes', this)">📜 Quêtes</button>
+    </div>
+
+    <!-- Tab: Stats -->
+    <div class="tab-panel active" id="tab-stats">
+      <div class="section-title">Caractéristiques</div>
+      <div class="traits-grid" id="f-traits"></div>
+
+      <div class="section-title">Jets de sauvegarde</div>
+      <div class="saves-grid" id="f-saves"></div>
+
+      <div class="section-title">Informations de combat</div>
+      <div class="info-grid" id="f-combat-info"></div>
+
+      <div id="f-conditions-section" style="display:none">
+        <div class="section-title">Conditions actives</div>
+        <div class="conditions-wrap" id="f-conditions"></div>
+      </div>
+
+      <div class="death-saves" id="f-death" style="display:none">
+        <div class="death-label">Jets de mort :</div>
+        <div>
+          <div class="death-label" style="font-size:0.7rem;color:var(--green)">Succès</div>
+          <div class="death-pips" id="f-death-succ"></div>
+        </div>
+        <div>
+          <div class="death-label" style="font-size:0.7rem;">Échecs</div>
+          <div class="death-pips" id="f-death-fail"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Compétences -->
+    <div class="tab-panel" id="tab-compet">
+      <div class="section-title">Compétences</div>
+      <div class="skills-grid" id="f-skills"></div>
+    </div>
+
+    <!-- Tab: Inventaire -->
+    <div class="tab-panel" id="tab-inventaire">
+      <div class="section-title">Inventaire</div>
+      <ul class="inv-list" id="f-inv"></ul>
+      <div id="f-monnaie-section" style="display:none; margin-top:14px;">
+        <div class="section-title">Monnaie</div>
+        <div class="info-grid" id="f-monnaie"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Capacités -->
+    <div class="tab-panel" id="tab-capacites">
+      <div class="section-title">Capacités &amp; Traits</div>
+      <div id="f-capacites"></div>
+    </div>
+
+    <!-- Tab: Sorts -->
+    <div class="tab-panel" id="tab-sorts">
+      <div class="section-title">Emplacements de sorts</div>
+      <div class="spell-slots" id="f-spell-slots"></div>
+      <div class="section-title">Sorts connus</div>
+      <div id="f-sorts"></div>
+    </div>
+
+    <!-- Tab: Quêtes -->
+    <div class="tab-panel" id="tab-quetes">
+      <div class="section-title">Objectifs &amp; Quêtes</div>
+      <div id="f-quetes"></div>
+    </div>
+
+  </div><!-- /fiche-wrapper -->
+</div><!-- /fiche-screen -->
+
+<script src="crypto.js"></script>
+<script>
+// ═══════════════════════════════════════════
+// CONSTANTES D&D
+// ═══════════════════════════════════════════
+const TRAITS_LABELS = ['FOR','DEX','CON','INT','SAG','CHA'];
+const TRAITS_NAMES = {
+  FOR:'Force', DEX:'Dextérité', CON:'Constitution',
+  INT:'Intelligence', SAG:'Sagesse', CHA:'Charisme'
+};
+const COMPETENCES = [
+  {nom:'Acrobaties',    trait:'DEX'},
+  {nom:'Arcanes',       trait:'INT'},
+  {nom:'Athlétisme',    trait:'FOR'},
+  {nom:'Discrétion',    trait:'DEX'},
+  {nom:'Dressage',      trait:'SAG'},
+  {nom:'Escamotage',    trait:'DEX'},
+  {nom:'Histoire',      trait:'INT'},
+  {nom:'Intimidation',  trait:'CHA'},
+  {nom:'Investigation', trait:'INT'},
+  {nom:'Médecine',      trait:'SAG'},
+  {nom:'Nature',        trait:'INT'},
+  {nom:'Perception',    trait:'SAG'},
+  {nom:'Persuasion',    trait:'CHA'},
+  {nom:'Religion',      trait:'INT'},
+  {nom:'Représentation',trait:'CHA'},
+  {nom:'Survie',        trait:'SAG'},
+  {nom:'Supercherie',   trait:'CHA'},
+  {nom:'Perspicacité',  trait:'SAG'},
+];
+const SCHOOL_COLORS = {
+  'Évocation':    ['#c0392b22','#c0392b'],
+  'Abjuration':   ['#1a5c1a22','#1a5c1a'],
+  'Divination':   ['#1a2a6c22','#1a2a6c'],
+  'Enchantement': ['#5c1a5c22','#5c1a5c'],
+  'Illusion':     ['#1a4a5c22','#1a4a5c'],
+  'Invocation':   ['#5c3a1a22','#5c3a1a'],
+  'Nécromancie':  ['#2a2a2a22','#2a2a2a'],
+  'Transmutation':['#5c5c1a22','#5c5c1a'],
+};
+
+// ═══════════════════════════════════════════
+// UNLOCK
+// ═══════════════════════════════════════════
+let encryptedData = null;
+
+window.addEventListener('load', () => {
+  const hash = location.hash.slice(1);
+  if (!hash) {
+    document.querySelector('.login-box p.subtitle').textContent =
+      'Aucune fiche dans ce lien. Demande à ton MJ de regénérer le lien.';
+    document.getElementById('pwd-input').style.display = 'none';
+    document.getElementById('unlock-btn').style.display = 'none';
+    return;
+  }
+  encryptedData = hash;
+  document.getElementById('pwd-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlockFiche();
+  });
+  document.getElementById('pwd-input').focus();
+});
+
+async function unlockFiche() {
+  const pwd = document.getElementById('pwd-input').value;
+  if (!pwd) { showError('Entre ton mot de passe.'); return; }
+  const btn = document.getElementById('unlock-btn');
+  const spinner = document.getElementById('spinner');
+  const btnText = document.getElementById('btn-text');
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  spinner.style.display = 'block';
+  showError('');
+
+  const data = await dechiffrer(encryptedData, pwd);
+
+  btn.disabled = false;
+  btnText.style.display = 'block';
+  spinner.style.display = 'none';
+
+  if (!data) {
+    showError('❌ Mot de passe incorrect.');
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+    return;
+  }
+  renderFiche(data);
+}
+
+function showError(msg) {
+  document.getElementById('error-msg').textContent = msg;
+}
+
+// ═══════════════════════════════════════════
+// RENDU DE LA FICHE
+// ═══════════════════════════════════════════
+function mod(val) {
+  const m = Math.floor((val - 10) / 2);
+  return (m >= 0 ? '+' : '') + m;
+}
+function profBonus(niveau) {
+  return Math.ceil(niveau / 4) + 1;
+}
+
+function renderFiche(c) {
+  document.title = (c.nom || 'Fiche') + ' — Astyria';
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('fiche-screen').style.display = 'block';
+
+  // Avatar
+  const avatarEl = document.getElementById('f-avatar');
+  if (c.avatar) {
+    avatarEl.innerHTML = `<img src="${c.avatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+  }
+
+  // En-tête
+  document.getElementById('f-nom').textContent = c.nom || 'Personnage';
+  const race = c.race || '', cls = c.classe || '', bg = c.historique || '';
+  document.getElementById('f-meta').textContent =
+    [race, cls, bg].filter(Boolean).join(' · ');
+
+  const niv = c.niveau || 1;
+  const xp  = c.xp !== undefined ? ` · ${c.xp} XP` : '';
+  const prof = profBonus(niv);
+  document.getElementById('f-level-xp').textContent =
+    `Niveau ${niv}${xp} · Bonus de maîtrise +${prof}`;
+
+  // HP
+  const hpMax = c.hpMax || c.hp || 1;
+  const hpCur = c.hpCurrent !== undefined ? c.hpCurrent : hpMax;
+  document.getElementById('f-hp-current').textContent = hpCur;
+  document.getElementById('f-hp-max').textContent = hpMax;
+  const pct = Math.max(0, Math.min(100, (hpCur / hpMax) * 100));
+  const bar = document.getElementById('f-hp-bar');
+  bar.style.width = pct + '%';
+  bar.style.background = pct > 50 ? '#27ae60' : pct > 25 ? '#e67e22' : '#c0392b';
+
+  // Traits
+  const traits = document.getElementById('f-traits');
+  traits.innerHTML = '';
+  const traitsData = c.traits || {};
+  TRAITS_LABELS.forEach(t => {
+    const val = traitsData[t] || 10;
+    const m = mod(val);
+    traits.innerHTML += `
+      <div class="trait-box">
+        <div class="trait-name">${t}</div>
+        <div class="trait-value">${val}</div>
+        <div class="trait-mod">${m}</div>
+      </div>`;
+  });
+
+  // Jets de sauvegarde
+  const saves = document.getElementById('f-saves');
+  saves.innerHTML = '';
+  const savesData = c.savesMaitrise || {};
+  TRAITS_LABELS.forEach(t => {
+    const val = traitsData[t] || 10;
+    const trained = savesData[t] || false;
+    const bonus = Math.floor((val - 10) / 2) + (trained ? prof : 0);
+    const bonusStr = (bonus >= 0 ? '+' : '') + bonus;
+    saves.innerHTML += `
+      <div class="save-box">
+        <div class="skill-dot${trained ? ' trained' : ''}"></div>
+        <div class="save-name">${TRAITS_NAMES[t]}</div>
+        <div class="save-val">${bonusStr}</div>
+      </div>`;
+  });
+
+  // Infos combat
+  const combatInfo = document.getElementById('f-combat-info');
+  const ca = c.ca || c.classeArmure || 10;
+  const ini = mod(traitsData.DEX || 10);
+  const vitesse = c.vitesse || '9m';
+  combatInfo.innerHTML = `
+    <div class="info-cell"><span class="ic-label">Classe d'Armure</span><span class="ic-value">${ca}</span></div>
+    <div class="info-cell"><span class="ic-label">Initiative</span><span class="ic-value">${ini}</span></div>
+    <div class="info-cell"><span class="ic-label">Vitesse</span><span class="ic-value">${vitesse}</span></div>
+    <div class="info-cell"><span class="ic-label">Dés de vie</span><span class="ic-value">d${c.deVie || 8}</span></div>
+    <div class="info-cell"><span class="ic-label">Inspiration</span><span class="ic-value">${c.inspiration ? '✦' : '—'}</span></div>
+    <div class="info-cell"><span class="ic-label">Maîtrise</span><span class="ic-value">+${prof}</span></div>
+  `;
+
+  // Conditions
+  const conds = c.conditions || [];
+  if (conds.length > 0) {
+    document.getElementById('f-conditions-section').style.display = 'block';
+    document.getElementById('f-conditions').innerHTML =
+      conds.map(cd => `<span class="condition-tag">⚠ ${cd}</span>`).join('');
+  }
+
+  // Death saves (seulement si hp = 0)
+  if (hpCur <= 0) {
+    document.getElementById('f-death').style.display = 'flex';
+    const ds = c.deathSaves || { successes: 0, failures: 0 };
+    renderDeathPips('f-death-succ', ds.successes || 0, 'success');
+    renderDeathPips('f-death-fail', ds.failures || 0, 'fail');
+  }
+
+  // Compétences
+  const skillsEl = document.getElementById('f-skills');
+  skillsEl.innerHTML = '';
+  const skillsData = c.competences || {};
+  COMPETENCES.forEach(sk => {
+    const trait = traitsData[sk.trait] || 10;
+    const trained = skillsData[sk.nom] || false;
+    const bonus = Math.floor((trait - 10) / 2) + (trained ? prof : 0);
+    const bonusStr = (bonus >= 0 ? '+' : '') + bonus;
+    skillsEl.innerHTML += `
+      <div class="skill-row">
+        <div class="skill-dot${trained ? ' trained' : ''}"></div>
+        <div class="skill-name">${sk.nom} <small style="opacity:.6">${sk.trait}</small></div>
+        <div class="skill-bonus">${bonusStr}</div>
+      </div>`;
+  });
+
+  // Inventaire
+  const invEl = document.getElementById('f-inv');
+  invEl.innerHTML = '';
+  const inv = c.inventaire || c.inventory || [];
+  if (inv.length === 0) {
+    invEl.innerHTML = '<li style="color:var(--ink-light);font-style:italic;font-size:0.85rem;padding:8px 0">Inventaire vide.</li>';
+  } else {
+    inv.forEach(item => {
+      invEl.innerHTML += `
+        <li class="inv-item">
+          <span class="inv-qty">${item.quantite || item.qty || 1}</span>
+          <div>
+            <div class="inv-name">${item.nom || item.name || '—'}</div>
+            ${item.description ? `<div class="inv-desc">${item.description}</div>` : ''}
+          </div>
+        </li>`;
+    });
+  }
+
+  // Monnaie
+  const monnaie = c.monnaie || {};
+  const hasMonnaie = Object.values(monnaie).some(v => v > 0);
+  if (hasMonnaie) {
+    document.getElementById('f-monnaie-section').style.display = 'block';
+    const mEl = document.getElementById('f-monnaie');
+    const coins = {PA:'Pièces d\'argent', PO:'Pièces d\'or', PC:'Pièces de cuivre', PE:'Pièces d\'électrum', PP:'Pièces de platine'};
+    mEl.innerHTML = Object.entries(coins).map(([k, label]) =>
+      monnaie[k] > 0
+        ? `<div class="info-cell"><span class="ic-label">${label}</span><span class="ic-value">${monnaie[k]}</span></div>`
+        : ''
+    ).join('');
+  }
+
+  // Capacités
+  const capsEl = document.getElementById('f-capacites');
+  capsEl.innerHTML = '';
+  const caps = c.capacites || c.abilities || [];
+  if (caps.length === 0) {
+    capsEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucune capacité enregistrée.</p>';
+  } else {
+    caps.forEach(cap => {
+      capsEl.innerHTML += `
+        <div class="ability-block">
+          <div class="ability-name">${cap.nom || cap.name}</div>
+          <div class="ability-desc">${cap.description || cap.desc || ''}</div>
+        </div>`;
+    });
+  }
+
+  // Sorts — emplacements
+  const slotsEl = document.getElementById('f-spell-slots');
+  slotsEl.innerHTML = '';
+  const slots = c.slotsTemps || c.spellSlots || {};
+  const slotsMax = c.slotsMax || {};
+  let hasSlots = false;
+  for (let i = 1; i <= 9; i++) {
+    const max = slotsMax[i] || slots[i] || 0;
+    const used = c.slotsUtilises?.[i] || 0;
+    if (max > 0) {
+      hasSlots = true;
+      let pips = '';
+      for (let p = 0; p < max; p++) {
+        pips += `<div class="pip${p < used ? ' used' : ''}"></div>`;
+      }
+      slotsEl.innerHTML += `
+        <div class="slot-level">
+          <div class="slot-num">Niv. ${i}</div>
+          <div class="slot-pips">${pips}</div>
+        </div>`;
+    }
+  }
+  if (!hasSlots) {
+    slotsEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Pas d\'emplacements de sorts.</p>';
+  }
+
+  // Sorts — liste
+  const sortsEl = document.getElementById('f-sorts');
+  sortsEl.innerHTML = '';
+  const sorts = c.sorts || c.spells || [];
+  if (sorts.length === 0) {
+    sortsEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucun sort enregistré.</p>';
+  } else {
+    sorts.forEach(s => {
+      const sc = SCHOOL_COLORS[s.ecole] || ['#88888822','#888'];
+      const tags = [
+        s.niveau === 0 ? '<span class="tag tag-slot">Tour de magie</span>' : `<span class="tag tag-slot">Niveau ${s.niveau}</span>`,
+        s.portee  ? `<span class="tag tag-portee">${s.portee}</span>` : '',
+        s.duree   ? `<span class="tag tag-duree">${s.duree}</span>` : '',
+        s.ecole   ? `<span class="tag" style="background:${sc[0]};color:${sc[1]};border:1px solid ${sc[1]}44">${s.ecole}</span>` : '',
+      ].join('');
+      sortsEl.innerHTML += `
+        <div class="ability-block">
+          <div class="ability-name">${s.nom || s.name}</div>
+          <div class="ability-desc">${s.description || s.desc || ''}</div>
+          <div class="ability-tags">${tags}</div>
+        </div>`;
+    });
+  }
+
+  // Quêtes
+  const quetesEl = document.getElementById('f-quetes');
+  quetesEl.innerHTML = '';
+  const quetes = c.quetes || c.quests || [];
+  if (quetes.length === 0) {
+    quetesEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucune quête enregistrée.</p>';
+  } else {
+    quetes.forEach(q => {
+      const statClass = {active:'status-active', complete:'status-complete', failed:'status-failed'}[q.statut || q.status] || 'status-active';
+      const statLabel = {active:'En cours', complete:'Terminée', failed:'Échouée'}[q.statut || q.status] || 'En cours';
+      quetesEl.innerHTML += `
+        <div class="quest-block">
+          <div class="quest-title">${q.titre || q.title || '—'}</div>
+          <div class="quest-desc">${q.description || q.desc || ''}</div>
+          <span class="quest-status ${statClass}">${statLabel}</span>
+        </div>`;
+    });
+  }
+}
+
+function renderDeathPips(containerId, count, type) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    el.innerHTML += `<div class="death-pip ${type}${i < count ? ' filled' : ''}"></div>`;
+  }
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION TABS
+// ═══════════════════════════════════════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
