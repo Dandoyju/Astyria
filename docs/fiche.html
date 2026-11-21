@@ -2,413 +2,301 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Fiche Personnage — Astyria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Marcellus&display=swap" rel="stylesheet">
 <style>
 :root {
-  --parch: #f5edd6;
-  --parch-dark: #e8d9b5;
-  --ink: #2c1810;
-  --ink-light: #5c3a1e;
-  --gold: #c9a84c;
-  --gold-dark: #8b6914;
-  --red: #8b1a1a;
-  --green: #1a5c1a;
-  --blue: #1a2a6c;
-  --shadow: rgba(44,24,16,0.18);
-  --bar-hp: #c0392b;
-  --bar-bg: #d4c4a0;
+  --bg:       #0a0b10;
+  --bg-card:  rgba(26,22,37,0.95);
+  --bg2:      #161421;
+  --bg-input: rgba(10,11,16,0.7);
+  --gold:     #d4af37;
+  --gold2:    #f7d070;
+  --red:      #a82222;
+  --red2:     #c0392b;
+  --green:    #2d8a4e;
+  --blue:     #2b6cb0;
+  --text:     #e2d9c6;
+  --muted:    #9a8c78;
+  --border:   #3d3124;
+  --font-t:   'Cinzel', serif;
+  --font-b:   'Marcellus', serif;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: #1a0f08;
-  color: var(--ink);
-  font-family: 'Georgia', serif;
-  min-height: 100vh;
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;}
+
+/* ── Header ── */
+header{
+  background:linear-gradient(180deg,#181420,#0d0b12);
+  border-bottom:2px solid var(--gold);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 6px 20px rgba(0,0,0,.8),0 0 15px rgba(212,175,55,.12);
+  position:sticky;top:0;z-index:100;
 }
+.logo{font-family:var(--font-t);font-size:1.3rem;color:var(--gold);letter-spacing:.1em;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.back-link{color:var(--muted);font-size:.82rem;text-decoration:none;transition:.15s;}
+.back-link:hover{color:var(--gold);}
 
 /* ── Ecran de connexion ── */
-#login-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:20px;}
+.login-box{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:12px;
+  padding:40px 32px;width:100%;max-width:400px;text-align:center;
+  backdrop-filter:blur(10px);
+  box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 30px rgba(212,175,55,.06);
 }
-.login-box {
-  background: var(--parch);
-  border: 2px solid var(--gold-dark);
-  border-radius: 6px;
-  padding: 40px 36px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+.login-box .rune{font-size:3rem;display:block;margin-bottom:14px;filter:drop-shadow(0 0 12px var(--gold));}
+.login-box h1{font-family:var(--font-t);font-size:1.5rem;color:var(--gold);letter-spacing:.08em;margin-bottom:6px;}
+.login-box p.subtitle{font-size:.85rem;color:var(--muted);font-style:italic;margin-bottom:28px;line-height:1.5;}
+.login-box label{display:block;text-align:left;font-size:.8rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.login-box input[type="password"]{
+  width:100%;padding:13px 16px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--bg-input);color:var(--text);
+  font-family:var(--font-b);font-size:16px;
+  outline:none;margin-bottom:16px;
+  transition:.2s;
 }
-.login-box .rune { font-size: 3rem; display: block; margin-bottom: 12px; }
-.login-box h1 {
-  font-size: 1.6rem;
-  color: var(--red);
-  font-variant: small-caps;
-  margin-bottom: 6px;
+.login-box input[type="password"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.12);}
+.btn-primary{
+  width:100%;padding:14px;min-height:48px;
+  background:linear-gradient(180deg,#d4af37,#997a15);
+  color:#000;border:none;border-radius:8px;
+  font-family:var(--font-t);font-size:.9rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;
+  cursor:pointer;transition:.15s;
 }
-.login-box p.subtitle {
-  font-size: 0.85rem;
-  color: var(--ink-light);
-  font-style: italic;
-  margin-bottom: 24px;
-}
-.login-box label {
-  display: block;
-  text-align: left;
-  font-size: 0.85rem;
-  color: var(--ink-light);
-  margin-bottom: 5px;
-  font-variant: small-caps;
-}
-.login-box input[type="password"] {
-  width: 100%;
-  padding: 11px 14px;
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  background: #fdf7e8;
-  font-size: 1rem;
-  color: var(--ink);
-  outline: none;
-  margin-bottom: 16px;
-}
-.login-box input[type="password"]:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(139,26,26,0.15); }
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  background: var(--red);
-  color: var(--parch);
-  border: none;
-  border-radius: 4px;
-  font-family: Georgia, serif;
-  font-size: 1rem;
-  font-variant: small-caps;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.btn-primary:hover { background: #6b1414; }
-.btn-primary:disabled { background: #aaa; cursor: wait; }
-.error-msg {
-  color: var(--red);
-  font-size: 0.85rem;
-  margin-top: 10px;
-  min-height: 20px;
-}
-.spinner {
-  display: none;
-  width: 20px; height: 20px;
-  border: 2px solid #fff4;
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  margin: 0 auto;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.btn-primary:hover{background:linear-gradient(180deg,#f7d070,#d4af37);}
+.btn-primary:disabled{opacity:.5;cursor:wait;}
+.error-msg{color:var(--red2);font-size:.85rem;margin-top:12px;min-height:20px;}
+.spinner{display:none;width:20px;height:20px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── Fiche ── */
-#fiche-screen { display: none; }
-.fiche-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-}
+#fiche-screen{display:none;}
+.fiche-wrapper{max-width:900px;margin:0 auto;padding:16px 16px 40px;}
 
-/* En-tête */
-.fiche-header {
-  background: var(--parch);
-  border: 2px solid var(--gold-dark);
-  border-radius: 6px 6px 0 0;
-  padding: 20px 24px 16px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
+/* En-tête personnage */
+.fiche-header{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:10px 10px 0 0;
+  padding:20px 24px 18px;
+  display:flex;align-items:center;gap:18px;
+  backdrop-filter:blur(6px);
 }
-.avatar {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  border: 3px solid var(--gold-dark);
-  object-fit: cover;
-  background: var(--parch-dark);
-  font-size: 2.5rem;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+.avatar{
+  width:72px;height:72px;border-radius:50%;
+  border:2px solid var(--gold);
+  object-fit:cover;background:var(--bg2);
+  font-size:2rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;box-shadow:0 0 14px rgba(212,175,55,.2);
 }
-.header-info h1 {
-  font-size: 1.8rem;
-  color: var(--red);
-  font-variant: small-caps;
-}
-.header-info .meta {
-  font-size: 0.85rem;
-  color: var(--ink-light);
-  font-style: italic;
-  margin-top: 2px;
-}
-.header-info .level-xp {
-  font-size: 0.9rem;
-  color: var(--ink);
-  margin-top: 6px;
-}
+.header-info{flex:1;min-width:0;}
+.header-info h1{font-family:var(--font-t);font-size:clamp(1.2rem,4vw,1.7rem);color:var(--gold);letter-spacing:.05em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.header-info .meta{font-size:.85rem;color:var(--muted);font-style:italic;margin-top:3px;}
+.header-info .level-xp{font-size:.82rem;color:var(--text);margin-top:6px;opacity:.85;}
 
 /* HP bar */
-.hp-section {
-  background: var(--parch);
-  border: 2px solid var(--gold-dark);
-  border-top: none;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.hp-section{
+  background:var(--bg-card);border:1px solid var(--border);border-top:none;
+  padding:12px 24px;display:flex;align-items:center;gap:14px;
+  backdrop-filter:blur(6px);
 }
-.hp-label { font-variant: small-caps; font-size: 0.85rem; color: var(--ink-light); min-width: 90px; }
-.hp-bar-wrap { flex: 1; height: 20px; background: var(--bar-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--gold-dark); }
-.hp-bar { height: 100%; background: var(--bar-hp); transition: width 0.4s; border-radius: 10px; }
-.hp-numbers { font-size: 0.95rem; color: var(--ink); font-variant: small-caps; min-width: 80px; text-align: right; }
-.hp-numbers span { color: var(--red); font-size: 1.1rem; font-weight: bold; }
+.hp-label{font-family:var(--font-t);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;min-width:80px;}
+.hp-bar-wrap{flex:1;height:16px;background:rgba(0,0,0,.4);border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.hp-bar{height:100%;background:var(--green);transition:width .4s;border-radius:8px;}
+.hp-numbers{font-size:.95rem;color:var(--text);min-width:80px;text-align:right;}
+.hp-numbers span{color:var(--gold);font-size:1.1rem;font-weight:700;}
 
-/* Tabs */
-.tabs-nav {
-  display: flex;
-  background: #2a1a08;
-  border: 2px solid var(--gold-dark);
-  border-top: none;
-  border-bottom: none;
-  overflow-x: auto;
-  scrollbar-width: none;
+/* Tabs nav */
+.tabs-nav{
+  display:flex;background:var(--bg2);
+  border:1px solid var(--border);border-top:none;
+  overflow-x:auto;scrollbar-width:none;
 }
-.tabs-nav::-webkit-scrollbar { display: none; }
-.tab-btn {
-  padding: 10px 18px;
-  color: #c8b48a;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-family: Georgia, serif;
-  font-size: 0.85rem;
-  font-variant: small-caps;
-  white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
-  border-bottom: 3px solid transparent;
+.tabs-nav::-webkit-scrollbar{display:none;}
+.tab-btn{
+  padding:11px 16px;color:var(--muted);border:none;background:none;
+  cursor:pointer;font-family:var(--font-t);font-size:.75rem;
+  text-transform:uppercase;letter-spacing:.4px;
+  white-space:nowrap;transition:.15s;
+  border-bottom:2px solid transparent;min-height:44px;
 }
-.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-.tab-btn:hover:not(.active) { background: rgba(255,255,255,0.05); }
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.04);color:var(--text);}
 
-.tab-panel {
-  display: none;
-  background: var(--parch);
-  border: 2px solid var(--gold-dark);
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  padding: 20px 24px 28px;
+.tab-panel{
+  display:none;background:var(--bg-card);
+  border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;
+  padding:20px 20px 28px;backdrop-filter:blur(6px);
 }
-.tab-panel.active { display: block; }
+.tab-panel.active{display:block;}
 
-/* Traits (stats) */
-.traits-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
+/* Section title */
+.section-title{
+  font-family:var(--font-t);font-size:.82rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.5px;
+  border-bottom:1px solid var(--border);padding-bottom:6px;
+  margin:18px 0 12px;
 }
-@media (max-width: 600px) { .traits-grid { grid-template-columns: repeat(3, 1fr); } }
-.trait-box {
-  text-align: center;
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  padding: 10px 6px 8px;
-  background: #fdf7e8;
-}
-.trait-name { font-size: 0.65rem; font-variant: small-caps; color: var(--ink-light); letter-spacing: 0.05em; }
-.trait-value { font-size: 1.5rem; font-weight: bold; color: var(--ink); line-height: 1.2; }
-.trait-mod { font-size: 0.8rem; color: var(--red); }
+.section-title:first-child{margin-top:0;}
 
-/* Compétences */
-.section-title {
-  font-variant: small-caps;
-  font-size: 1rem;
-  color: var(--red);
-  border-bottom: 1px solid var(--gold-dark);
-  padding-bottom: 4px;
-  margin: 18px 0 10px;
+/* Traits */
+.traits-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:4px;}
+@media(max-width:600px){.traits-grid{grid-template-columns:repeat(3,1fr);}}
+.trait-box{
+  text-align:center;border:1px solid var(--border);border-radius:8px;
+  padding:10px 6px 8px;background:rgba(0,0,0,.3);
+  transition:.15s;
 }
-.skills-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 16px;
-}
-@media (max-width: 500px) { .skills-grid { grid-template-columns: 1fr; } }
-.skill-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.82rem;
-  padding: 3px 0;
-  border-bottom: 1px solid rgba(139,105,20,0.12);
-}
-.skill-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  border: 1.5px solid var(--gold-dark);
-  background: transparent;
-  flex-shrink: 0;
-}
-.skill-dot.trained { background: var(--gold-dark); }
-.skill-name { flex: 1; color: var(--ink-light); }
-.skill-bonus { font-weight: bold; color: var(--ink); min-width: 28px; text-align: right; }
-
-/* Inventaire */
-.inv-list { list-style: none; }
-.inv-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba(139,105,20,0.15);
-  font-size: 0.88rem;
-}
-.inv-item:last-child { border-bottom: none; }
-.inv-qty {
-  background: var(--gold-dark);
-  color: var(--parch);
-  font-size: 0.72rem;
-  padding: 1px 5px;
-  border-radius: 10px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-.inv-name { flex: 1; color: var(--ink); }
-.inv-desc { font-size: 0.78rem; color: var(--ink-light); font-style: italic; margin-top: 1px; }
-
-/* Capacités & sorts */
-.ability-block {
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  background: #fdf7e8;
-}
-.ability-name {
-  font-variant: small-caps;
-  font-size: 0.95rem;
-  color: var(--red);
-  margin-bottom: 4px;
-}
-.ability-desc { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; }
-.ability-tags {
-  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;
-}
-.tag {
-  font-size: 0.68rem;
-  padding: 1px 7px;
-  border-radius: 10px;
-  font-family: sans-serif;
-  font-variant: small-caps;
-}
-.tag-slot { background: #1a2a6c22; color: #1a2a6c; border: 1px solid #1a2a6c44; }
-.tag-portee { background: #1a5c1a22; color: #1a5c1a; border: 1px solid #1a5c1a44; }
-.tag-duree { background: #5c1a1a22; color: #5c1a1a; border: 1px solid #5c1a1a44; }
-
-/* Sorts slots */
-.spell-slots {
-  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
-}
-.slot-level {
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  padding: 8px 12px;
-  text-align: center;
-  background: #fdf7e8;
-  min-width: 70px;
-}
-.slot-level .slot-num { font-size: 0.7rem; color: var(--ink-light); font-variant: small-caps; }
-.slot-level .slot-pips { display: flex; gap: 3px; justify-content: center; margin-top: 4px; }
-.pip { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
-.pip.used { background: var(--bar-bg); border: 1px solid var(--gold-dark); }
-
-/* Quêtes */
-.quest-block {
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  background: #fdf7e8;
-}
-.quest-title { font-variant: small-caps; color: var(--red); font-size: 0.95rem; margin-bottom: 4px; }
-.quest-desc { font-size: 0.82rem; color: var(--ink-light); line-height: 1.55; }
-.quest-status {
-  display: inline-block;
-  font-size: 0.68rem;
-  padding: 1px 8px;
-  border-radius: 10px;
-  font-family: sans-serif;
-  font-variant: small-caps;
-  margin-top: 6px;
-}
-.status-active { background: #1a5c1a22; color: #1a5c1a; border: 1px solid #1a5c1a44; }
-.status-complete { background: #c9a84c22; color: #8b6914; border: 1px solid #c9a84c44; }
-.status-failed { background: #8b1a1a22; color: #8b1a1a; border: 1px solid #8b1a1a44; }
+.trait-box:hover{border-color:var(--gold);}
+.trait-name{font-family:var(--font-t);font-size:.6rem;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;}
+.trait-value{font-size:1.5rem;font-weight:700;color:var(--text);line-height:1.2;}
+.trait-mod{font-size:.8rem;color:var(--gold);}
 
 /* Jets de sauvegarde */
-.saves-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
-@media (max-width: 500px) { .saves-grid { grid-template-columns: repeat(2, 1fr); } }
-.save-box {
-  display: flex; align-items: center; gap: 7px;
-  border: 1px solid var(--gold-dark); border-radius: 4px;
-  padding: 7px 10px; background: #fdf7e8; font-size: 0.82rem;
+.saves-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:4px;}
+@media(max-width:500px){.saves-grid{grid-template-columns:repeat(2,1fr);}}
+.save-box{
+  display:flex;align-items:center;gap:7px;
+  border:1px solid var(--border);border-radius:6px;
+  padding:7px 10px;background:rgba(0,0,0,.2);font-size:.8rem;
 }
-.save-box .skill-dot { width: 9px; height: 9px; }
-.save-name { flex: 1; color: var(--ink-light); font-variant: small-caps; font-size: 0.75rem; }
-.save-val { font-weight: bold; color: var(--ink); }
+.save-name{flex:1;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.3px;}
+.save-val{font-weight:700;color:var(--text);}
 
-/* Death saves */
-.death-saves {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  border: 1px solid var(--red); border-radius: 4px; padding: 10px 14px;
-  background: #fff4f4; margin-top: 12px;
+/* Dot maîtrise */
+.skill-dot{
+  width:10px;height:10px;border-radius:50%;
+  border:1.5px solid var(--border);background:transparent;flex-shrink:0;
 }
-.death-label { font-variant: small-caps; font-size: 0.8rem; color: var(--red); }
-.death-pips { display: flex; gap: 4px; }
-.death-pip { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid; }
-.death-pip.success { border-color: var(--green); background: transparent; }
-.death-pip.success.filled { background: var(--green); }
-.death-pip.fail { border-color: var(--red); background: transparent; }
-.death-pip.fail.filled { background: var(--red); }
+.skill-dot.trained{background:var(--gold);border-color:var(--gold);}
 
-/* Misc info */
-.info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
-.info-cell {
-  border: 1px solid var(--gold-dark); border-radius: 4px; padding: 8px 10px;
-  background: #fdf7e8; text-align: center;
+/* Infos combat */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:4px;}
+.info-cell{
+  border:1px solid var(--border);border-radius:6px;padding:8px 10px;
+  background:rgba(0,0,0,.2);text-align:center;transition:.15s;
 }
-.info-cell .ic-label { font-size: 0.65rem; color: var(--ink-light); font-variant: small-caps; display: block; }
-.info-cell .ic-value { font-size: 1.1rem; font-weight: bold; color: var(--ink); }
-
-.back-link {
-  display: inline-block;
-  margin: 12px 0 0 24px;
-  color: #c8b48a;
-  font-size: 0.82rem;
-  text-decoration: none;
-}
-.back-link:hover { color: var(--gold); }
+.info-cell:hover{border-color:var(--gold);}
+.ic-label{font-family:var(--font-t);font-size:.6rem;color:var(--muted);display:block;text-transform:uppercase;letter-spacing:.4px;}
+.ic-value{font-size:1.1rem;font-weight:700;color:var(--text);}
 
 /* Conditions */
-.conditions-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.condition-tag {
-  padding: 3px 10px; border-radius: 12px; font-size: 0.75rem;
-  font-family: sans-serif; font-variant: small-caps;
-  background: #8b1a1a22; color: #8b1a1a; border: 1px solid #8b1a1a55;
+.conditions-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.condition-tag{
+  padding:3px 10px;border-radius:12px;font-size:.75rem;
+  background:rgba(168,34,34,.2);color:#e06060;border:1px solid rgba(168,34,34,.4);
+}
+
+/* Death saves */
+.death-saves{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  border:1px solid rgba(168,34,34,.4);border-radius:8px;padding:12px 16px;
+  background:rgba(168,34,34,.08);margin-top:14px;
+}
+.death-label{font-family:var(--font-t);font-size:.72rem;color:var(--red2);text-transform:uppercase;letter-spacing:.4px;}
+.death-pips{display:flex;gap:5px;}
+.death-pip{width:14px;height:14px;border-radius:50%;border:1.5px solid;}
+.death-pip.success{border-color:var(--green);}
+.death-pip.success.filled{background:var(--green);}
+.death-pip.fail{border-color:var(--red);}
+.death-pip.fail.filled{background:var(--red);}
+
+/* Compétences */
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 14px;}
+@media(max-width:500px){.skills-grid{grid-template-columns:1fr;}}
+.skill-row{
+  display:flex;align-items:center;gap:8px;font-size:.82rem;
+  padding:4px 0;border-bottom:1px solid rgba(61,49,36,.3);
+}
+.skill-name{flex:1;color:var(--muted);}
+.skill-bonus{font-weight:700;color:var(--text);min-width:28px;text-align:right;}
+
+/* Inventaire */
+.inv-list{list-style:none;}
+.inv-item{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:7px 0;border-bottom:1px solid rgba(61,49,36,.3);font-size:.88rem;
+}
+.inv-item:last-child{border-bottom:none;}
+.inv-qty{
+  background:var(--gold);color:#000;
+  font-family:var(--font-t);font-size:.68rem;font-weight:700;
+  padding:1px 6px;border-radius:10px;flex-shrink:0;margin-top:1px;
+}
+.inv-name{flex:1;color:var(--text);}
+.inv-desc{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:1px;}
+
+/* Capacités & sorts */
+.ability-block{
+  border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;margin-bottom:8px;background:rgba(0,0,0,.25);
+  transition:.15s;
+}
+.ability-block:hover{border-color:rgba(212,175,55,.3);}
+.ability-name{font-family:var(--font-t);font-size:.88rem;color:var(--gold);margin-bottom:5px;}
+.ability-desc{font-size:.82rem;color:var(--muted);line-height:1.6;}
+.ability-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+.tag{font-size:.68rem;padding:2px 8px;border-radius:10px;}
+.tag-slot{background:rgba(43,108,176,.15);color:#6ea8d8;border:1px solid rgba(43,108,176,.3);}
+.tag-portee{background:rgba(45,138,78,.15);color:#6dc294;border:1px solid rgba(45,138,78,.3);}
+.tag-duree{background:rgba(168,34,34,.15);color:#e08080;border:1px solid rgba(168,34,34,.3);}
+
+/* Emplacements de sorts */
+.spell-slots{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.slot-level{
+  border:1px solid var(--border);border-radius:8px;
+  padding:8px 12px;text-align:center;background:rgba(0,0,0,.2);min-width:68px;
+  transition:.15s;
+}
+.slot-level:hover{border-color:rgba(212,175,55,.3);}
+.slot-num{font-family:var(--font-t);font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+.slot-pips{display:flex;gap:3px;justify-content:center;margin-top:5px;}
+.pip{width:9px;height:9px;border-radius:50%;background:var(--blue);}
+.pip.used{background:transparent;border:1px solid var(--border);}
+
+/* Quêtes */
+.quest-block{
+  border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;margin-bottom:8px;background:rgba(0,0,0,.25);
+  transition:.15s;
+}
+.quest-block:hover{border-color:rgba(212,175,55,.3);}
+.quest-title{font-family:var(--font-t);font-size:.88rem;color:var(--gold);margin-bottom:4px;}
+.quest-desc{font-size:.82rem;color:var(--muted);line-height:1.6;}
+.quest-status{
+  display:inline-block;font-size:.68rem;padding:2px 9px;
+  border-radius:10px;margin-top:7px;
+}
+.status-active{background:rgba(45,138,78,.15);color:#6dc294;border:1px solid rgba(45,138,78,.3);}
+.status-complete{background:rgba(212,175,55,.15);color:var(--gold);border:1px solid rgba(212,175,55,.3);}
+.status-failed{background:rgba(168,34,34,.15);color:#e08080;border:1px solid rgba(168,34,34,.3);}
+
+/* Monnaie */
+#f-monnaie-section{margin-top:14px;}
+
+/* Vide */
+.empty{color:var(--muted);font-style:italic;font-size:.85rem;padding:8px 0;}
+
+/* Responsive */
+@media(max-width:480px){
+  .fiche-header{padding:14px 14px;}
+  .hp-section{padding:10px 14px;}
+  .tab-panel{padding:14px 12px 24px;}
+  .tab-btn{padding:10px 12px;font-size:.7rem;}
 }
 </style>
 </head>
 <body>
+
+<header>
+  <a class="logo" href="index.html"><span>⚔</span> Astyria</a>
+  <a class="back-link" href="index.html">← Accueil</a>
+</header>
 
 <!-- ══ ECRAN DE CONNEXION ══ -->
 <div id="login-screen">
@@ -428,7 +316,6 @@ body {
 
 <!-- ══ FICHE ══ -->
 <div id="fiche-screen">
-  <a class="back-link" href="index.html">← Accueil</a>
   <div class="fiche-wrapper">
 
     <!-- En-tête -->
@@ -450,12 +337,12 @@ body {
 
     <!-- Tabs nav -->
     <div class="tabs-nav">
-      <button class="tab-btn active" onclick="switchTab('stats', this)">📊 Stats</button>
-      <button class="tab-btn" onclick="switchTab('compet', this)">🎯 Compétences</button>
-      <button class="tab-btn" onclick="switchTab('inventaire', this)">🎒 Inventaire</button>
-      <button class="tab-btn" onclick="switchTab('capacites', this)">⚡ Capacités</button>
-      <button class="tab-btn" onclick="switchTab('sorts', this)">🔮 Sorts</button>
-      <button class="tab-btn" onclick="switchTab('quetes', this)">📜 Quêtes</button>
+      <button class="tab-btn active" onclick="switchTab('stats',this)">📊 Stats</button>
+      <button class="tab-btn" onclick="switchTab('compet',this)">🎯 Compétences</button>
+      <button class="tab-btn" onclick="switchTab('inventaire',this)">🎒 Inventaire</button>
+      <button class="tab-btn" onclick="switchTab('capacites',this)">⚡ Capacités</button>
+      <button class="tab-btn" onclick="switchTab('sorts',this)">🔮 Sorts</button>
+      <button class="tab-btn" onclick="switchTab('quetes',this)">📜 Quêtes</button>
     </div>
 
     <!-- Tab: Stats -->
@@ -477,11 +364,11 @@ body {
       <div class="death-saves" id="f-death" style="display:none">
         <div class="death-label">Jets de mort :</div>
         <div>
-          <div class="death-label" style="font-size:0.7rem;color:var(--green)">Succès</div>
+          <div class="death-label" style="font-size:.68rem;color:var(--green)">Succès</div>
           <div class="death-pips" id="f-death-succ"></div>
         </div>
         <div>
-          <div class="death-label" style="font-size:0.7rem;">Échecs</div>
+          <div class="death-label" style="font-size:.68rem;">Échecs</div>
           <div class="death-pips" id="f-death-fail"></div>
         </div>
       </div>
@@ -489,15 +376,15 @@ body {
 
     <!-- Tab: Compétences -->
     <div class="tab-panel" id="tab-compet">
-      <div class="section-title">Compétences</div>
+      <div class="section-title" style="margin-top:0">Compétences</div>
       <div class="skills-grid" id="f-skills"></div>
     </div>
 
     <!-- Tab: Inventaire -->
     <div class="tab-panel" id="tab-inventaire">
-      <div class="section-title">Inventaire</div>
+      <div class="section-title" style="margin-top:0">Inventaire</div>
       <ul class="inv-list" id="f-inv"></ul>
-      <div id="f-monnaie-section" style="display:none; margin-top:14px;">
+      <div id="f-monnaie-section" style="display:none">
         <div class="section-title">Monnaie</div>
         <div class="info-grid" id="f-monnaie"></div>
       </div>
@@ -505,13 +392,13 @@ body {
 
     <!-- Tab: Capacités -->
     <div class="tab-panel" id="tab-capacites">
-      <div class="section-title">Capacités &amp; Traits</div>
+      <div class="section-title" style="margin-top:0">Capacités &amp; Traits</div>
       <div id="f-capacites"></div>
     </div>
 
     <!-- Tab: Sorts -->
     <div class="tab-panel" id="tab-sorts">
-      <div class="section-title">Emplacements de sorts</div>
+      <div class="section-title" style="margin-top:0">Emplacements de sorts</div>
       <div class="spell-slots" id="f-spell-slots"></div>
       <div class="section-title">Sorts connus</div>
       <div id="f-sorts"></div>
@@ -519,12 +406,12 @@ body {
 
     <!-- Tab: Quêtes -->
     <div class="tab-panel" id="tab-quetes">
-      <div class="section-title">Objectifs &amp; Quêtes</div>
+      <div class="section-title" style="margin-top:0">Objectifs &amp; Quêtes</div>
       <div id="f-quetes"></div>
     </div>
 
-  </div><!-- /fiche-wrapper -->
-</div><!-- /fiche-screen -->
+  </div>
+</div>
 
 <script src="crypto.js"></script>
 <script>
@@ -557,14 +444,14 @@ const COMPETENCES = [
   {nom:'Perspicacité',  trait:'SAG'},
 ];
 const SCHOOL_COLORS = {
-  'Évocation':    ['#c0392b22','#c0392b'],
-  'Abjuration':   ['#1a5c1a22','#1a5c1a'],
-  'Divination':   ['#1a2a6c22','#1a2a6c'],
-  'Enchantement': ['#5c1a5c22','#5c1a5c'],
-  'Illusion':     ['#1a4a5c22','#1a4a5c'],
-  'Invocation':   ['#5c3a1a22','#5c3a1a'],
-  'Nécromancie':  ['#2a2a2a22','#2a2a2a'],
-  'Transmutation':['#5c5c1a22','#5c5c1a'],
+  'Évocation':    ['rgba(192,57,43,.18)','#c0392b'],
+  'Abjuration':   ['rgba(45,138,78,.18)','#2d8a4e'],
+  'Divination':   ['rgba(43,108,176,.18)','#2b6cb0'],
+  'Enchantement': ['rgba(140,40,140,.18)','#8c288c'],
+  'Illusion':     ['rgba(40,120,160,.18)','#2878a0'],
+  'Invocation':   ['rgba(140,80,20,.18)','#8c5014'],
+  'Nécromancie':  ['rgba(80,80,80,.18)','#808080'],
+  'Transmutation':['rgba(160,140,20,.18)','#a08c14'],
 };
 
 // ═══════════════════════════════════════════
@@ -637,7 +524,7 @@ function renderFiche(c) {
   // Avatar
   const avatarEl = document.getElementById('f-avatar');
   if (c.avatar) {
-    avatarEl.innerHTML = `<img src="${c.avatar}" alt="avatar" style="width:80px;height:80px;border-radius:50%;object-fit:cover;">`;
+    avatarEl.innerHTML = `<img src="${c.avatar}" alt="avatar" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">`;
   }
 
   // En-tête
@@ -660,7 +547,7 @@ function renderFiche(c) {
   const pct = Math.max(0, Math.min(100, (hpCur / hpMax) * 100));
   const bar = document.getElementById('f-hp-bar');
   bar.style.width = pct + '%';
-  bar.style.background = pct > 50 ? '#27ae60' : pct > 25 ? '#e67e22' : '#c0392b';
+  bar.style.background = pct > 50 ? '#2d8a4e' : pct > 25 ? '#e67e22' : '#c0392b';
 
   // Traits
   const traits = document.getElementById('f-traits');
@@ -736,7 +623,7 @@ function renderFiche(c) {
     skillsEl.innerHTML += `
       <div class="skill-row">
         <div class="skill-dot${trained ? ' trained' : ''}"></div>
-        <div class="skill-name">${sk.nom} <small style="opacity:.6">${sk.trait}</small></div>
+        <div class="skill-name">${sk.nom} <small style="opacity:.5">${sk.trait}</small></div>
         <div class="skill-bonus">${bonusStr}</div>
       </div>`;
   });
@@ -746,7 +633,7 @@ function renderFiche(c) {
   invEl.innerHTML = '';
   const inv = c.inventaire || c.inventory || [];
   if (inv.length === 0) {
-    invEl.innerHTML = '<li style="color:var(--ink-light);font-style:italic;font-size:0.85rem;padding:8px 0">Inventaire vide.</li>';
+    invEl.innerHTML = '<li class="empty">Inventaire vide.</li>';
   } else {
     inv.forEach(item => {
       invEl.innerHTML += `
@@ -766,7 +653,7 @@ function renderFiche(c) {
   if (hasMonnaie) {
     document.getElementById('f-monnaie-section').style.display = 'block';
     const mEl = document.getElementById('f-monnaie');
-    const coins = {PA:'Pièces d\'argent', PO:'Pièces d\'or', PC:'Pièces de cuivre', PE:'Pièces d\'électrum', PP:'Pièces de platine'};
+    const coins = {PA:"Pièces d'argent", PO:"Pièces d'or", PC:"Pièces de cuivre", PE:"Pièces d'électrum", PP:"Pièces de platine"};
     mEl.innerHTML = Object.entries(coins).map(([k, label]) =>
       monnaie[k] > 0
         ? `<div class="info-cell"><span class="ic-label">${label}</span><span class="ic-value">${monnaie[k]}</span></div>`
@@ -779,7 +666,7 @@ function renderFiche(c) {
   capsEl.innerHTML = '';
   const caps = c.capacites || c.abilities || [];
   if (caps.length === 0) {
-    capsEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucune capacité enregistrée.</p>';
+    capsEl.innerHTML = '<p class="empty">Aucune capacité enregistrée.</p>';
   } else {
     caps.forEach(cap => {
       capsEl.innerHTML += `
@@ -813,7 +700,7 @@ function renderFiche(c) {
     }
   }
   if (!hasSlots) {
-    slotsEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Pas d\'emplacements de sorts.</p>';
+    slotsEl.innerHTML = '<p class="empty">Pas d\'emplacements de sorts.</p>';
   }
 
   // Sorts — liste
@@ -821,10 +708,10 @@ function renderFiche(c) {
   sortsEl.innerHTML = '';
   const sorts = c.sorts || c.spells || [];
   if (sorts.length === 0) {
-    sortsEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucun sort enregistré.</p>';
+    sortsEl.innerHTML = '<p class="empty">Aucun sort enregistré.</p>';
   } else {
     sorts.forEach(s => {
-      const sc = SCHOOL_COLORS[s.ecole] || ['#88888822','#888'];
+      const sc = SCHOOL_COLORS[s.ecole] || ['rgba(100,100,100,.18)','#888'];
       const tags = [
         s.niveau === 0 ? '<span class="tag tag-slot">Tour de magie</span>' : `<span class="tag tag-slot">Niveau ${s.niveau}</span>`,
         s.portee  ? `<span class="tag tag-portee">${s.portee}</span>` : '',
@@ -845,7 +732,7 @@ function renderFiche(c) {
   quetesEl.innerHTML = '';
   const quetes = c.quetes || c.quests || [];
   if (quetes.length === 0) {
-    quetesEl.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucune quête enregistrée.</p>';
+    quetesEl.innerHTML = '<p class="empty">Aucune quête enregistrée.</p>';
   } else {
     quetes.forEach(q => {
       const statClass = {active:'status-active', complete:'status-complete', failed:'status-failed'}[q.statut || q.status] || 'status-active';

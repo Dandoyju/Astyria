@@ -6,7 +6,7 @@ import shutil
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 
 PORT = 8000
-CAMPAIGNS_DIR = 'campaigns'
+CAMPAIGNS_DIR = 'app/campaigns'
 
 def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

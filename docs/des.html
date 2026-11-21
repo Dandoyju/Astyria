@@ -2,232 +2,197 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lanceur de Dés — Astyria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Marcellus&display=swap" rel="stylesheet">
 <style>
 :root {
-  --parch: #f5edd6;
-  --parch-dark: #e8d9b5;
-  --ink: #2c1810;
-  --ink-light: #5c3a1e;
-  --gold: #c9a84c;
-  --gold-dark: #8b6914;
-  --red: #8b1a1a;
+  --bg:       #0a0b10;
+  --bg-card:  rgba(26,22,37,0.95);
+  --bg2:      #161421;
+  --bg-input: rgba(10,11,16,0.6);
+  --gold:     #d4af37;
+  --gold2:    #f7d070;
+  --red:      #a82222;
+  --red2:     #c0392b;
+  --text:     #e2d9c6;
+  --muted:    #9a8c78;
+  --border:   #3d3124;
+  --font-t:   'Cinzel', serif;
+  --font-b:   'Marcellus', serif;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: #1a0f08;
-  color: var(--ink);
-  font-family: 'Georgia', serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-h1 {
-  color: var(--gold);
-  font-variant: small-caps;
-  font-size: 2rem;
-  text-shadow: 1px 1px 6px #000;
-  margin: 20px 0 4px;
-}
-.subtitle { color: #c8b48a; font-style: italic; font-size: 0.9rem; margin-bottom: 24px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;}
 
-.box {
-  background: var(--parch);
-  border: 2px solid var(--gold-dark);
-  border-radius: 6px;
-  width: 100%;
-  max-width: 520px;
-  padding: 24px;
-  margin-bottom: 16px;
+/* ── Header ── */
+header{
+  background:linear-gradient(180deg,#181420,#0d0b12);
+  border-bottom:2px solid var(--gold);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 6px 20px rgba(0,0,0,.8),0 0 15px rgba(212,175,55,.12);
+  position:sticky;top:0;z-index:100;
+}
+.logo{font-family:var(--font-t);font-size:1.3rem;color:var(--gold);letter-spacing:.1em;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.back-link{color:var(--muted);font-size:.82rem;text-decoration:none;transition:.15s;}
+.back-link:hover{color:var(--gold);}
+
+/* ── Page layout ── */
+.page{max-width:560px;margin:0 auto;padding:24px 16px 60px;}
+
+.page-title{
+  font-family:var(--font-t);font-size:clamp(1.4rem,5vw,2rem);
+  color:var(--gold);text-align:center;
+  text-shadow:0 0 30px rgba(212,175,55,.4);
+  letter-spacing:.1em;margin-bottom:4px;
+}
+.subtitle{color:var(--muted);font-style:italic;font-size:.88rem;text-align:center;margin-bottom:24px;}
+
+/* ── Card ── */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:10px;
+  padding:22px 20px;margin-bottom:14px;
+  backdrop-filter:blur(6px);
 }
 
-/* Dés rapides */
-.dice-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 20px;
+/* ── Dés rapides ── */
+.dice-row{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  margin-bottom:22px;
 }
-.die-btn {
-  width: 68px; height: 68px;
-  border: 2px solid var(--gold-dark);
-  border-radius: 8px;
-  background: #fdf7e8;
-  color: var(--red);
-  font-family: Georgia, serif;
-  font-size: 0.95rem;
-  font-variant: small-caps;
-  cursor: pointer;
-  transition: all 0.1s;
-  position: relative;
+.die-btn{
+  width:clamp(60px,13vw,72px);height:clamp(60px,13vw,72px);
+  border:1px solid var(--border);border-radius:10px;
+  background:rgba(0,0,0,.3);color:var(--text);
+  font-family:var(--font-t);font-size:.82rem;
+  cursor:pointer;transition:.15s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
 }
-.die-btn .die-emoji { font-size: 1.5rem; display: block; line-height: 1.2; }
-.die-btn:hover { background: var(--parch-dark); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-.die-btn:active { transform: translateY(0); }
-.die-btn.active { border-color: var(--red); background: #fff0f0; }
+.die-emoji{font-size:1.4rem;line-height:1;}
+.die-btn:hover{border-color:var(--gold);background:rgba(212,175,55,.08);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.4);}
+.die-btn:active{transform:translateY(0);}
+.die-btn.active{border-color:var(--gold);background:rgba(212,175,55,.12);}
 
-/* Formule */
-.formula-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 16px;
+/* ── Formule ── */
+.formula-row{display:flex;gap:8px;align-items:center;}
+.formula-row input{
+  flex:1;padding:12px 14px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--bg-input);color:var(--text);
+  font-family:var(--font-b);font-size:16px;
+  outline:none;transition:.2s;
 }
-.formula-row input {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  background: #fdf7e8;
-  font-family: Georgia, serif;
-  font-size: 1rem;
-  color: var(--ink);
-  outline: none;
+.formula-row input::placeholder{color:var(--muted);}
+.formula-row input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.1);}
+.roll-btn{
+  padding:12px 20px;min-height:48px;
+  background:linear-gradient(180deg,#d4af37,#997a15);
+  color:#000;border:none;border-radius:8px;
+  font-family:var(--font-t);font-size:.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.4px;
+  cursor:pointer;transition:.15s;white-space:nowrap;
 }
-.formula-row input:focus { border-color: var(--red); }
-.roll-btn {
-  padding: 10px 20px;
-  background: var(--red);
-  color: var(--parch);
-  border: none;
-  border-radius: 4px;
-  font-family: Georgia, serif;
-  font-size: 1rem;
-  font-variant: small-caps;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.roll-btn:hover { background: #6b1414; }
+.roll-btn:hover{background:linear-gradient(180deg,#f7d070,#d4af37);}
 
-/* Résultat */
-.result-area {
-  text-align: center;
-  padding: 16px 0 8px;
+/* ── Résultat ── */
+.result-area{text-align:center;padding:20px 0 8px;}
+.result-total{
+  font-family:var(--font-t);
+  font-size:clamp(3rem,16vw,5rem);font-weight:700;
+  color:var(--gold);line-height:1;
+  text-shadow:0 0 40px rgba(212,175,55,.4);
+  animation:popIn .2s ease;
 }
-.result-total {
-  font-size: 4rem;
-  font-weight: bold;
-  color: var(--red);
-  line-height: 1;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-  animation: popIn 0.2s ease;
+@keyframes popIn{from{transform:scale(.6);opacity:0;}to{transform:scale(1);opacity:1;}}
+.result-detail{color:var(--muted);font-size:.88rem;margin-top:8px;font-style:italic;}
+.result-formula{color:var(--muted);font-size:.78rem;margin-top:3px;opacity:.7;}
+.result-crit{margin-top:8px;}
+.crit-badge{
+  display:inline-block;padding:3px 12px;border-radius:20px;
+  font-family:var(--font-t);font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;
 }
-@keyframes popIn {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
-}
-.result-detail {
-  color: var(--ink-light);
-  font-size: 0.9rem;
-  margin-top: 6px;
-  font-style: italic;
-}
-.result-formula {
-  color: var(--ink-light);
-  font-size: 0.8rem;
-  margin-top: 2px;
-}
-.result-crit {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-family: sans-serif;
-  font-variant: small-caps;
-  margin-top: 6px;
-}
-.crit-max { background: #c9a84c22; color: #8b6914; border: 1px solid #c9a84c66; }
-.crit-min { background: #8b1a1a22; color: #8b1a1a; border: 1px solid #8b1a1a66; }
+.crit-max{background:rgba(212,175,55,.15);color:var(--gold);border:1px solid rgba(212,175,55,.4);}
+.crit-min{background:rgba(168,34,34,.15);color:#e08080;border:1px solid rgba(168,34,34,.4);}
 
-/* Historique */
-.history-section h2 {
-  font-variant: small-caps;
-  font-size: 1rem;
-  color: var(--red);
-  border-bottom: 1px solid var(--gold-dark);
-  padding-bottom: 4px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* ── Historique ── */
+.hist-header{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;
 }
-.clear-btn {
-  font-size: 0.72rem;
-  color: var(--ink-light);
-  background: none;
-  border: 1px solid var(--gold-dark);
-  border-radius: 3px;
-  padding: 2px 8px;
-  cursor: pointer;
-  font-family: sans-serif;
+.hist-header h2{
+  font-family:var(--font-t);font-size:.82rem;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.5px;
 }
-.clear-btn:hover { background: var(--parch-dark); }
-.hist-list { max-height: 220px; overflow-y: auto; padding-right: 4px; }
-.hist-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px 0;
-  border-bottom: 1px solid rgba(139,105,20,0.12);
-  font-size: 0.84rem;
+.clear-btn{
+  font-size:.72rem;color:var(--muted);background:none;
+  border:1px solid var(--border);border-radius:4px;padding:3px 10px;
+  cursor:pointer;font-family:var(--font-b);transition:.15s;
 }
-.hist-total {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: var(--red);
-  min-width: 32px;
-  text-align: center;
+.clear-btn:hover{border-color:var(--gold);color:var(--text);}
+.hist-list{max-height:240px;overflow-y:auto;padding-right:4px;}
+.hist-list::-webkit-scrollbar{width:4px;}
+.hist-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.hist-item{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 0;border-bottom:1px solid rgba(61,49,36,.3);font-size:.84rem;
 }
-.hist-formula { flex: 1; color: var(--ink-light); }
-.hist-detail { color: var(--ink-light); font-size: 0.75rem; font-style: italic; }
-
-.back-link { color: #c8b48a; font-size: 0.82rem; text-decoration: none; margin-bottom: 8px; display: block; }
-.back-link:hover { color: var(--gold); }
+.hist-item:last-child{border-bottom:none;}
+.hist-total{
+  font-family:var(--font-t);font-size:1.1rem;font-weight:700;
+  color:var(--gold);min-width:36px;text-align:center;
+}
+.hist-formula{flex:1;color:var(--text);}
+.hist-detail{color:var(--muted);font-size:.74rem;font-style:italic;}
+.empty{color:var(--muted);font-style:italic;font-size:.85rem;padding:4px 0;}
 </style>
 </head>
 <body>
-<a class="back-link" href="index.html">← Accueil</a>
-<h1>🎲 Lanceur de Dés</h1>
-<p class="subtitle">D&amp;D 5e — marche hors-ligne</p>
 
-<!-- Dés rapides + formule -->
-<div class="box">
-  <div class="dice-row" id="dice-row">
-    <button class="die-btn" onclick="quickRoll(4)"  title="d4">  <span class="die-emoji">🔺</span>d4</button>
-    <button class="die-btn" onclick="quickRoll(6)"  title="d6">  <span class="die-emoji">🎲</span>d6</button>
-    <button class="die-btn" onclick="quickRoll(8)"  title="d8">  <span class="die-emoji">💎</span>d8</button>
-    <button class="die-btn" onclick="quickRoll(10)" title="d10"> <span class="die-emoji">🔷</span>d10</button>
-    <button class="die-btn" onclick="quickRoll(12)" title="d12"> <span class="die-emoji">🔮</span>d12</button>
-    <button class="die-btn" onclick="quickRoll(20)" title="d20"> <span class="die-emoji">⚡</span>d20</button>
-    <button class="die-btn" onclick="quickRoll(100)" title="d100"><span class="die-emoji">💯</span>d%</button>
+<header>
+  <a class="logo" href="index.html"><span>⚔</span> Astyria</a>
+  <a class="back-link" href="index.html">← Accueil</a>
+</header>
+
+<div class="page">
+  <h1 class="page-title">🎲 Lanceur de Dés</h1>
+  <p class="subtitle">D&amp;D 5e — marche hors-ligne</p>
+
+  <!-- Dés rapides + formule -->
+  <div class="card">
+    <div class="dice-row" id="dice-row">
+      <button class="die-btn" onclick="quickRoll(4)"   title="d4">  <span class="die-emoji">🔺</span>d4</button>
+      <button class="die-btn" onclick="quickRoll(6)"   title="d6">  <span class="die-emoji">🎲</span>d6</button>
+      <button class="die-btn" onclick="quickRoll(8)"   title="d8">  <span class="die-emoji">💎</span>d8</button>
+      <button class="die-btn" onclick="quickRoll(10)"  title="d10"> <span class="die-emoji">🔷</span>d10</button>
+      <button class="die-btn" onclick="quickRoll(12)"  title="d12"> <span class="die-emoji">🔮</span>d12</button>
+      <button class="die-btn" onclick="quickRoll(20)"  title="d20"> <span class="die-emoji">⚡</span>d20</button>
+      <button class="die-btn" onclick="quickRoll(100)" title="d100"><span class="die-emoji">💯</span>d%</button>
+    </div>
+
+    <div class="formula-row">
+      <input type="text" id="formula-input" placeholder="ex: 2d6+3, 1d20-1, 4d6kh3" value=""
+        onkeydown="if(event.key==='Enter') rollFormula()">
+      <button class="roll-btn" onclick="rollFormula()">🎲 Lancer</button>
+    </div>
+
+    <div class="result-area" id="result-area" style="display:none">
+      <div class="result-total" id="result-total">—</div>
+      <div class="result-detail" id="result-detail"></div>
+      <div class="result-formula" id="result-formula"></div>
+      <div id="result-crit"></div>
+    </div>
   </div>
 
-  <div class="formula-row">
-    <input type="text" id="formula-input" placeholder="ex: 2d6+3, 1d20-1, 4d6kh3" value=""
-      onkeydown="if(event.key==='Enter') rollFormula()">
-    <button class="roll-btn" onclick="rollFormula()">🎲 Lancer</button>
-  </div>
-
-  <div class="result-area" id="result-area" style="display:none">
-    <div class="result-total" id="result-total">—</div>
-    <div class="result-detail" id="result-detail"></div>
-    <div class="result-formula" id="result-formula"></div>
-    <div id="result-crit"></div>
-  </div>
-</div>
-
-<!-- Historique -->
-<div class="box history-section">
-  <h2>
-    Historique
-    <button class="clear-btn" onclick="clearHistory()">Effacer</button>
-  </h2>
-  <div class="hist-list" id="hist-list">
-    <p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucun lancer pour l'instant.</p>
+  <!-- Historique -->
+  <div class="card">
+    <div class="hist-header">
+      <h2>Historique</h2>
+      <button class="clear-btn" onclick="clearHistory()">Effacer</button>
+    </div>
+    <div class="hist-list" id="hist-list">
+      <p class="empty">Aucun lancer pour l'instant.</p>
+    </div>
   </div>
 </div>
 
@@ -333,8 +298,8 @@ function display({ total, detail, formula, dice, faces }) {
   const critEl = document.getElementById('result-crit');
   critEl.innerHTML = '';
   if (faces === 20 && dice.length === 1) {
-    if (dice[0] === 20) critEl.innerHTML = '<span class="result-crit crit-max">⭐ Critique!</span>';
-    if (dice[0] === 1)  critEl.innerHTML = '<span class="result-crit crit-min">💀 Échec critique</span>';
+    if (dice[0] === 20) critEl.innerHTML = '<span class="crit-badge crit-max">⭐ Critique!</span>';
+    if (dice[0] === 1)  critEl.innerHTML = '<span class="crit-badge crit-min">💀 Échec critique</span>';
   }
 
   addHistory(total, detail, formula);
@@ -349,7 +314,7 @@ function addHistory(total, detail, formula) {
 function renderHistory() {
   const el = document.getElementById('hist-list');
   if (history.length === 0) {
-    el.innerHTML = '<p style="color:var(--ink-light);font-style:italic;font-size:0.85rem">Aucun lancer pour l\'instant.</p>';
+    el.innerHTML = '<p class="empty">Aucun lancer pour l\'instant.</p>';
     return;
   }
   el.innerHTML = history.map(h => `
