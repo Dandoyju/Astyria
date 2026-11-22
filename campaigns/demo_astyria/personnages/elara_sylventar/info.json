@@ -1,0 +1,113 @@
+{
+  "id": "elara_sylventar",
+  "name": "Elara Sylventar",
+  "class": "Elfe Magicienne (Niveau 5)",
+  "avatar": "",
+  "ca": 13,
+  "description": "Érudite de la Tour de Cristal d'Avenmoor, Elara a été envoyée par son ordre pour étudier la corruption magique qui ronge la Forêt des Murmures. Curieuse jusqu'à l'imprudence, brillante jusqu'à l'arrogance, elle a néanmoins appris à faire confiance à son compagnon nain — même s'il rechigne à lire ses notes de terrain.",
+  "bars": [
+    {
+      "id": "hp",
+      "name": "Santé",
+      "current": 24,
+      "max": 24,
+      "color": "linear-gradient(90deg, #9b1c1c, #e53e3e)"
+    },
+    {
+      "id": "mana",
+      "name": "Points de Mana",
+      "current": 7,
+      "max": 10,
+      "color": "linear-gradient(90deg, #1e40af, #60a5fa)"
+    }
+  ],
+  "traits": [
+    { "name": "Force",        "value": 8  },
+    { "name": "Dextérité",    "value": 14 },
+    { "name": "Constitution", "value": 10 },
+    { "name": "Intelligence", "value": 18 },
+    { "name": "Sagesse",      "value": 14 },
+    { "name": "Charisme",     "value": 12 }
+  ],
+  "skillPoints": [
+    { "name": "Acrobaties (DEX)",    "value": 2  },
+    { "name": "Arcanes (INT)",       "value": 7  },
+    { "name": "Athlétisme (FOR)",    "value": -1 },
+    { "name": "Discrétion (DEX)",    "value": 2  },
+    { "name": "Dressage (SAG)",      "value": 2  },
+    { "name": "Escamotage (DEX)",    "value": 2  },
+    { "name": "Histoire (INT)",      "value": 7  },
+    { "name": "Intimidation (CHA)",  "value": 1  },
+    { "name": "Investigation (INT)", "value": 7  },
+    { "name": "Médecine (SAG)",      "value": 2  },
+    { "name": "Nature (INT)",        "value": 4  },
+    { "name": "Perception (SAG)",    "value": 5  },
+    { "name": "Perspicacité (SAG)",  "value": 2  },
+    { "name": "Persuasion (CHA)",    "value": 4  },
+    { "name": "Religion (INT)",      "value": 4  },
+    { "name": "Représentation (CHA)","value": 1  },
+    { "name": "Survie (SAG)",        "value": 2  },
+    { "name": "Tromperie (CHA)",     "value": 1  }
+  ],
+  "inventory": [
+    { "name": "Bâton de Cristal d'Avenmoor", "description": "Focalisant magique. +1 aux jets d'attaque de sorts. Peut stocker un sort de niveau 1-3 (1 charge/repos long)." },
+    { "name": "Grimoire des Voiles", "description": "Le grimoire personnel d'Elara, relié en cuir de basilic. Contient 12 sorts dont 3 encore déchiffrables." },
+    { "name": "Robe des Mages", "description": "CA 13 + mod. Dextérité. Résistance magique : avantage aux JS contre les sorts." },
+    { "name": "Parchemin de Lévitation", "description": "Sort unique, usage unique. Lance Lévitation sans utiliser d'emplacement." },
+    { "name": "Flacon de Distillat de Feu de Fée", "description": "Lance Lumières Dansantes sans emplacement de sort, 3 fois. Utile pour l'exploration." }
+  ],
+  "skills": [
+    { "name": "Adepte de récupération magique", "description": "Après un repos court, récupère des emplacements de sorts dont le total ne dépasse pas la moitié du niveau de magicien (arrondis au supérieur). 1 fois par repos long." },
+    { "name": "Sens magique elfique", "description": "Peut détecter la magie à volonté (sort de détection de magie rituel). Voit l'aura magique des objets à 9m." },
+    { "name": "Transe elfique", "description": "Le repos long ne dure que 4h (méditation). Immunité aux effets de sommeil magique." },
+    { "name": "Maîtrise des armes légères", "description": "Peut utiliser arbalètes légères, dagues et bâtons. Favorise la dague en cas de mêlée rapprochée." },
+    { "name": "Spécialisation : Évocation", "description": "Peut maximiser les dégâts d'un sort d'évocation 1 fois par repos court (Explosion Surpuissante)." }
+  ],
+  "quests": [
+    { "name": "Analyser la corruption de la forêt", "description": "Collecter 3 échantillons de bois corrompu. L'ordre de la Tour de Cristal paiera 50 PO par échantillon pour analyse. 1/3 collecté." },
+    { "name": "Retrouver le Cristal de la Mémoire", "description": "Artefact mentionné dans le journal volé du Pr. Valdris. Le cristal contiendrait la mémoire de la forêt avant la corruption de Malachar. Localisation inconnue, probablement dans sa tour." },
+    { "name": "Répondre à la lettre de Maîtresse Thendara", "description": "La directrice de la Tour exige un rapport complet dans les 10 jours. Elara a oublié d'envoyer les deux derniers. La situation devient diplomatiquement délicate." }
+  ],
+  "spells": [
+    {
+      "name": "Boule de Feu",
+      "level": 3,
+      "slots": 2,
+      "usedSlots": 0,
+      "available": true,
+      "description": "Dégâts : 8d6 feu, zone sphérique rayon 6m. JS Dex DD 15 pour demi-dégâts. Portée 45m."
+    },
+    {
+      "name": "Bouclier Arcanique",
+      "level": 1,
+      "slots": 3,
+      "usedSlots": 1,
+      "available": true,
+      "description": "Réaction. +5 CA jusqu'au début de votre prochain tour. Durée instantanée. Bloque aussi Mains du Mage."
+    },
+    {
+      "name": "Téléportation Mineure",
+      "level": 0,
+      "slots": 1,
+      "usedSlots": 0,
+      "available": true,
+      "description": "Tour/Cantrip. Se téléporte jusqu'à 9m dans un espace visible. Sans risque d'être intercepté par des sorts d'anti-magie mineurs."
+    },
+    {
+      "name": "Contresort",
+      "level": 3,
+      "slots": 1,
+      "usedSlots": 0,
+      "available": true,
+      "description": "Réaction. Annule un sort de niveau ≤3 automatiquement. Pour les niveaux supérieurs : JS d'Intelligence DD (10 + niv sort)."
+    },
+    {
+      "name": "Invisibilité Totale",
+      "level": 4,
+      "slots": 1,
+      "usedSlots": 0,
+      "available": false,
+      "description": "⚠ Sort non maîtrisé (MJ : verrouillé). La composante matérielle rare manque encore."
+    }
+  ]
+}

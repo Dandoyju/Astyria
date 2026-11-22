@@ -1,0 +1,267 @@
+[
+  {
+    "name": "Boule de Feu",
+    "type": "spells",
+    "level": 3,
+    "slots": 2,
+    "description": "Dégâts : 8d6 feu, zone sphérique rayon 6m. JS Dextérité DD 15 pour demi-dégâts. Portée 45m."
+  },
+  {
+    "name": "Soin des Blessures",
+    "type": "spells",
+    "level": 1,
+    "slots": 3,
+    "description": "Restaure 1d8 + modif. Sagesse PV à une créature touchée. Pas utilisable sur les morts-vivants."
+  },
+  {
+    "name": "Bouclier Arcanique",
+    "type": "spells",
+    "level": 1,
+    "slots": 2,
+    "description": "Réaction. +5 CA jusqu'au début de votre prochain tour. Annule également les missiles magiques."
+  },
+  {
+    "name": "Téléportation Mineure",
+    "type": "spells",
+    "level": 0,
+    "slots": 1,
+    "description": "Cantrip. Déplacement magique jusqu'à 9m dans un espace visible. Pas d'attaque d'opportunité."
+  },
+  {
+    "name": "Contresort",
+    "type": "spells",
+    "level": 3,
+    "slots": 1,
+    "description": "Réaction. Annule automatiquement tout sort de niveau ≤ 3. Niveaux supérieurs : JS INT DD (10 + niveau)."
+  },
+  {
+    "name": "Vague de froid",
+    "type": "spells",
+    "level": 3,
+    "slots": 2,
+    "description": "Cône de 9m. Dégâts : 8d8 froid, JS Con DD 15 demi. Sol glacé : terrain difficile jusqu'à la fin de votre prochain tour."
+  },
+  {
+    "name": "Convocation de Familier",
+    "type": "spells",
+    "level": 1,
+    "slots": 1,
+    "description": "Rituel (10 min). Invoque un familier (chouette, chat, corbeau…). Le familier peut transmettre des sensations et délivrer des sorts tactiles."
+  },
+  {
+    "name": "Tremblement de Terre (mini)",
+    "type": "spells",
+    "level": 2,
+    "slots": 2,
+    "description": "Zone 6m. Terrain difficile pendant 1 min. Toute créature dans la zone doit réussir un JS Dex DD 13 ou être renversée au sol."
+  },
+  {
+    "name": "Hâte",
+    "type": "spells",
+    "level": 3,
+    "slots": 1,
+    "description": "1 créature consentante pendant 1 minute : vitesse ×2, +2 CA, avantage aux JS Dex, action supplémentaire limitée (attaque, Esquiver, Foncer, Se désengager, Se cacher)."
+  },
+  {
+    "name": "Nuage Mortel",
+    "type": "spells",
+    "level": 5,
+    "slots": 1,
+    "description": "Nuage de gaz toxique (sphère 6m). Dégâts : 5d8 poison/tour, JS Con DD 16 demi. Dure 10 min, se déplace de 3m/tour (vent)."
+  },
+  {
+    "name": "Mains du Mage",
+    "type": "spells",
+    "level": 0,
+    "slots": 1,
+    "description": "Cantrip. Main spectrale à portée 9m. Manipule objets légers (<5kg), ouvre des portes/sacs, peut déclencher des pièges à distance."
+  },
+  {
+    "name": "Lumière",
+    "type": "spells",
+    "level": 0,
+    "slots": 1,
+    "description": "Cantrip. Touche un objet qui brille comme une torche (rayon 6m) pendant 1h. Une créature hostile peut tenter JS Dex DD 13 pour éviter."
+  },
+  {
+    "name": "Flamme sacrée",
+    "type": "spells",
+    "level": 0,
+    "slots": 1,
+    "description": "Cantrip clerc. Rayon de lumière radieuse (portée 18m). Dégâts 1d8 (niv 5 : 2d8), JS Dextérité DD 13. Ignore les couverts."
+  },
+  {
+    "name": "Châtiment retentissant",
+    "type": "spells",
+    "level": 1,
+    "slots": 2,
+    "description": "Sort de paladin. Action bonus lors d'une attaque réussie : +2d6 tonnerre supplémentaire. La cible doit JS Con DD 13 ou être assourdie."
+  },
+  {
+    "name": "Sphère de feu ardent",
+    "type": "spells",
+    "level": 2,
+    "slots": 2,
+    "description": "Crée une sphère de feu de 1,5m (CA 10) pendant 1 min. Action bonus pour la déplacer. Dégâts 2d6 feu aux créatures adjacentes, JS Dex DD 13 demi."
+  },
+  {
+    "name": "Épée Longue +1",
+    "type": "inventory",
+    "description": "Acier elfique gravé de runes de précision. +1 aux jets d'attaque et de dégâts. Dégâts 1d8+1 (ou 1d10+1 à deux mains)."
+  },
+  {
+    "name": "Arc long elfique",
+    "type": "inventory",
+    "description": "Arc en bois de frêne argenté. Portée 45/180m. Dégâts 1d8+mod DEX. Les flèches retrouvent leur forme après usage (1/2 récupérables)."
+  },
+  {
+    "name": "Potion de Soin",
+    "type": "inventory",
+    "description": "Action pour boire ou donner. Restaure 2d4+2 PV. Se conserve indéfiniment."
+  },
+  {
+    "name": "Potion de Soin Majeure",
+    "type": "inventory",
+    "description": "Restaure 4d4+4 PV. Rareté peu commune. Valeur : 100 PO."
+  },
+  {
+    "name": "Potion de Force de Géant",
+    "type": "inventory",
+    "description": "Pendant 1h, Force = 21. Ne se cumule pas avec un sort de Hâte. Valeur : 250 PO."
+  },
+  {
+    "name": "Parchemin de Détection de la Magie",
+    "type": "inventory",
+    "description": "Sort niveau 1, usage unique. Pendant 10 min, perçoit les auras magiques dans un rayon de 9m. Révèle les écoles de magie présentes."
+  },
+  {
+    "name": "Torche ×5",
+    "type": "inventory",
+    "description": "Éclaire sur 6m pendant 1h. Peut être utilisée comme arme improvisée (1d4 feu). Équipement de base."
+  },
+  {
+    "name": "Rope d'escalade (15m)",
+    "type": "inventory",
+    "description": "Résistance 500 kg. Test d'Athlétisme ou d'Acrobaties réduit à difficulté 5 pour grimper."
+  },
+  {
+    "name": "Huile enflammée (flasque)",
+    "type": "inventory",
+    "description": "Lance à 3m. Dégâts 5 feu au premier tour, 2 feu au second. Peut enflammer une zone 1,5m² (action)."
+  },
+  {
+    "name": "Antidote universel",
+    "type": "inventory",
+    "description": "Annule l'effet d'un poison naturel (pas magique). Donne avantage aux JS contre le poison pendant 1h."
+  },
+  {
+    "name": "Bouclier de bois enchanté",
+    "type": "inventory",
+    "description": "+2 CA. Peut absorber un coup critique une fois par repos long (réduit à toucher normal)."
+  },
+  {
+    "name": "Clé passe-partout (magique)",
+    "type": "inventory",
+    "description": "Ouvre toute serrure de qualité commune ou rare sans test. Cassée si utilisée sur une serrure légendaire ou protégée par anti-magie."
+  },
+  {
+    "name": "Bottes de pas feutrés",
+    "type": "inventory",
+    "description": "Avantage aux tests de Discrétion liés au mouvement. Ne laissent pas de traces sur les surfaces naturelles (neige, boue, sable)."
+  },
+  {
+    "name": "Sac sans fond (petit)",
+    "type": "inventory",
+    "description": "Peut contenir jusqu'à 500 kg / 2m³ d'objets ne dépassant pas 60cm. Ne pèse jamais plus de 7,5 kg. Ne fonctionne pas si retourné."
+  },
+  {
+    "name": "Frappe dévastatrice",
+    "type": "skills",
+    "description": "Une fois par tour, si vous touchez une cible déjà engagée au corps à corps par un allié, ajoutez 2d6 aux dégâts (Avantage de flanquement non requis)."
+  },
+  {
+    "name": "Expertise : Furtivité",
+    "type": "skills",
+    "description": "Double le bonus de maîtrise pour les tests de Discrétion. Prérequis : maîtrise en Discrétion."
+  },
+  {
+    "name": "Esquive instinctive",
+    "type": "skills",
+    "description": "Réaction. Lorsqu'une attaque à distance vous touche, réduisez les dégâts de moitié. 1 fois par repos court."
+  },
+  {
+    "name": "Frappe à deux mains",
+    "type": "skills",
+    "description": "Lorsque vous attaquez avec une arme à deux mains ou polyvalente, relancez un 1 ou un 2 aux dégâts (gardez le second résultat)."
+  },
+  {
+    "name": "Inspiration bardique",
+    "type": "skills",
+    "description": "Action bonus. Donne un dé d'inspiration 1d6 à une créature dans 18m. Elle peut ajouter ce résultat à un jet d'attaque, de compétence ou de sauvegarde dans les 10 min."
+  },
+  {
+    "name": "Attaque sournoise",
+    "type": "skills",
+    "description": "Une fois par tour, dégâts supplémentaires (+Xd6 selon niveau) si vous avez l'avantage ou qu'un allié non incapacité est adjacent à la cible. Ne fonctionne qu'avec des armes à finesse ou à distance."
+  },
+  {
+    "name": "Défense tous azimuts",
+    "type": "skills",
+    "description": "Aucun ennemi n'a d'avantage contre vous lors d'attaques au corps à corps, même si vous êtes encerclé."
+  },
+  {
+    "name": "Frappe sacrée (Paladin)",
+    "type": "skills",
+    "description": "Dépense 1 emplacement de sort lors d'une attaque réussie : dégâts supplémentaires selon niveau (1 → +2d8, 2 → +4d8, etc.). Peut également éliminer des maladies ou effets négatifs."
+  },
+  {
+    "name": "Volée de flèches",
+    "type": "skills",
+    "description": "Action d'attaque avec un arc. Ciblez jusqu'à 3 créatures dans un rayon de 3m (doivent toutes être à portée). Un seul jet d'attaque par cible. Consomme 3 flèches."
+  },
+  {
+    "name": "Résistance draconique",
+    "type": "skills",
+    "description": "Résistance permanente à un type de dégâts élémentaires selon l'ascendance draconique (feu, froid, foudre, acide ou poison)."
+  },
+  {
+    "name": "Trouver la faille",
+    "type": "skills",
+    "description": "Action bonus. Étudie un ennemi (Perception active DD 12) : révèle sa résistance, immunité ou vulnérabilité à un type de dégâts au choix du MJ."
+  },
+  {
+    "name": "Briser les défenses corrompues",
+    "type": "quests",
+    "description": "Malachar a érigé 3 piliers de cristal noir qui renforcent ses défenses. Les détruire (+10 aux attaques jusqu'à la fin du combat pour chaque pilier brisé) avant d'affronter le boss."
+  },
+  {
+    "name": "Libérer les âmes piégées",
+    "type": "quests",
+    "description": "5 villageois de Pierrebasse sont emprisonnés dans des gemmes noires. Les localiser dans la tour de Malachar et les briser libère les âmes. Récompense villageoise : 200 PO et logement gratuit à vie."
+  },
+  {
+    "name": "Le grimoire perdu de Valdris",
+    "type": "quests",
+    "description": "Le Professeur Valdris de la Tour de Cristal a perdu son grimoire de recherche lors d'une expédition. Il est probablement dans la Tour de Malachar. Récompense : un sort de niveau 4 au choix parmi ceux de Valdris."
+  },
+  {
+    "name": "Le contrat des marchands",
+    "type": "quests",
+    "description": "Une caravane de marchands nains n'est pas arrivée à Pierrebasse depuis 2 semaines. Retrouver leur trace (ou leurs corps) et ramener la cargaison de minerai précieux. Récompense : 150 PO + 10% de la valeur des marchandises."
+  },
+  {
+    "name": "Purifier la source corrompue",
+    "type": "quests",
+    "description": "La Source des Larmes, cœur magique de la forêt, a été souillée par la magie noire. Utiliser le Cristal de la Mémoire (si récupéré) ou 3 potions de purification magique pour la nettoyer. Restaurerait l'équilibre naturel de la région."
+  },
+  {
+    "name": "Le défi du Gardien",
+    "type": "quests",
+    "description": "Un ancien gardien de pierre (golem) bloque l'entrée de la chambre du trésor de Malachar. Résoudre son énigme (non combat) : 'Je suis toujours devant toi mais ne peux être touché. Je grandis quand la lumière brille et disparais dans le noir.' Réponse : l'ombre."
+  },
+  {
+    "name": "Escorter la réfugiée",
+    "type": "quests",
+    "description": "Lyris, une halfeline druide, a survécu à l'attaque de son village. Elle connaît un raccourci vers la tour mais est trop blessée pour combattre. L'escorter à travers la forêt sans qu'elle subisse de dégâts."
+  }
+]

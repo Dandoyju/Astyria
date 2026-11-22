@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Garth le Tavernier",
+    "type": "pnj",
+    "hpCurrent": 18,
+    "hpMax": 20,
+    "notes": "Propriétaire de l'Auberge du Cerf Couronné au village de Pierrebasse. Bonhomme jovial à la barbe rousse, ancien soldat reconverti. Informe les aventuriers sur la forêt, garde des secrets pour de l'or. Doit 12 PO à Thorin. Ne se bat pas sauf en toute dernière extrémité.",
+    "attacks": [
+      {
+        "name": "coup 2 beuteu",
+        "dice": "2d6",
+        "description": "gros calibre"
+      }
+    ],
+    "id": "pnj_1795366322066"
+  },
+  {
+    "id": "pnj_sortcelame",
+    "name": "Sorcelame le Gobelin",
+    "type": "monstre",
+    "hpCurrent": 14,
+    "hpMax": 14,
+    "notes": "Chef d'une bande de 6 gobelins embusqués sur la Route des Murmures. Porte une épée courte volée à un garde royal. Lâche dès qu'il perd plus de la moitié de ses PV — peut devenir informateur s'il est épargné.",
+    "attacks": [
+      {
+        "name": "Épée courte",
+        "dice": "1d6+2",
+        "description": "Attaque à la mêlée. +4 toucher."
+      },
+      {
+        "name": "Arc court",
+        "dice": "1d6+2",
+        "description": "Attaque à distance (portée 24/96m). +4 toucher."
+      },
+      {
+        "name": "Fuite éclair",
+        "dice": "—",
+        "description": "Se désengager ou se cacher en action bonus chaque tour."
+      }
+    ]
+  },
+  {
+    "id": "pnj_araignee_phase",
+    "name": "Araignée des Phases",
+    "type": "monstre",
+    "hpCurrent": 32,
+    "hpMax": 32,
+    "notes": "Créature semi-éthérée gardant l'entrée Est de la forêt. Peut se téléporter (plan éthéré) jusqu'à 18m par action bonus. Vulnérable aux dégâts de feu. Immunisée aux dégâts contondants des armes non magiques.",
+    "attacks": [
+      {
+        "name": "Morsure vénéneuse",
+        "dice": "2d10+4",
+        "description": "Corps à corps. +6 toucher. JS Constitution DD 11 : 2d10 poison supplémentaire (demi si réussi)."
+      },
+      {
+        "name": "Saut de phase",
+        "dice": "—",
+        "description": "Téléportation jusqu'à 18m en action bonus. Réapparaît visible ou invisible."
+      }
+    ]
+  },
+  {
+    "id": "pnj_malachar",
+    "name": "Malachar le Corrompu",
+    "type": "boss",
+    "hpCurrent": 120,
+    "hpMax": 120,
+    "notes": "Nécromancien elfe corrompu par un pacte démoniaque. Autrefois gardien de la forêt, il cherche maintenant à en drainer l'énergie vitale pour l'immortalité. Réside dans sa tour de basalte noir au centre de la forêt. Phase 1 (120→60 PV) : sorts offensifs à distance. Phase 2 (60→0 PV) : convoque 3 squelettes et se téléporte derrière les combattants.",
+    "attacks": [
+      {
+        "name": "Rayon de désintégration",
+        "dice": "10d6+40",
+        "description": "Sorts offensif. +7 toucher. Si la cible tombe à 0 PV, elle est réduite en poussière."
+      },
+      {
+        "name": "Vague nécrotique (cône 9m)",
+        "dice": "5d8",
+        "description": "Dégâts nécrotiques, zone. JS Constitution DD 15 pour demi. Soigne Malachar de la moitié des dégâts infligés."
+      },
+      {
+        "name": "Invoquer squelettes (Phase 2)",
+        "dice": "—",
+        "description": "Invoque 1d3+2 squelettes armés de faux. Utilisable une seule fois par combat."
+      },
+      {
+        "name": "Marque de mort",
+        "dice": "2d6",
+        "description": "Réaction. Lorsqu'une cible le frappe en mêlée, elle subit 2d6 nécrotiques. Max 1/tour."
+      }
+    ]
+  }
+]

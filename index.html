@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les aventuriers d'Astyria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=MedievalSharp&family=UnifrakturMaguntia&family=Marcellus&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0a0b10;
+            --bg-card: rgba(26, 22, 37, 0.85);
+            --bg-card-border: #4a3b2c;
+            --bg-secondary: #161421;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #f3e5ab;
+            --accent-gold-hover: #f7d070;
+            --accent-red: #a82222;
+            --accent-green: #2d8a4e;
+            --accent-blue: #2b6cb0;
+            --accent-amber: #d97706;
+            --text-main: #e2d9c6;
+            --text-muted: #9a8c78;
+            --border-color: #3d3124;
+            --font-title: 'Cinzel', serif;
+            --font-header: 'MedievalSharp', cursive;
+            --font-gothic: 'UnifrakturMaguntia', cursive;
+            --font-body: 'Marcellus', serif, -apple-system, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at center, rgba(15, 17, 26, 0.10) 0%, rgba(10, 11, 16, 0.95) 100%),
+                url('background/bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #181420 0%, #0d0b12 100%);
+            border-bottom: 2px solid var(--accent-gold);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.8), 0 0 15px rgba(212,175,55,0.2);
+        }
+        .header-title {
+            font-family: var(--font-header);
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(212,175,55,0.4);
+        }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .role-badge {
+            font-family: var(--font-title);
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--accent-gold);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+        .badge-mj { background: linear-gradient(135deg, #8b0000, #4a0000); color: #ffcccc; }
+        .badge-player { background: linear-gradient(135deg, #1a365d, #0f172a); color: #cbd5e1; }
+
+        nav.player-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(0deg, #120e17 0%, #1a1524 100%);
+            border-top: 2px solid var(--accent-gold);
+            display: flex; justify-content: space-around; padding: 8px 0; z-index: 100;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.7);
+        }
+        .nav-btn {
+            background: none; border: none; color: var(--text-muted);
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            font-size: 0.75rem; font-family: var(--font-title); cursor: pointer; width: 16%;
+            transition: all 0.2s ease;
+        }
+        .nav-btn i { font-size: 1.2rem; }
+        .nav-btn.active { color: var(--accent-gold); text-shadow: 0 0 8px rgba(212,175,55,0.5); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 8px; padding: 16px; margin-bottom: 16px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            position: relative;
+        }
+        .card-header {
+            font-family: var(--font-title); font-size: 1.1rem; color: var(--accent-gold);
+            border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 14px;
+            display: flex; align-items: center; justify-content: space-between; gap: 8px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .card-header > span:first-child { display: flex; align-items: center; gap: 8px; }
+
+        .char-header { display: flex; gap: 15px; align-items: center; }
+        .char-avatar {
+            width: 85px; height: 85px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 10px rgba(212,175,55,0.3), inset 0 0 10px rgba(0,0,0,0.8);
+            background-color: var(--bg-secondary);
+        }
+        .char-info { flex-grow: 1; }
+        .char-name { font-family: var(--font-header); font-size: 1.5rem; color: var(--text-main); }
+        .char-class { color: var(--accent-gold-light); font-size: 0.9rem; font-style: italic; }
+        .char-badges { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+        .ca-badge {
+            background: linear-gradient(135deg, #2b6cb0, #1a365d);
+            border: 1px solid #4a90d9;
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: var(--font-title);
+            flex-shrink: 0;
+        }
+        .ca-badge .ca-label { font-size: 0.45rem; color: #7ab8f5; text-transform: uppercase; letter-spacing: 0.5px; }
+        .ca-badge .ca-value { font-size: 1rem; font-weight: bold; color: #fff; line-height: 1; }
+
+        .stat-bar-container { margin-top: 10px; }
+        .stat-bar-header { display: flex; justify-content: space-between; margin-bottom: 3px; font-weight: bold; font-size: 0.85rem; font-family: var(--font-title); }
+        .stat-bar-bg { background-color: rgba(10,10,15,0.8); height: 18px; border-radius: 9px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
+        .stat-bar-fill { height: 100%; transition: width 0.3s ease-in-out; border-radius: 8px; }
+
+        .item-list { list-style: none; }
+        .item-row {
+            background: linear-gradient(90deg, rgba(30,26,42,0.7) 0%, rgba(20,17,28,0.7) 100%);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 4px; padding: 10px 12px; margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: background 0.15s;
+        }
+        .item-row.item-expandable { cursor: pointer; }
+        .item-row.item-expandable:hover { background: linear-gradient(90deg, rgba(40,34,55,0.85) 0%, rgba(28,23,40,0.85) 100%); }
+        .item-title-row { display: flex; justify-content: space-between; align-items: center; }
+        .item-title { font-weight: bold; color: var(--text-main); font-size: 0.95rem; }
+        .item-chevron { color: var(--accent-gold); font-size: 0.75rem; opacity: 0.7; transition: transform 0.25s ease; flex-shrink: 0; margin-left: 8px; }
+        .item-expandable.expanded .item-chevron { transform: rotate(180deg); }
+        .item-desc { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-color); color: #b8a98a; font-size: 0.85rem; line-height: 1.55; font-style: italic; }
+        .item-expandable.expanded .item-desc { display: block; }
+
+        .desc-input { font-size: 0.78rem !important; padding: 5px 8px !important; margin-top: 4px !important; margin-bottom: 0 !important; color: var(--text-muted) !important; border-style: dashed !important; }
+        .list-editor-box { background: rgba(15,13,20,0.5); border: 1px solid var(--border-color); padding: 10px; border-radius: 6px; transition: border-color 0.2s, box-shadow 0.2s; }
+        .list-editor-box.drag-over { border-color: var(--accent-gold); box-shadow: 0 0 12px rgba(212,175,55,0.25); }
+        .list-editor-box.just-added { border-color: var(--accent-green); box-shadow: 0 0 12px rgba(45,138,78,0.3); }
+        .item-list-editor { list-style: none; max-height: 130px; overflow-y: auto; margin-top: 8px; padding: 0; }
+        .item-list-editor li { display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 6px 10px; border-radius: 4px; margin-bottom: 4px; font-size: 0.85rem; border-left: 2px solid var(--accent-gold); }
+        .item-list-editor li button { background: none; border: none; color: var(--accent-red); cursor: pointer; font-size: 1rem; line-height: 1; padding: 2px 6px; }
+        .item-list-editor li button:hover { color: #ff4d4d; }
+
+        .map-container { width: 100%; text-align: center; overflow: hidden; border-radius: 8px; border: 1px solid var(--border-color); background-color: #000; min-height: 200px; }
+        .map-img { width: 100%; max-height: 70vh; object-fit: contain; display: block; margin: 0 auto; }
+
+        /* ── Dice Panel ── */
+        #dicePanel { display: none; position: fixed; bottom: 80px; right: 16px; width: 300px; background: linear-gradient(160deg, #1a1628 0%, #0e0b15 100%); border: 1px solid var(--accent-gold); border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.15); z-index: 150; overflow: hidden; }
+        #dicePanel.open { display: block; }
+        .dice-panel-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: linear-gradient(90deg, rgba(212,175,55,0.12), transparent); border-bottom: 1px solid var(--border-color); font-family: var(--font-title); font-size: 0.9rem; color: var(--accent-gold); }
+        .dice-multiplier { display: flex; gap: 4px; padding: 10px 14px 6px; }
+        .mult-btn { flex: 1; padding: 4px 0; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-muted); font-size: 0.78rem; cursor: pointer; font-family: var(--font-title); transition: all 0.15s; }
+        .mult-btn:hover { border-color: var(--accent-gold); color: var(--text-main); }
+        .mult-btn.active { background: rgba(212,175,55,0.18); border-color: var(--accent-gold); color: var(--accent-gold); font-weight: bold; }
+        .dice-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; padding: 6px 14px 10px; }
+        .die-btn { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); font-family: var(--font-title); font-size: 0.82rem; cursor: pointer; transition: all 0.15s; user-select: none; }
+        .die-btn:hover { background: rgba(212,175,55,0.18); border-color: var(--accent-gold); color: var(--accent-gold-light); transform: scale(1.08); }
+        .die-btn:active { transform: scale(0.95); }
+        .die-btn.die-d20 { border-color: #4a90d9; color: #7ab8f5; }
+        .die-btn.die-d20:hover { background: rgba(74,144,217,0.2); border-color: #7ab8f5; }
+        .dice-result-area { text-align: center; padding: 12px 14px 8px; border-top: 1px solid var(--border-color); }
+        .dice-result-number { font-family: var(--font-header); font-size: 2.8rem; color: var(--accent-gold); line-height: 1; text-shadow: 0 0 20px rgba(212,175,55,0.5); }
+        @keyframes diceRoll { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+        .dice-result-number.rolling { animation: diceRoll 0.08s linear infinite; color: var(--accent-gold-light); }
+        .dice-result-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; font-family: var(--font-title); letter-spacing: 0.05em; }
+        .dice-result-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; min-height: 1em; }
+        .dice-history-list { border-top: 1px solid var(--border-color); padding: 6px 14px 10px; display: flex; flex-direction: column; gap: 2px; }
+        .dice-history-item { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-title); }
+        .dice-history-item .h-total { color: var(--text-main); font-weight: bold; }
+        #diceToggleBtn { position: fixed; bottom: 85px; right: 20px; width: 48px; height: 48px; background: linear-gradient(180deg, #d4af37 0%, #997a15 100%); border: none; border-radius: 50%; cursor: pointer; font-size: 1.3rem; color: #000; box-shadow: 0 4px 16px rgba(0,0,0,0.6), 0 0 12px rgba(212,175,55,0.4); z-index: 151; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; }
+        #diceToggleBtn:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.7), 0 0 18px rgba(212,175,55,0.6); }
+
+        .mj-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .bar-controls { display: flex; gap: 4px; margin-top: 4px; margin-bottom: 8px; }
+
+        /* ── MJ Joueurs layout ── */
+        .mj-joueurs-layout { display: flex; gap: 16px; align-items: flex-start; }
+        .mj-lib-col { width: 250px; flex-shrink: 0; position: sticky; top: 10px; max-height: calc(100vh - 80px); display: flex; flex-direction: column; }
+        .mj-chars-col { flex: 1; min-width: 0; }
+        /* MJ library panel (clone of .library-panel but stand-alone) */
+        .mj-lib-panel { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; overflow: hidden; max-height: calc(100vh - 80px); }
+        /* MJ char items */
+        .mj-items-section { margin-bottom: 10px; }
+        .mj-items-title { font-size: 0.7rem; color: var(--accent-gold-light); font-family: var(--font-title); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .mj-item-row { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: rgba(20,16,34,0.7); border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 3px; }
+        .mj-item-row[data-type="inventory"] { border-left: 2px solid #4a90d9; }
+        .mj-item-row[data-type="skills"]    { border-left: 2px solid #48bb78; }
+        .mj-item-row[data-type="quests"]    { border-left: 2px solid #fc8181; }
+        .mj-item-row[data-type="spells"]    { border-left: 2px solid #9b59b6; }
+        .mj-item-name { flex: 1; font-size: 0.78rem; color: var(--text-main); }
+        .mj-item-remove { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 0.72rem; padding: 1px 4px; border-radius: 3px; line-height: 1; flex-shrink: 0; }
+        .mj-item-remove:hover { color: #fc8181; background: rgba(168,34,34,0.2); }
+        .mj-drop-zone { border: 1px dashed var(--border-color); border-radius: 5px; min-height: 28px; padding: 4px 8px; transition: border-color 0.15s, background 0.15s; }
+        .mj-drop-zone.drag-over { border-color: var(--accent-gold); background: rgba(212,175,55,0.08); }
+        .mj-drop-hint { font-size: 0.62rem; color: var(--border-color); font-style: italic; text-align: center; padding: 2px 0; }
+
+        /* ── MJ Tabs ── */
+        .mj-tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 0; }
+        .mj-tab-btn { padding: 8px 18px; border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 0.82rem; font-family: var(--font-title); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); background: transparent; transition: all 0.15s; position: relative; bottom: -1px; }
+        .mj-tab-btn:hover { color: var(--accent-gold-light); background: rgba(212,175,55,0.06); }
+        .mj-tab-btn.active { color: var(--accent-gold); border-color: var(--border-color); border-bottom-color: var(--bg-main); background: var(--bg-main); font-weight: bold; }
+        .mj-tab-panel { display: none; }
+        .mj-tab-panel.active { display: block; }
+
+        /* ── Compact char card (MJ summary) ── */
+        .mj-char-compact { background: linear-gradient(135deg, rgba(26,22,37,0.9) 0%, rgba(20,17,28,0.9) 100%); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; transition: border-color 0.2s; }
+        .mj-char-compact:hover { border-color: rgba(212,175,55,0.4); }
+        .mj-char-summary { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; user-select: none; }
+        .mj-char-summary:hover { background: rgba(212,175,55,0.04); }
+        .mj-char-avatar-sm { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border-color); object-fit: cover; flex-shrink: 0; }
+        .mj-char-info { flex: 1; min-width: 0; }
+        .mj-char-info .char-name { font-family: var(--font-title); font-size: 0.95rem; color: var(--accent-gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mj-char-info .char-class { font-size: 0.72rem; color: var(--text-muted); }
+        .mj-char-hp { font-family: var(--font-title); font-size: 0.82rem; color: var(--accent-red, #e53e3e); white-space: nowrap; flex-shrink: 0; }
+        .mj-char-expand-icon { font-size: 0.75rem; color: var(--text-muted); flex-shrink: 0; transition: transform 0.25s; }
+        .mj-char-compact.expanded .mj-char-expand-icon { transform: rotate(180deg); }
+        .mj-char-detail { display: none; border-top: 1px solid var(--border-color); padding: 14px; transition: outline 0.15s, background 0.15s; }
+        .mj-char-compact.expanded .mj-char-detail { display: block; }
+        .mj-char-detail.drag-active { outline: 2px dashed var(--accent-gold); outline-offset: -3px; background: rgba(212,175,55,0.05); border-radius: 0 0 10px 10px; }
+
+        /* ── Wallet (bourse) ── */
+        .mj-wallet { display: flex; gap: 8px; align-items: center; margin-top: 10px; padding: 8px 10px; background: rgba(10,8,18,0.5); border: 1px solid var(--border-color); border-radius: 7px; }
+        .mj-wallet-label { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 2px; }
+        .mj-coin-group { display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .mj-coin-controls { display: flex; align-items: center; gap: 3px; }
+        .mj-coin-val { font-size: 0.88rem; font-weight: bold; min-width: 28px; text-align: center; }
+        .mj-coin-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 3px; width: 18px; height: 18px; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
+        .mj-coin-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .mj-renew-spells-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; padding: 1px 7px; cursor: pointer; font-size: 0.68rem; line-height: 1.6; transition: all 0.15s; }
+        .mj-renew-spells-btn:hover, .mj-renew-spells-btn.has-used { background: rgba(155,89,182,0.15); border-color: #9b59b6; color: #c39bd3; }
+        .mj-renew-spells-btn.has-used:hover { background: rgba(155,89,182,0.3); }
+        .coin-gold   { color: #f5c518; }
+        .coin-silver { color: #b0b8c1; }
+        .coin-bronze { color: #cd7f32; }
+        /* ── Item stack badge ── */
+        .mj-item-qty { font-size: 0.65rem; background: rgba(74,144,217,0.25); color: #7ab8f5; border: 1px solid rgba(74,144,217,0.4); border-radius: 3px; padding: 0 4px; min-width: 18px; text-align: center; flex-shrink: 0; }
+
+        /* ── Expandable PNJ row ── */
+        .pnj-block { background: rgba(15,12,22,0.7); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 8px; overflow: hidden; transition: border-color 0.15s; }
+        .pnj-block:hover { border-color: rgba(212,175,55,0.3); }
+        .pnj-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; user-select: none; }
+        .pnj-row:hover { background: rgba(30,24,45,0.9); }
+        .pnj-detail { display: none; border-top: 1px solid var(--border-color); padding: 10px 12px; background: rgba(10,8,18,0.5); }
+        .pnj-block.expanded .pnj-detail { display: block; }
+        .pnj-attack-row { display: flex; align-items: center; gap: 8px; background: rgba(20,16,34,0.8); border: 1px solid var(--border-color); border-radius: 5px; padding: 6px 10px; margin-bottom: 5px; }
+        .pnj-attack-name { flex: 1; font-size: 0.82rem; color: var(--text-main); font-weight: bold; }
+        .pnj-attack-dice { font-family: var(--font-title); color: var(--accent-gold); font-size: 0.8rem; }
+        .pnj-expand-icon { font-size: 0.7rem; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+        .pnj-block.expanded .pnj-expand-icon { transform: rotate(180deg); }
+        .btn { background: linear-gradient(180deg, #2a2436 0%, #171321 100%); color: var(--text-main); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-family: var(--font-title); transition: all 0.2s ease; }
+        .btn:hover { border-color: var(--accent-gold); color: #fff; }
+        .btn-gold { background: linear-gradient(180deg, #d4af37 0%, #997a15 100%); color: #000; font-weight: bold; border: none; }
+        .btn-gold:hover { background: linear-gradient(180deg, #f7d070 0%, #d4af37 100%); }
+        .btn-danger { background: linear-gradient(180deg, #a82222 0%, #5e1111 100%); color: white; border: none; }
+        .btn-sm { padding: 3px 6px; font-size: 0.75rem; }
+
+        input, textarea, select { width: 100%; padding: 8px 10px; background-color: rgba(15,13,20,0.8); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 4px; margin-top: 4px; margin-bottom: 10px; font-family: var(--font-body); }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent-gold); }
+        label { font-size: 0.8rem; color: var(--accent-gold-light); font-family: var(--font-title); text-transform: uppercase; font-weight: bold; }
+        .qr-box { background-color: white; padding: 10px; border-radius: 8px; display: inline-block; margin: 10px 0; }
+        .ip-config-box { background: var(--bg-card); border: 1px solid var(--accent-gold); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .history-log { max-height: 150px; overflow-y: auto; background-color: rgba(10,8,15,0.9); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Traits */
+        .traits-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 8px; margin-top: 8px; }
+        .trait-badge { background: rgba(20,16,34,0.85); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 8px; text-align: center; }
+        .trait-badge .trait-name { font-size: 0.68rem; color: var(--text-main); font-family: var(--font-title); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px; }
+        .trait-badge .trait-value { font-size: 1.5rem; font-weight: bold; color: var(--accent-gold); font-family: var(--font-title); line-height: 1; }
+        .skillpoints-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 4px; margin-top: 8px; }
+        .skillpoint-row { display: flex; align-items: center; justify-content: space-between; background: rgba(20,16,34,0.75); border: 1px solid var(--border-color); border-radius: 6px; padding: 5px 8px; }
+        .skillpoint-row .sp-name { font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-title); text-transform: uppercase; letter-spacing: 0.4px; }
+        .skillpoint-row .sp-value { font-size: 0.95rem; font-weight: bold; color: var(--accent-gold); font-family: var(--font-title); min-width: 22px; text-align: right; }
+
+        /* ── Bibliothèque ── */
+        .library-panel { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; max-height: calc(100vh - 80px); position: sticky; top: 30px; padding: 14px; margin-bottom: 0; overflow: hidden; }
+        .library-search-wrap { position: relative; margin-bottom: 8px; }
+        .library-search-wrap i { position: absolute; left: 10px; top: 50%; transform: translateY(-60%); color: var(--text-muted); pointer-events: none; font-size: 0.8rem; }
+        .library-search-wrap input { padding-left: 30px; margin: 0; font-size: 0.85rem; }
+        .library-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+        .lib-tab { flex: 1; padding: 5px 2px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); border-radius: 4px; cursor: pointer; font-size: 0.65rem; font-family: var(--font-title); color: var(--text-muted); text-align: center; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.15s; }
+        .lib-tab:hover { border-color: var(--accent-gold); color: var(--text-main); }
+        .lib-tab.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(212,175,55,0.1); }
+        .library-items { overflow-y: auto; flex: 1; padding-right: 2px; }
+        .library-items::-webkit-scrollbar { width: 4px; }
+        .library-items::-webkit-scrollbar-track { background: transparent; }
+        .library-items::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+        .lib-empty { text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 24px 12px; line-height: 1.6; }
+        .lib-empty code { display: block; margin-top: 8px; font-size: 0.7rem; color: var(--accent-gold); background: rgba(212,175,55,0.08); border: 1px solid var(--border-color); border-radius: 4px; padding: 6px 8px; font-family: monospace; text-align: left; white-space: pre; }
+        .lib-item { background: linear-gradient(90deg, rgba(20,16,34,0.8) 0%, rgba(15,12,25,0.8) 100%); border: 1px solid var(--border-color); border-left: 3px solid var(--border-color); border-radius: 5px; padding: 8px 10px; margin-bottom: 6px; cursor: grab; transition: border-color 0.15s, background 0.15s, transform 0.1s; user-select: none; }
+        .lib-item:hover { background: rgba(212,175,55,0.06); }
+        .lib-item[data-type="inventory"] { border-left-color: #4a90d9; }
+        .lib-item[data-type="skills"]    { border-left-color: #48bb78; }
+        .lib-item[data-type="quests"]    { border-left-color: #fc8181; }
+        .lib-item[data-type="spells"]    { border-left-color: #9b59b6; }
+        .lib-item.lib-dragging { opacity: 0.45; transform: scale(0.97); cursor: grabbing; }
+        .lib-item-header { display: flex; align-items: center; gap: 6px; }
+        .lib-item-name { font-size: 0.83rem; font-weight: bold; color: var(--text-main); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lib-item-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; font-style: italic; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .lib-item-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+        .lib-type-badge { font-size: 0.58rem; font-family: var(--font-title); text-transform: uppercase; padding: 1px 5px; border-radius: 3px; letter-spacing: 0.5px; }
+        .lib-type-inventory { background: rgba(43,108,176,0.25); color: #7ab8f5; border: 1px solid rgba(43,108,176,0.4); }
+        .lib-type-skills    { background: rgba(45,138,78,0.25);  color: #68d391; border: 1px solid rgba(45,138,78,0.4); }
+        .lib-type-quests    { background: rgba(168,34,34,0.25);  color: #fc8181; border: 1px solid rgba(168,34,34,0.4); }
+        .lib-type-spells    { background: rgba(155,89,182,0.25); color: #c39bd3; border: 1px solid rgba(155,89,182,0.4); }
+        .lib-add-btn { background: none; border: 1px solid var(--border-color); color: var(--accent-gold); width: 22px; height: 22px; border-radius: 4px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; line-height: 1; }
+        .lib-add-btn:hover { background: rgba(212,175,55,0.2); border-color: var(--accent-gold); }
+        .drop-hint { font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 4px 0 2px; font-style: italic; opacity: 0.7; }
+
+        /* ── Campaign Selector ── */
+        .campaign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; margin-top: 10px; }
+        .campaign-card { background: linear-gradient(135deg, rgba(26,22,37,0.9) 0%, rgba(20,17,28,0.9) 100%); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+        .campaign-card:hover { border-color: var(--accent-gold); box-shadow: 0 0 18px rgba(212,175,55,0.2); }
+        .campaign-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent-gold), transparent); }
+        .campaign-card-name { font-family: var(--font-title); font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 6px; }
+        .campaign-card-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; min-height: 2em; }
+        .campaign-card-actions { display: flex; gap: 6px; }
+        .campaign-empty { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .campaign-empty i { font-size: 2.5rem; color: var(--border-color); margin-bottom: 12px; display: block; }
+
+        /* ── PNJ Section ── */
+        .pnj-row { display: flex; align-items: center; gap: 10px; background: rgba(15,12,22,0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; transition: background 0.15s; }
+        .pnj-row:hover { background: rgba(30,24,45,0.9); border-color: var(--border-color); }
+        .pnj-type-badge { font-size: 0.6rem; font-family: var(--font-title); text-transform: uppercase; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.5px; flex-shrink: 0; }
+        .pnj-type-pnj     { background: rgba(43,108,176,0.25); color: #7ab8f5; border: 1px solid rgba(43,108,176,0.4); }
+        .pnj-type-monstre { background: rgba(168,34,34,0.25);  color: #fc8181; border: 1px solid rgba(168,34,34,0.4); }
+        .pnj-type-boss    { background: rgba(212,175,55,0.2);  color: #f6d860; border: 1px solid rgba(212,175,55,0.4); }
+        .pnj-name { flex: 1; font-weight: bold; color: var(--text-main); font-size: 0.9rem; }
+        .pnj-hp { font-size: 0.8rem; color: var(--accent-red); font-family: var(--font-title); }
+        .pnj-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+        /* ── Sorts (Spells) ── */
+        .spell-card { background: rgba(20,16,34,0.8); border: 1px solid rgba(155,89,182,0.3); border-left: 3px solid #9b59b6; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; }
+        .spell-card.unavailable { opacity: 0.5; border-left-color: var(--border-color); }
+        .spell-card.exhausted { opacity: 0.45; border-left-color: #555; filter: grayscale(0.4); }
+        .spell-card.exhausted .spell-use-btn { display: none; }
+        .mj-item-row.spell-exhausted { opacity: 0.4; text-decoration: line-through; text-decoration-color: rgba(155,89,182,0.4); }
+        .spell-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .spell-level-badge { background: rgba(155,89,182,0.3); border: 1px solid rgba(155,89,182,0.5); color: #c39bd3; font-size: 0.6rem; font-family: var(--font-title); padding: 2px 6px; border-radius: 3px; text-transform: uppercase; flex-shrink: 0; }
+        .spell-name { font-weight: bold; color: var(--text-main); font-size: 0.95rem; flex: 1; }
+        .spell-locked-icon { color: var(--text-muted); font-size: 0.8rem; }
+        .spell-slots { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
+        .spell-slot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(155,89,182,0.6); background: rgba(155,89,182,0.2); display: inline-block; }
+        .spell-slot.used { background: transparent; border-color: var(--border-color); }
+        .spell-use-btn { background: rgba(155,89,182,0.2); border: 1px solid rgba(155,89,182,0.5); color: #c39bd3; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; font-family: var(--font-title); margin-left: 6px; }
+        .spell-use-btn:hover { background: rgba(155,89,182,0.4); }
+        .spell-desc { font-size: 0.82rem; color: #b8a98a; font-style: italic; margin-top: 4px; display: none; }
+        .spell-card:hover .spell-desc { display: block; }
+
+        /* ── Map visibility ── */
+        .map-row { display: flex; align-items: center; gap: 10px; background: rgba(15,12,22,0.5); border: 1px solid var(--border-color); border-radius: 5px; padding: 8px 12px; margin-bottom: 6px; }
+        .map-row-name { flex: 1; font-size: 0.88rem; color: var(--text-main); }
+        .map-vis-toggle { background: none; border: 1px solid var(--border-color); color: var(--text-muted); padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 0.72rem; font-family: var(--font-title); transition: all 0.15s; }
+        .map-vis-toggle.visible { border-color: var(--accent-green); color: #68d391; background: rgba(45,138,78,0.1); }
+        .map-vis-toggle:hover { border-color: var(--accent-gold); }
+
+        /* ── MJ header bar ── */
+        .mj-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+        .back-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-family: var(--font-title); transition: all 0.15s; }
+        .back-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .campaign-name-badge { font-family: var(--font-title); font-size: 0.85rem; color: var(--accent-gold-light); background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); padding: 5px 12px; border-radius: 4px; }
+        .poll-indicator { font-size: 0.65rem; color: var(--text-muted); margin-left: auto; }
+
+        @media (max-width: 820px) { .library-panel { display: none; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title"><i class="fa-solid fa-dice-d20"></i><span>Les aventuriers d'Astyria</span></div>
+        <div class="header-actions">
+            <div id="roleBadgeContainer"></div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- ══════════════════════════════════════════════════════
+             CAMPAIGN SELECTOR VIEW
+        ══════════════════════════════════════════════════════ -->
+        <div id="campaignView" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fa-solid fa-scroll"></i> Campagnes</span>
+                    <button class="btn btn-gold btn-sm" onclick="openNewCampaignModal()"><i class="fa-solid fa-plus"></i> Nouvelle Campagne</button>
+                </div>
+                <div id="campaignGrid" class="campaign-grid">
+                    <div class="campaign-empty"><i class="fa-solid fa-spinner fa-spin"></i><span>Chargement…</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+             PLAYER VIEW
+        ══════════════════════════════════════════════════════ -->
+        <div id="playerView" style="display: none;">
+            <div id="tab-stats" class="tab-content active">
+                <div class="card">
+                    <div class="char-header">
+                        <img id="p-avatar" src="" class="char-avatar" onerror="this.src='https://via.placeholder.com/80?text=Hero'">
+                        <div class="char-info">
+                            <div id="p-name" class="char-name">-</div>
+                            <div id="p-class" class="char-class">-</div>
+                            <div class="char-badges">
+                                <div id="p-ca-badge" class="ca-badge" style="display:none;">
+                                    <span class="ca-label">CA</span>
+                                    <span class="ca-value" id="p-ca-value">10</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="p-bars-container" style="margin-top: 15px;"></div>
+                </div>
+                <div class="card" id="p-traits-card" style="display:none;">
+                    <div class="card-header"><span><i class="fa-solid fa-brain"></i> Traits de Caractère</span></div>
+                    <div id="p-traits-grid" class="traits-grid"></div>
+                </div>
+                <div class="card" id="p-skillpoints-card" style="display:none;">
+                    <div class="card-header"><span><i class="fa-solid fa-star-half-stroke"></i> Compétences</span></div>
+                    <div id="p-skillpoints-grid" class="skillpoints-grid"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-book-open"></i> Histoire & Contexte</span></div>
+                    <p id="p-description" style="line-height:1.6; color:#cbd5e0; white-space:pre-line;"></p>
+                </div>
+            </div>
+
+            <div id="tab-desc" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-crosshairs"></i> Objectifs</span></div>
+                    <ul id="p-quests-list" class="item-list"></ul>
+                </div>
+            </div>
+
+            <div id="tab-inventory" class="tab-content">
+                <div class="card" id="p-wallet-card" style="display:none;">
+                    <div class="card-header"><span><i class="fa-solid fa-coins"></i> Bourse</span></div>
+                    <div id="p-wallet-display"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-sack-dollar"></i> Inventaire</span></div>
+                    <ul id="p-inventory-list" class="item-list"></ul>
+                </div>
+            </div>
+
+            <div id="tab-spells" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-bolt"></i> Capacités</span></div>
+                    <ul id="p-skills-list" class="item-list"></ul>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-hat-wizard"></i> Sorts</span></div>
+                    <div id="p-spells-list"></div>
+                </div>
+            </div>
+
+            <div id="tab-map" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-map-location-dot"></i> Cartes du Monde</span></div>
+                    <label>Sélectionner une carte :</label>
+                    <select id="playerMapSelector" onchange="changePlayerMap(this.value)"></select>
+                    <div class="map-container" style="margin-top:10px;">
+                        <img id="p-map-img" src="" class="map-img">
+                    </div>
+                </div>
+            </div>
+
+            <nav class="player-nav">
+                <button class="nav-btn active" onclick="switchPlayerTab('stats',this)"><i class="fa-solid fa-user-shield"></i>Fiche</button>
+                <button class="nav-btn" onclick="switchPlayerTab('desc',this)"><i class="fa-solid fa-scroll"></i>Quêtes</button>
+                <button class="nav-btn" onclick="switchPlayerTab('inventory',this)"><i class="fa-solid fa-bag-shopping"></i>Équip.</button>
+                <button class="nav-btn" onclick="switchPlayerTab('spells',this)"><i class="fa-solid fa-bolt"></i>Capacités</button>
+                <button class="nav-btn" onclick="switchPlayerTab('map',this)"><i class="fa-solid fa-map"></i>Cartes</button>
+            </nav>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════
+             MJ VIEW
+        ══════════════════════════════════════════════════════ -->
+        <div id="mjView" style="display: none;">
+
+            <!-- Topbar MJ -->
+            <div class="mj-topbar">
+                <button class="back-btn" onclick="backToCampaigns()"><i class="fa-solid fa-arrow-left"></i> Campagnes</button>
+                <span id="mjCampaignBadge" class="campaign-name-badge"></span>
+                <span id="pollIndicator" class="poll-indicator"></span>
+            </div>
+
+            <!-- MJ Tabs Navigation -->
+            <div class="mj-tabs">
+                <button class="mj-tab-btn active" id="mjTab-joueurs" onclick="switchMJTab('joueurs',this)">
+                    <i class="fa-solid fa-users"></i> Joueurs
+                </button>
+                <button class="mj-tab-btn" id="mjTab-pnj" onclick="switchMJTab('pnj',this)">
+                    <i class="fa-solid fa-skull-crossbones"></i> PNJ
+                </button>
+                <button class="mj-tab-btn" id="mjTab-cartes" onclick="switchMJTab('cartes',this)">
+                    <i class="fa-solid fa-map"></i> Cartes
+                </button>
+                <button class="mj-tab-btn" id="mjTab-journal" onclick="switchMJTab('journal',this)">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Journal
+                </button>
+            </div>
+
+            <!-- Tab: Joueurs -->
+            <div class="mj-tab-panel active" id="mjPanel-joueurs">
+                <div class="mj-joueurs-layout">
+
+                    <!-- Library column -->
+                    <div class="mj-lib-col">
+                        <div class="mj-lib-panel">
+                            <div style="font-family:var(--font-title);font-size:0.9rem;color:var(--accent-gold);margin-bottom:8px;">
+                                <i class="fa-solid fa-book-open-reader"></i> Bibliothèque
+                            </div>
+                            <div class="library-search-wrap" style="margin-bottom:6px;">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="mjLibSearchInput" placeholder="Rechercher..."
+                                       oninput="onMJLibSearch(this.value)" style="margin:0;font-size:0.82rem;padding-left:28px;">
+                            </div>
+                            <div class="library-tabs" style="margin-bottom:8px;">
+                                <button class="lib-tab active" id="mjLibTab_all"        onclick="setMJLibFilter('all')">Tout</button>
+                                <button class="lib-tab"        id="mjLibTab_inventory"  onclick="setMJLibFilter('inventory')"><i class="fa-solid fa-box"></i></button>
+                                <button class="lib-tab"        id="mjLibTab_skills"     onclick="setMJLibFilter('skills')" title="Capacités"><i class="fa-solid fa-bolt"></i></button>
+                                <button class="lib-tab"        id="mjLibTab_spells"     onclick="setMJLibFilter('spells')" title="Sorts"><i class="fa-solid fa-hat-wizard"></i></button>
+                                <button class="lib-tab"        id="mjLibTab_quests"     onclick="setMJLibFilter('quests')"><i class="fa-solid fa-scroll"></i></button>
+                            </div>
+                            <div id="mjLibraryItems" class="library-items">
+                                <div class="lib-empty"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Characters column -->
+                    <div class="mj-chars-col">
+                        <div id="mjCharactersGrid" class="mj-grid"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tab: PNJ -->
+            <div class="mj-tab-panel" id="mjPanel-pnj">
+                <div class="card">
+                    <div class="card-header">
+                        <span><i class="fa-solid fa-skull-crossbones"></i> PNJ &amp; Monstres</span>
+                        <button class="btn btn-sm btn-gold" onclick="openNewPnjModal()"><i class="fa-solid fa-plus"></i> Ajouter</button>
+                    </div>
+                    <div id="pnjList"><div style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:16px;">Aucun PNJ pour l'instant.</div></div>
+                </div>
+            </div>
+
+            <!-- Tab: Cartes -->
+            <div class="mj-tab-panel" id="mjPanel-cartes">
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-map"></i> Cartes de la Campagne</span></div>
+                    <div id="mjMapsList" style="margin-bottom:12px;"></div>
+                    <label>Prévisualisation :</label>
+                    <select id="mjMapSelector" onchange="changeMjMap(this.value)"></select>
+                    <div class="map-container" style="margin-top:10px;">
+                        <img id="mj-map-img" src="" class="map-img">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Journal -->
+            <div class="mj-tab-panel" id="mjPanel-journal">
+                <div class="card">
+                    <div class="card-header"><span><i class="fa-solid fa-clock-rotate-left"></i> Journal d'actions</span></div>
+                    <div id="historyLog" class="history-log" style="max-height:400px;"></div>
+                </div>
+            </div>
+
+            <!-- Hidden IP input (kept for JS references) -->
+            <input type="hidden" id="mjIpInput">
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- ── Floating Dice Button ── -->
+    <button id="diceToggleBtn" onclick="toggleDicePanel()" title="Lancer les dés">🎲</button>
+
+    <!-- ── Dice Panel ── -->
+    <div id="dicePanel">
+        <div class="dice-panel-header">
+            <span><i class="fa-solid fa-dice-d20"></i> Lancer de dés</span>
+            <button onclick="toggleDicePanel()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">✕</button>
+        </div>
+        <div class="dice-multiplier">
+            <button class="mult-btn active" onclick="selectMult(this,1)">1×</button>
+            <button class="mult-btn" onclick="selectMult(this,2)">2×</button>
+            <button class="mult-btn" onclick="selectMult(this,3)">3×</button>
+            <button class="mult-btn" onclick="selectMult(this,4)">4×</button>
+            <button class="mult-btn" onclick="selectMult(this,5)">5×</button>
+        </div>
+        <div class="dice-grid">
+            <button class="die-btn" onclick="rollDie(4)">d4</button>
+            <button class="die-btn" onclick="rollDie(6)">d6</button>
+            <button class="die-btn" onclick="rollDie(8)">d8</button>
+            <button class="die-btn" onclick="rollDie(10)">d10</button>
+            <button class="die-btn" onclick="rollDie(12)">d12</button>
+            <button class="die-btn die-d20" onclick="rollDie(20)">d20</button>
+            <button class="die-btn" onclick="rollDie(100)" style="grid-column:span 2;aspect-ratio:auto;padding:8px 0;">d100</button>
+        </div>
+        <div class="dice-result-area">
+            <div class="dice-result-number" id="diceResultNum">–</div>
+            <div class="dice-result-label" id="diceResultLabel"></div>
+            <div class="dice-result-detail" id="diceResultDetail"></div>
+        </div>
+        <div class="dice-history-list" id="diceHistoryList"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         CHARACTER EDIT MODAL
+    ══════════════════════════════════════════════════════ -->
+    <div id="charModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:200;overflow-y:auto;padding:20px;">
+        <div style="display:flex;gap:16px;max-width:1140px;margin:30px auto;align-items:flex-start;">
+
+            <!-- Edit Panel -->
+            <div class="card" style="flex:1;min-width:0;">
+                <div class="card-header">
+                    <span id="modalTitle">Éditer Personnage</span>
+                    <button class="btn btn-sm" onclick="closeCharModal()">✕</button>
+                </div>
+                <form id="charForm" onsubmit="saveCharacter(event)">
+                    <input type="hidden" id="editCharId">
+                    <label>Nom</label><input type="text" id="editName" required>
+                    <label>Classe</label><input type="text" id="editClass" required>
+                    <label>Avatar (URL)</label><input type="text" id="editAvatar" placeholder="https://... ou chemin local">
+                    <label>CA (Classe d'Armure)</label><input type="number" id="editCA" min="0" max="99" value="10">
+
+                    <div id="editBarsMaxSection" style="margin-bottom:15px;"></div>
+                    <div id="editTraitsSection" style="margin-bottom:15px;"></div>
+                    <div id="editSkillPointsSection" style="margin-bottom:15px;"></div>
+
+                    <label>Histoire</label><textarea id="editDescription" rows="3"></textarea>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;">
+                        <div class="list-editor-box"
+                             ondragover="onDropZoneDragOver(event,'inventory')"
+                             ondragleave="onDropZoneDragLeave(event)"
+                             ondrop="onDropZoneDrop(event,'inventory')">
+                            <label><i class="fa-solid fa-bag-shopping"></i> Inventaire</label>
+                            <div class="drop-hint"><i class="fa-solid fa-arrow-right-to-bracket"></i> Déposer ici</div>
+                            <div style="display:flex;gap:5px;margin-top:4px;">
+                                <input type="text" id="newInvInput" placeholder="Nom de l'objet..." onkeydown="if(event.key==='Enter'){event.preventDefault();addListItem('inventory');}">
+                                <button type="button" class="btn btn-sm btn-gold" onclick="addListItem('inventory')" style="align-self:flex-start;margin-top:4px;">+</button>
+                            </div>
+                            <input type="text" id="newInvDesc" class="desc-input" placeholder="Description (optionnelle)...">
+                            <ul id="editInventoryList" class="item-list-editor"></ul>
+                        </div>
+                        <div class="list-editor-box"
+                             ondragover="onDropZoneDragOver(event,'skills')"
+                             ondragleave="onDropZoneDragLeave(event)"
+                             ondrop="onDropZoneDrop(event,'skills')">
+                            <label><i class="fa-solid fa-bolt"></i> Capacités</label>
+                            <div class="drop-hint"><i class="fa-solid fa-arrow-right-to-bracket"></i> Déposer ici</div>
+                            <div style="display:flex;gap:5px;margin-top:4px;">
+                                <input type="text" id="newSkillInput" placeholder="Nom du talent..." onkeydown="if(event.key==='Enter'){event.preventDefault();addListItem('skills');}">
+                                <button type="button" class="btn btn-sm btn-gold" onclick="addListItem('skills')" style="align-self:flex-start;margin-top:4px;">+</button>
+                            </div>
+                            <input type="text" id="newSkillDesc" class="desc-input" placeholder="Description (optionnelle)...">
+                            <ul id="editSkillsList" class="item-list-editor"></ul>
+                        </div>
+                    </div>
+
+                    <div class="list-editor-box" style="margin-bottom:15px;"
+                         ondragover="onDropZoneDragOver(event,'quests')"
+                         ondragleave="onDropZoneDragLeave(event)"
+                         ondrop="onDropZoneDrop(event,'quests')">
+                        <label><i class="fa-solid fa-scroll"></i> Objectifs</label>
+                        <div class="drop-hint"><i class="fa-solid fa-arrow-right-to-bracket"></i> Déposer ici</div>
+                        <div style="display:flex;gap:5px;margin-top:4px;">
+                            <input type="text" id="newQuestInput" placeholder="Nom de l'objectif..." onkeydown="if(event.key==='Enter'){event.preventDefault();addListItem('quests');}">
+                            <button type="button" class="btn btn-sm btn-gold" onclick="addListItem('quests')" style="align-self:flex-start;margin-top:4px;">+</button>
+                        </div>
+                        <input type="text" id="newQuestDesc" class="desc-input" placeholder="Description (optionnelle)...">
+                        <ul id="editQuestsList" class="item-list-editor"></ul>
+                    </div>
+
+                    <!-- Sorts -->
+                    <div class="list-editor-box" style="margin-bottom:15px;"
+                         ondragover="onDropZoneDragOver(event,'spells')"
+                         ondragleave="onDropZoneDragLeave(event)"
+                         ondrop="onDropZoneDrop(event,'spells')">
+                        <label><i class="fa-solid fa-hat-wizard"></i> Sorts</label>
+                        <div class="drop-hint"><i class="fa-solid fa-arrow-right-to-bracket"></i> Déposer depuis la bibliothèque</div>
+                        <div style="display:grid;grid-template-columns:2fr 60px 60px 1fr;gap:5px;margin-top:6px;align-items:flex-start;">
+                            <input type="text" id="newSpellName" placeholder="Nom du sort..." style="margin:0;">
+                            <input type="number" id="newSpellLevel" placeholder="Niv." min="0" max="9" value="1" style="margin:0;">
+                            <input type="number" id="newSpellSlots" placeholder="Emp." min="1" max="99" value="1" style="margin:0;" title="Emplacements">
+                            <button type="button" class="btn btn-sm btn-gold" onclick="addSpellItem()" style="margin:0;padding:8px 10px;">+</button>
+                        </div>
+                        <input type="text" id="newSpellDesc" class="desc-input" placeholder="Description (optionnelle)..." style="margin-top:4px;">
+                        <ul id="editSpellsList" class="item-list-editor"></ul>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;margin-top:15px;">
+                        <button type="button" class="btn btn-danger" onclick="deleteCharacter()">Supprimer</button>
+                        <div style="display:flex;gap:8px;">
+                            <button type="button" class="btn" onclick="closeCharModal()">Annuler</button>
+                            <button type="submit" class="btn btn-gold">Sauvegarder</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Library Panel -->
+            <div id="libraryPanel" class="card library-panel">
+                <div class="card-header" style="margin-bottom:4px;">
+                    <span><i class="fa-solid fa-book-open-reader"></i> Bibliothèque</span>
+                </div>
+                <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:8px;line-height:1.4;">
+                    <i class="fa-solid fa-globe" style="color:#68d391;margin-right:3px;"></i>Commune +
+                    <i class="fa-solid fa-scroll" style="color:var(--accent-gold);margin-right:3px;"></i>Campagne
+                </div>
+                <div class="library-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="libSearchInput" placeholder="Rechercher..."
+                           oninput="onLibSearch(this.value)" style="margin:0;font-size:0.85rem;">
+                </div>
+                <div class="library-tabs">
+                    <button class="lib-tab active" id="libTab_all"       onclick="setLibFilter('all')">Tout</button>
+                    <button class="lib-tab"         id="libTab_inventory" onclick="setLibFilter('inventory')"><i class="fa-solid fa-box"></i></button>
+                    <button class="lib-tab"         id="libTab_skills"    onclick="setLibFilter('skills')"><i class="fa-solid fa-bolt"></i></button>
+                    <button class="lib-tab"         id="libTab_quests"    onclick="setLibFilter('quests')"><i class="fa-solid fa-scroll"></i></button>
+                    <button class="lib-tab"         id="libTab_spells"    onclick="setLibFilter('spells')"><i class="fa-solid fa-hat-wizard"></i></button>
+                </div>
+                <div id="libraryItems" class="library-items">
+                    <div class="lib-empty"><i class="fa-solid fa-spinner fa-spin"></i> Chargement...</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         CAMPAIGN CREATION MODAL
+    ══════════════════════════════════════════════════════ -->
+    <div id="campaignModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;">
+        <div class="card" style="max-width:480px;width:100%;margin:0 auto;">
+            <div class="card-header">
+                <span><i class="fa-solid fa-scroll"></i> Nouvelle Campagne</span>
+                <button class="btn btn-sm" onclick="closeCampaignModal()">✕</button>
+            </div>
+            <label>Nom de la campagne</label>
+            <input type="text" id="newCampaignName" placeholder="Ex: La Forêt Maudite">
+            <label>Description (optionnelle)</label>
+            <textarea id="newCampaignDesc" rows="3" placeholder="Une brève description de la campagne…"></textarea>
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+                <button class="btn" onclick="closeCampaignModal()">Annuler</button>
+                <button class="btn btn-gold" onclick="createCampaign()"><i class="fa-solid fa-wand-magic-sparkles"></i> Créer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         PNJ EDIT MODAL
+    ══════════════════════════════════════════════════════ -->
+    <div id="pnjModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.88);z-index:200;overflow-y:auto;padding:20px;">
+        <div class="card" style="max-width:580px;margin:40px auto;">
+            <div class="card-header">
+                <span id="pnjModalTitle"><i class="fa-solid fa-skull-crossbones"></i> PNJ</span>
+                <button class="btn btn-sm" onclick="closePnjModal()">✕</button>
+            </div>
+            <form id="pnjForm" onsubmit="savePnj(event)">
+                <input type="hidden" id="editPnjId">
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">
+                    <div>
+                        <label>Nom</label>
+                        <input type="text" id="editPnjName" required placeholder="Nom du PNJ">
+                    </div>
+                    <div>
+                        <label>Type</label>
+                        <select id="editPnjType">
+                            <option value="pnj">PNJ</option>
+                            <option value="monstre">Monstre</option>
+                            <option value="boss">Boss</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div><label>PV Actuels</label><input type="number" id="editPnjHpCurrent" min="0" value="10"></div>
+                    <div><label>PV Maximum</label><input type="number" id="editPnjHpMax" min="1" value="10"></div>
+                </div>
+                <label>Description / Notes</label>
+                <textarea id="editPnjNotes" rows="3" placeholder="Description, comportement, récompenses…"></textarea>
+
+                <!-- Attacks -->
+                <div style="margin-bottom:15px;">
+                    <label style="display:block;margin-bottom:6px;"><i class="fa-solid fa-swords"></i> Attaques</label>
+                    <div id="editPnjAttacks"></div>
+                    <div style="display:grid;grid-template-columns:2fr 80px 1fr;gap:5px;margin-top:6px;align-items:flex-start;">
+                        <input type="text" id="newAttackName" placeholder="Nom (ex: Morsure)" style="margin:0;">
+                        <input type="text" id="newAttackDice" placeholder="1d6" style="margin:0;">
+                        <button type="button" class="btn btn-sm btn-gold" onclick="addPnjAttack()" style="margin:0;">+</button>
+                    </div>
+                    <input type="text" id="newAttackDesc" class="desc-input" placeholder="Description…" style="margin-top:4px;">
+                </div>
+
+                <div style="display:flex;justify-content:space-between;margin-top:12px;">
+                    <button type="button" class="btn btn-danger" onclick="deletePnj()">Supprimer</button>
+                    <div style="display:flex;gap:8px;">
+                        <button type="button" class="btn" onclick="closePnjModal()">Annuler</button>
+                        <button type="submit" class="btn btn-gold">Sauvegarder</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         MJ JOIN QR MODAL
+    ══════════════════════════════════════════════════════ -->
+
+    <script>
+    // ══════════════════════════════════════════════════════════
+    //  CONSTANTS
+    // ══════════════════════════════════════════════════════════
+    const FIXED_TRAITS = ['Force','Dextérité','Constitution','Intelligence','Sagesse','Charisme'];
+    const FIXED_SKILL_POINTS = [
+        'Acrobaties (DEX)','Arcanes (INT)','Athlétisme (FOR)','Discrétion (DEX)','Dressage (SAG)',
+        'Escamotage (DEX)','Histoire (INT)','Intimidation (CHA)','Investigation (INT)','Médecine (SAG)',
+        'Nature (INT)','Perception (SAG)','Perspicacité (SAG)','Persuasion (CHA)','Religion (INT)',
+        'Représentation (CHA)','Survie (SAG)','Tromperie (CHA)'
+    ];
+
+    // ══════════════════════════════════════════════════════════
+    //  STATE
+    // ══════════════════════════════════════════════════════════
+    let appData = { ipConfig: window.location.host, history: [], characters: {}, maps: [], pnj: [] };
+    let currentRole       = 'player';
+    let selectedCharId    = null;
+    let currentCampaignId = null;
+    let mjPollInterval    = null;
+
+    // ══════════════════════════════════════════════════════════
+    //  INIT
+    // ══════════════════════════════════════════════════════════
+    window.addEventListener('DOMContentLoaded', async () => {
+        const p = new URLSearchParams(window.location.search);
+        const role       = p.get('role');
+        const charId     = p.get('char');
+        const campaignId = p.get('campaign');
+
+        if (!campaignId) {
+            // No campaign in URL → show campaign selector
+            showCampaignView();
+            return;
+        }
+
+        currentCampaignId = campaignId;
+
+        if (role === 'mj' || (!charId && !role)) {
+            currentRole = 'mj';
+            await loadAllFromCampaign(campaignId);
+            initMJView();
+        } else if (charId) {
+            currentRole = 'player';
+            selectedCharId = charId;
+            await loadSinglePlayer(campaignId, charId);
+            initPlayerView();
+            setInterval(() => loadSinglePlayer(campaignId, selectedCharId), 2000);
+        } else {
+            showCampaignView();
+        }
+    });
+
+    // ══════════════════════════════════════════════════════════
+    //  IP DETECTION (WebRTC)
+    // ══════════════════════════════════════════════════════════
+    function detectLocalIP() {
+        return new Promise(resolve => {
+            const ips = new Set();
+            try {
+                const pc = new RTCPeerConnection({ iceServers: [] });
+                pc.createDataChannel('');
+                pc.createOffer().then(offer => pc.setLocalDescription(offer));
+                pc.onicecandidate = e => {
+                    if (!e || !e.candidate) {
+                        pc.close();
+                        const found = [...ips].find(ip => !ip.startsWith('127.'));
+                        resolve(found || null);
+                        return;
+                    }
+                    const m = /([0-9]{1,3}(?:\.[0-9]{1,3}){3})/.exec(e.candidate.candidate);
+                    if (m) ips.add(m[1]);
+                };
+                setTimeout(() => { pc.close(); resolve([...ips].find(ip => !ip.startsWith('127.')) || null); }, 1500);
+            } catch(e) { resolve(null); }
+        });
+    }
+
+    async function autoDetectIp() {
+        const btn = event.currentTarget;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+        const ip = await detectLocalIP();
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-search-location"></i> Auto';
+        if (ip) {
+            const port = window.location.port || '8000';
+            const full = ip + ':' + port;
+            document.getElementById('mjIpInput').value = full;
+            updateIpAddress(full);
+        } else {
+            alert("Impossible de détecter l'IP automatiquement. Renseignez-la manuellement.");
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  CAMPAIGN MANAGEMENT
+    // ══════════════════════════════════════════════════════════
+    async function showCampaignView() {
+        document.getElementById('campaignView').style.display = 'block';
+        document.getElementById('mjView').style.display = 'none';
+        document.getElementById('playerView').style.display = 'none';
+        document.getElementById('roleBadgeContainer').innerHTML = '';
+        await loadCampaigns();
+    }
+
+    async function loadCampaigns() {
+        const grid = document.getElementById('campaignGrid');
+        grid.innerHTML = '<div class="campaign-empty"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+        try {
+            const res = await fetch('/api/campaigns?t=' + Date.now());
+            if (!res.ok) throw new Error();
+            const campaigns = await res.json();
+            renderCampaignGrid(campaigns);
+        } catch(e) {
+            grid.innerHTML = '<div class="campaign-empty"><i class="fa-solid fa-triangle-exclamation"></i><br>Impossible de charger les campagnes.<br><small>Vérifiez que server.py est démarré.</small></div>';
+        }
+    }
+
+    function renderCampaignGrid(campaigns) {
+        const grid = document.getElementById('campaignGrid');
+        if (!campaigns || campaigns.length === 0) {
+            grid.innerHTML = '<div class="campaign-empty"><i class="fa-solid fa-scroll"></i><br>Aucune campagne.<br>Créez-en une pour commencer!</div>';
+            return;
+        }
+        grid.innerHTML = campaigns.map(c => `
+            <div class="campaign-card">
+                <div class="campaign-card-name"><i class="fa-solid fa-scroll"></i> ${c.name}</div>
+                <div class="campaign-card-desc">${c.description || '<em style="opacity:0.5">Aucune description</em>'}</div>
+                <div class="campaign-card-actions">
+                    <button class="btn btn-gold btn-sm" onclick="openCampaignMJ('${c.id}')"><i class="fa-solid fa-crown"></i> Jouer (MJ)</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCampaign('${c.id}','${c.name.replace(/'/g,'\\\'')}')" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openCampaignMJ(campaignId) {
+        window.location.href = `${window.location.pathname}?campaign=${encodeURIComponent(campaignId)}&role=mj`;
+    }
+
+    async function deleteCampaign(id, name) {
+        if (!confirm(`Supprimer la campagne "${name}" et tous ses données ? Cette action est irréversible.`)) return;
+        await fetch(`/api/campaigns/${id}/delete`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}' });
+        loadCampaigns();
+    }
+
+    function openNewCampaignModal() {
+        document.getElementById('campaignModal').style.display = 'flex';
+        document.getElementById('newCampaignName').value = '';
+        document.getElementById('newCampaignDesc').value = '';
+        setTimeout(() => document.getElementById('newCampaignName').focus(), 50);
+    }
+
+    function closeCampaignModal() {
+        document.getElementById('campaignModal').style.display = 'none';
+    }
+
+    async function createCampaign() {
+        const name = document.getElementById('newCampaignName').value.trim();
+        if (!name) { alert('Donnez un nom à votre campagne.'); return; }
+        const desc = document.getElementById('newCampaignDesc').value.trim();
+        const res = await fetch('/api/campaigns', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ name, description: desc, createdAt: new Date().toISOString() })
+        });
+        if (res.ok) {
+            closeCampaignModal();
+            loadCampaigns();
+        } else {
+            alert('Erreur lors de la création de la campagne.');
+        }
+    }
+
+    function backToCampaigns() {
+        stopMJPolling();
+        window.location.href = window.location.pathname;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  DATA LOADING (campaign-scoped)
+    // ══════════════════════════════════════════════════════════
+    async function loadAllFromCampaign(cid) {
+        try {
+            const t = Date.now();
+            const [mapRes, charListRes, pnjRes] = await Promise.all([
+                fetch(`campaigns/${cid}/cartes/cartes.json?t=${t}`),
+                fetch(`campaigns/${cid}/personnages/liste.json?t=${t}`),
+                fetch(`campaigns/${cid}/pnj.json?t=${t}`)
+            ]);
+            if (mapRes.ok) appData.maps = await mapRes.json();
+            if (pnjRes.ok) appData.pnj = await pnjRes.json();
+            if (charListRes.ok) {
+                const charFolders = await charListRes.json();
+                // Build in a local object first — never expose an empty appData.characters
+                // mid-load, which would cause renderMJGrid() to show no characters if
+                // triggered by a concurrent user interaction or saveAction call.
+                const newChars = {};
+                await Promise.all(charFolders.map(async folder => {
+                    const infoRes = await fetch(`campaigns/${cid}/personnages/${folder}/info.json?t=${t}`);
+                    if (infoRes.ok) {
+                        const charData = await infoRes.json();
+                        newChars[charData.id] = charData;
+                    }
+                }));
+                appData.characters = newChars; // atomic swap — always all-or-nothing
+            }
+            // Load campaign meta for display name
+            const metaRes = await fetch(`campaigns/${cid}/meta.json?t=${t}`);
+            if (metaRes.ok) {
+                const meta = await metaRes.json();
+                appData.campaignName = meta.name;
+            }
+        } catch(err) {
+            console.warn('Erreur de chargement des données.', err);
+        }
+    }
+
+    async function loadSinglePlayer(cid, charId) {
+        try {
+            const t = Date.now();
+            const infoRes = await fetch(`campaigns/${cid}/personnages/${charId}/info.json?t=${t}`);
+            if (infoRes.ok) {
+                const charData = await infoRes.json();
+                appData.characters[charId] = charData;
+                if (!appData.maps || appData.maps.length === 0) {
+                    const mapRes = await fetch(`campaigns/${cid}/cartes/cartes.json?t=${t}`);
+                    if (mapRes.ok) appData.maps = await mapRes.json();
+                }
+                if (currentRole === 'player') renderPlayerSheet();
+            }
+        } catch(err) { console.error('Erreur joueur', err); }
+    }
+
+    async function saveCharacterToServer(charData) {
+        if (!currentCampaignId) return;
+        await fetch(`/api/campaigns/${currentCampaignId}/save-character`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(charData)
+        });
+    }
+
+    async function savePnjToServer(pnjList) {
+        if (!currentCampaignId) return;
+        await fetch(`/api/campaigns/${currentCampaignId}/save-pnj`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(pnjList)
+        });
+    }
+
+    async function saveMapsToServer(maps) {
+        if (!currentCampaignId) return;
+        await fetch(`/api/campaigns/${currentCampaignId}/save-maps`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(maps)
+        });
+    }
+
+    async function saveAction(logAction) {
+        if (logAction) {
+            const time = new Date().toLocaleTimeString();
+            appData.history.unshift({ time, text: logAction });
+            if (appData.history.length > 30) appData.history.pop();
+        }
+        if (currentRole === 'mj') {
+            renderMJGrid();
+            renderHistory();
+            renderMJPnjList();
+            populateMapSelectors();
+            renderMJMapsList();
+        } else if (currentRole === 'player' && selectedCharId) {
+            renderPlayerSheet();
+            populateMapSelectors();
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  MAP HELPERS
+    // ══════════════════════════════════════════════════════════
+    function populateMapSelectors() {
+        if (!appData.maps || appData.maps.length === 0) return;
+        const mjSelect = document.getElementById('mjMapSelector');
+        const pSelect  = document.getElementById('playerMapSelector');
+        const optionsHTML = appData.maps.map(m => `<option value="${m.image}">${m.name}</option>`).join('');
+        if (mjSelect && mjSelect.children.length === 0) {
+            mjSelect.innerHTML = optionsHTML;
+            if (appData.maps[0]) changeMjMap(appData.maps[0].image);
+        }
+        // Player only sees visible maps
+        if (pSelect) {
+            const visibleMaps = appData.maps.filter(m => m.visible !== false);
+            pSelect.innerHTML = visibleMaps.map(m => `<option value="${m.image}">${m.name}</option>`).join('');
+            if (pSelect.children.length === 0) pSelect.innerHTML = '<option value="">Aucune carte disponible</option>';
+            else if (visibleMaps[0]) changePlayerMap(visibleMaps[0].image);
+        }
+    }
+
+    function changeMjMap(url) {
+        const img = document.getElementById('mj-map-img');
+        if (img && url) img.src = url + '?t=' + Date.now();
+    }
+
+    function changePlayerMap(url) {
+        const img = document.getElementById('p-map-img');
+        if (img && url) img.src = url + '?t=' + Date.now();
+    }
+
+    function renderMJMapsList() {
+        const container = document.getElementById('mjMapsList');
+        if (!container) return;
+        if (!appData.maps || appData.maps.length === 0) {
+            container.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;font-style:italic;">Aucune carte chargée (ajoutez des fichiers dans campaigns/'+currentCampaignId+'/cartes/).</div>';
+            return;
+        }
+        container.innerHTML = appData.maps.map((m, idx) => `
+            <div class="map-row">
+                <span class="map-row-name"><i class="fa-solid fa-map" style="color:var(--text-muted);margin-right:6px;"></i>${m.name}</span>
+                <button class="map-vis-toggle ${m.visible !== false ? 'visible' : ''}"
+                        onclick="toggleMapVisibility(${idx})">
+                    ${m.visible !== false ? '<i class="fa-solid fa-eye"></i> Visible' : '<i class="fa-solid fa-eye-slash"></i> Masquée'}
+                </button>
+            </div>
+        `).join('');
+    }
+
+    async function toggleMapVisibility(idx) {
+        if (!appData.maps[idx]) return;
+        appData.maps[idx].visible = appData.maps[idx].visible === false ? true : false;
+        await saveMapsToServer(appData.maps);
+        renderMJMapsList();
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  MJ VIEW
+    // ══════════════════════════════════════════════════════════
+    function initMJView() {
+        document.getElementById('mjView').style.display = 'block';
+        document.getElementById('playerView').style.display = 'none';
+        document.getElementById('campaignView').style.display = 'none';
+        document.getElementById('roleBadgeContainer').innerHTML = `<span class="role-badge badge-mj">Maitre du Jeu</span>`;
+        document.getElementById('mjIpInput').value = appData.ipConfig || window.location.host;
+        document.getElementById('mjCampaignBadge').textContent = appData.campaignName || currentCampaignId;
+
+        renderMJGrid();
+        renderMJPnjList();
+        renderHistory();
+        populateMapSelectors();
+        renderMJMapsList();
+        loadLibrary();
+        startMJPolling();
+
+        // Auto-detect IP on first load if not set
+        if (!appData.ipConfig || appData.ipConfig === window.location.host) {
+            detectLocalIP().then(ip => {
+                if (ip) {
+                    const port = window.location.port || '8000';
+                    appData.ipConfig = ip + ':' + port;
+                    document.getElementById('mjIpInput').value = appData.ipConfig;
+                }
+            });
+        }
+    }
+
+    function updateIpAddress(newIp) {
+        appData.ipConfig = newIp.trim();
+        renderMJGrid(); // Re-render QR codes with new IP
+        addHistory("IP mise à jour: " + appData.ipConfig);
+    }
+
+    function addHistory(text) {
+        const time = new Date().toLocaleTimeString();
+        appData.history.unshift({ time, text });
+        if (appData.history.length > 30) appData.history.pop();
+        renderHistory();
+    }
+
+    // ── MJ POLLING ─────────────────────────────────────────────
+    function startMJPolling() {
+        stopMJPolling();
+        mjPollInterval = setInterval(async () => {
+            if (!currentCampaignId) return;
+            const prevCharIds = JSON.stringify(Object.keys(appData.characters).sort());
+            await loadAllFromCampaign(currentCampaignId);
+            const newCharIds  = JSON.stringify(Object.keys(appData.characters).sort());
+            const indicator   = document.getElementById('pollIndicator');
+            if (indicator) indicator.textContent = '⟳ ' + new Date().toLocaleTimeString();
+            // Only full re-render if character set changed
+            if (prevCharIds !== newCharIds) {
+                renderMJGrid();
+                renderMJPnjList();
+                populateMapSelectors();
+                renderMJMapsList();
+            } else {
+                // Update in-place: HP bars + items/spells for expanded cards
+                Object.values(appData.characters).forEach(char => {
+                    // HP bars (always, even when card is collapsed)
+                    const bars = getCharacterBars(char);
+                    bars.forEach(bar => {
+                        const fillEl = document.getElementById(`bar-fill-${char.id}-${bar.id}`);
+                        const textEl = document.getElementById(`bar-text-${char.id}-${bar.id}`);
+                        if (fillEl) fillEl.style.width = Math.max(0, Math.min(100, (bar.current / bar.max) * 100)) + '%';
+                        if (textEl) textEl.textContent = `${bar.current} / ${bar.max}`;
+                    });
+                    // Items/spells (only when card is open — avoids invisible DOM churn)
+                    const card = document.getElementById(`mjcard-${char.id}`);
+                    if (card && card.classList.contains('expanded')) {
+                        const itemsDiv = document.getElementById(`mjitems-${char.id}`);
+                        if (itemsDiv) itemsDiv.innerHTML = renderMJCharItems(char);
+                        // Wallet coins
+                        const w = char.wallet || {};
+                        ['gold','silver','bronze'].forEach(k => {
+                            const el = document.getElementById(`coin-${char.id}-${k}`);
+                            if (el) el.textContent = w[k] ?? 0;
+                        });
+                    }
+                });
+            }
+        }, 5000);
+    }
+
+    function stopMJPolling() {
+        if (mjPollInterval) { clearInterval(mjPollInterval); mjPollInterval = null; }
+    }
+
+    // ── RENDER MJ GRID (old QR approach: all chars with QR) ────
+    function renderMJGrid() {
+        const grid = document.getElementById('mjCharactersGrid');
+        if (!grid) return;
+
+        // ── Preserve expanded state before re-render ──
+        const expandedIds = new Set();
+        grid.querySelectorAll('.mj-char-compact.expanded').forEach(el => {
+            expandedIds.add(el.id.replace('mjcard-', ''));
+        });
+
+        grid.innerHTML = '';
+
+        const chars = Object.values(appData.characters);
+        if (chars.length === 0) {
+            grid.innerHTML = '<div style="color:var(--text-muted);font-size:0.9rem;padding:20px;text-align:center;grid-column:1/-1;">Aucun personnage dans cette campagne.</div>';
+            return;
+        }
+
+        chars.forEach(char => {
+            const protocol  = window.location.protocol;
+            const ip        = appData.ipConfig || window.location.host;
+            const playerUrl = `${protocol}//${ip}${window.location.pathname}?campaign=${encodeURIComponent(currentCampaignId)}&char=${encodeURIComponent(char.id)}`;
+
+            // ── First bar only (HP) for summary
+            const bars = getCharacterBars(char);
+            const firstBar = bars[0] || { name: 'Santé', current: 0, max: 1 };
+            const hpPct = Math.max(0, Math.min(100, (firstBar.current / firstBar.max) * 100));
+            const hpColor = firstBar.color || 'linear-gradient(90deg,#9b1c1c,#e53e3e)';
+
+            const card = document.createElement('div');
+            card.className = 'mj-char-compact';
+            card.id = `mjcard-${char.id}`;
+            card.innerHTML = `
+                <!-- Summary row (always visible) -->
+                <div class="mj-char-summary" onclick="toggleMJCharCard('${char.id}')">
+                    <img src="${char.avatar || ''}" class="mj-char-avatar-sm" onerror="this.src='https://via.placeholder.com/44?text=?'">
+                    <div class="mj-char-info">
+                        <div class="char-name">${char.name}</div>
+                        <div class="char-class">${char.class || ''}</div>
+                        <div style="margin-top:4px;">
+                            <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);margin-bottom:2px;">
+                                <span>${firstBar.name}</span>
+                                <span id="mjbar-txt-${char.id}">${firstBar.current} / ${firstBar.max}</span>
+                            </div>
+                            <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
+                                <div id="mjbar-fill-${char.id}" style="height:100%;width:${hpPct}%;background:${hpColor};border-radius:3px;transition:width 0.3s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    ${char.ca ? `<div class="ca-badge" style="font-size:0.65rem;padding:4px 6px;"><span class="ca-label">CA</span><span class="ca-value">${char.ca}</span></div>` : ''}
+                    <i class="fa-solid fa-chevron-down mj-char-expand-icon"></i>
+                </div>
+
+                <!-- Detail panel (collapsed by default) -->
+                <div class="mj-char-detail" id="mjdetail-${char.id}"
+                     ondragover="onMJCharDragOver(event,'${char.id}')"
+                     ondragleave="onMJCharDragLeave(event,'${char.id}')"
+                     ondrop="onMJCharDrop(event,'${char.id}')"
+                >
+
+                    <!-- All bars with controls -->
+                    ${renderBarsHTML(char, true)}
+
+                    <!-- Items sections with drop zones -->
+                    ${renderWalletHTML(char)}
+                    <div id="mjitems-${char.id}" style="margin-top:10px;border-top:1px solid var(--border-color);padding-top:10px;">
+                        ${renderMJCharItems(char)}
+                    </div>
+
+                    <!-- QR Code (generated lazily when expanded) -->
+                    <div style="text-align:center;margin-top:12px;border-top:1px dashed var(--border-color);padding-top:10px;">
+                        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">QR Code Joueur :</div>
+                        <div id="qrcode-${char.id}" class="qr-box"></div>
+                        <div style="font-size:0.6rem;color:var(--text-muted);word-break:break-all;margin-top:4px;">${playerUrl}</div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+
+            // ── Restore expanded state if it was open before re-render ──
+            if (expandedIds.has(char.id)) {
+                card.classList.add('expanded');
+                // Re-generate QR code (was already generated before, re-do it)
+                const protocol  = window.location.protocol;
+                const ip        = appData.ipConfig || window.location.host;
+                const playerUrl = `${protocol}//${ip}${window.location.pathname}?campaign=${encodeURIComponent(currentCampaignId)}&char=${encodeURIComponent(char.id)}`;
+                setTimeout(() => {
+                    const qrElem = document.getElementById(`qrcode-${char.id}`);
+                    if (qrElem) {
+                        qrElem.innerHTML = '';
+                        new QRCode(qrElem, { text: playerUrl, width: 110, height: 110 });
+                    }
+                }, 50);
+            }
+        });
+    }
+
+    function toggleMJCharCard(charId) {
+        const card = document.getElementById(`mjcard-${charId}`);
+        if (!card) return;
+        const wasExpanded = card.classList.contains('expanded');
+        card.classList.toggle('expanded');
+        if (!wasExpanded) {
+            // Generate QR lazily on first expand
+            const protocol  = window.location.protocol;
+            const ip        = appData.ipConfig || window.location.host;
+            const playerUrl = `${protocol}//${ip}${window.location.pathname}?campaign=${encodeURIComponent(currentCampaignId)}&char=${encodeURIComponent(charId)}`;
+            setTimeout(() => {
+                const qrElem = document.getElementById(`qrcode-${charId}`);
+                if (qrElem && qrElem.innerHTML.trim() === '') {
+                    new QRCode(qrElem, { text: playerUrl, width: 110, height: 110 });
+                }
+            }, 50);
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  MJ CHAR ITEMS — render, add, remove
+    // ══════════════════════════════════════════════════════════
+    function renderMJCharItems(char) {
+        // Sections: Objets | Capacités | Sorts | Quêtes
+        const sections = [
+            { key: 'inventory', label: 'Objets',    icon: 'fa-box',       color: '#4a90d9' },
+            { key: 'skills',    label: 'Capacités', icon: 'fa-bolt',       color: '#48bb78' },
+            { key: 'spells',    label: 'Sorts',     icon: 'fa-hat-wizard', color: '#9b59b6' },
+            { key: 'quests',    label: 'Quêtes',    icon: 'fa-scroll',     color: '#fc8181' },
+        ];
+
+        return sections.map(s => {
+            let rows = '';
+            if (s.key === 'skills') {
+                const skills = (char.skills || []);
+                rows = skills.map((item, idx) => {
+                    const name = item.name || item;
+                    return `<div class="mj-item-row" data-type="skills">
+                        <i class="fa-solid fa-bolt" style="font-size:0.6rem;color:#48bb78;flex-shrink:0;"></i>
+                        <span class="mj-item-name">${name}</span>
+                        <button class="mj-item-remove" onclick="removeMJCharItem('${char.id}','skills',${idx})" title="Retirer">✕</button>
+                    </div>`;
+                }).join('');
+                return `<div class="mj-items-section">
+                    <div class="mj-items-title" style="color:${s.color};"><i class="fa-solid ${s.icon}"></i> ${s.label} (${skills.length})</div>
+                    ${rows || '<div style="font-size:0.68rem;color:var(--text-muted);padding:2px 0;">—</div>'}
+                </div>`;
+            } else if (s.key === 'spells') {
+                const spells = (char.spells || []);
+                rows = spells.map((item, idx) => {
+                    const name = item.name || item;
+                    const lvl = item.level != null ? ` <span style="font-size:0.62rem;color:#9b59b6;">niv.${item.level}</span>` : '';
+                    const usedSlots = item.usedSlots || 0;
+                    const slots = item.slots || 1;
+                    const slotsLeft = slots - usedSlots;
+                    const spellExhausted = item.available !== false && slotsLeft <= 0;
+                    const slotInfo = slots > 1
+                        ? ` <span style="font-size:0.6rem;color:${slotsLeft === 0 ? '#fc8181' : 'var(--text-muted)'};">[${slotsLeft}/${slots}]</span>`
+                        : (usedSlots > 0 ? ` <span style="font-size:0.6rem;color:#fc8181;">épuisé</span>` : '');
+                    return `<div class="mj-item-row${spellExhausted ? ' spell-exhausted' : ''}" data-type="spells">
+                        <i class="fa-solid fa-hat-wizard" style="font-size:0.6rem;color:#9b59b6;flex-shrink:0;"></i>
+                        <span class="mj-item-name">${name}${lvl}${slotInfo}</span>
+                        <button class="mj-item-remove" onclick="removeMJCharItem('${char.id}','spells',${idx})" title="Retirer">✕</button>
+                    </div>`;
+                }).join('');
+                const hasUsed = spells.some(sp => (sp.usedSlots || 0) > 0);
+                return `<div class="mj-items-section">
+                    <div class="mj-items-title" style="color:${s.color};display:flex;align-items:center;justify-content:space-between;">
+                        <span><i class="fa-solid ${s.icon}"></i> ${s.label} (${spells.length})</span>
+                        ${spells.length > 0 ? `<button class="mj-renew-spells-btn${hasUsed ? ' has-used' : ''}" onclick="renewSpells('${char.id}')" title="Renouveler tous les sorts">↺ Renouveler</button>` : ''}
+                    </div>
+                    ${rows || '<div style="font-size:0.68rem;color:var(--text-muted);padding:2px 0;">—</div>'}
+                </div>`;
+            } else if (s.key === 'inventory') {
+                // Inventory with stacking: group identical names, show qty badge
+                const items = (char.inventory || []);
+                // Build stacked map: name → { firstIdx, qty, item }
+                const stackMap = new Map();
+                items.forEach((item, idx) => {
+                    const name = (item.name || item).trim();
+                    if (!stackMap.has(name)) stackMap.set(name, { firstIdx: idx, qty: 1, item });
+                    else stackMap.get(name).qty++;
+                });
+                rows = [...stackMap.values()].map(({ firstIdx, qty, item }) => {
+                    const name = item.name || item;
+                    const qtyBadge = qty > 1 ? `<span class="mj-item-qty">×${qty}</span>` : '';
+                    return `<div class="mj-item-row" data-type="inventory">
+                        <span class="mj-item-name">${name}</span>
+                        ${qtyBadge}
+                        <button class="mj-item-remove" onclick="removeMJCharItem('${char.id}','inventory',${firstIdx})" title="Retirer un exemplaire">✕</button>
+                    </div>`;
+                }).join('');
+                return `<div class="mj-items-section">
+                    <div class="mj-items-title" style="color:${s.color};"><i class="fa-solid ${s.icon}"></i> ${s.label} (${items.length})</div>
+                    ${rows || '<div style="font-size:0.68rem;color:var(--text-muted);padding:2px 0;">—</div>'}
+                </div>`;
+            } else {
+                const items = (char[s.key] || []);
+                rows = items.map((item, idx) => {
+                    const name = item.name || item;
+                    return `<div class="mj-item-row" data-type="${s.key}">
+                        <span class="mj-item-name">${name}</span>
+                        <button class="mj-item-remove" onclick="removeMJCharItem('${char.id}','${s.key}',${idx})" title="Retirer">✕</button>
+                    </div>`;
+                }).join('');
+                return `<div class="mj-items-section">
+                    <div class="mj-items-title" style="color:${s.color};"><i class="fa-solid ${s.icon}"></i> ${s.label} (${items.length})</div>
+                    ${rows || '<div style="font-size:0.68rem;color:var(--text-muted);padding:2px 0;">—</div>'}
+                </div>`;
+            }
+        }).join('') + `<div style="margin-top:8px;font-size:0.65rem;color:var(--text-muted);text-align:center;padding:4px;">
+            <i class="fa-solid fa-arrow-down-to-line"></i> Glisser un objet depuis la bibliothèque pour l'ajouter
+        </div>`;
+    }
+
+    function renderWalletHTML(char) {
+        const w = char.wallet || { gold: 0, silver: 0, bronze: 0 };
+        const coins = [
+            { key: 'gold',   label: 'Or',      symbol: '⬡', cls: 'coin-gold'   },
+            { key: 'silver', label: 'Argent',   symbol: '⬡', cls: 'coin-silver' },
+            { key: 'bronze', label: 'Bronze',   symbol: '⬡', cls: 'coin-bronze' },
+        ];
+        return `<div class="mj-wallet">
+            <div style="font-size:0.65rem;color:var(--text-muted);flex-shrink:0;"><i class="fa-solid fa-coins"></i></div>
+            ${coins.map(c => `
+            <div class="mj-coin-group">
+                <div class="mj-wallet-label ${c.cls}">${c.label}</div>
+                <div class="mj-coin-controls">
+                    <button class="mj-coin-btn" onclick="adjustCoin('${char.id}','${c.key}',-1)">−</button>
+                    <span class="mj-coin-val ${c.cls}" id="coin-${char.id}-${c.key}">${w[c.key] ?? 0}</span>
+                    <button class="mj-coin-btn" onclick="adjustCoin('${char.id}','${c.key}',1)">+</button>
+                </div>
+            </div>`).join('')}
+        </div>`;
+    }
+
+    async function adjustCoin(charId, coin, delta) {
+        const char = appData.characters[charId];
+        if (!char) return;
+        if (!char.wallet) char.wallet = { gold: 0, silver: 0, bronze: 0 };
+        char.wallet[coin] = Math.max(0, (char.wallet[coin] ?? 0) + delta);
+        // Update live without full re-render
+        const el = document.getElementById(`coin-${charId}-${coin}`);
+        if (el) el.textContent = char.wallet[coin];
+        await saveCharacterToServer(char);
+    }
+
+    async function renewSpells(charId) {
+        const char = appData.characters[charId];
+        if (!char || !char.spells || char.spells.length === 0) return;
+        char.spells.forEach(s => { s.usedSlots = 0; s.available = true; });
+        await saveCharacterToServer(char);
+        await saveAction(`Sorts de ${char.name} renouvelés`);
+        renderMJGrid();
+    }
+
+    async function removeMJCharItem(charId, type, idx) {
+        const char = appData.characters[charId];
+        if (!char || !char[type]) return;
+        char[type].splice(idx, 1);
+        await saveCharacterToServer(char);
+        // Refresh detail without collapsing
+        const detailEl = document.getElementById(`mjdetail-${charId}`);
+        if (detailEl) {
+            const itemsDiv = detailEl.querySelector('.mj-items-wrapper');
+            if (itemsDiv) itemsDiv.innerHTML = renderMJCharItems(char);
+        }
+        renderMJGrid(); // full re-render (preserves expanded state)
+    }
+
+    function onMJCharDragOver(event, charId) {
+        if (draggedLibIdx < 0) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+        const detail = document.getElementById(`mjdetail-${charId}`);
+        if (detail) detail.classList.add('drag-active');
+    }
+
+    function onMJCharDragLeave(event, charId) {
+        // Only remove highlight when truly leaving the detail div (not entering a child)
+        const detail = document.getElementById(`mjdetail-${charId}`);
+        if (!detail) return;
+        const related = event.relatedTarget;
+        if (related && detail.contains(related)) return;
+        detail.classList.remove('drag-active');
+    }
+
+    async function onMJCharDrop(event, charId) {
+        event.preventDefault();
+        const detail = document.getElementById(`mjdetail-${charId}`);
+        if (detail) detail.classList.remove('drag-active');
+
+        const rawIdx = parseInt(event.dataTransfer.getData('text/plain'), 10);
+        const libIdx = isNaN(rawIdx) ? draggedLibIdx : rawIdx;
+        const item = libraryData[libIdx];
+        if (!item) return;
+        draggedLibIdx = -1;
+
+        const char = appData.characters[charId];
+        if (!char) return;
+
+        // Auto-route based on item.type from library
+        const type = item.type || 'inventory';
+        if (!char[type]) char[type] = [];
+
+        if (type === 'spells') {
+            char.spells.push({ name: item.name, level: item.level || 1, slots: item.slots || 1, usedSlots: 0, description: item.description || '', available: true });
+        } else {
+            char[type].push({ name: item.name, description: item.description || '' });
+        }
+
+        await saveCharacterToServer(char);
+        await saveAction(`${item.name} ajouté à ${char.name}`);
+        renderMJGrid();
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  MJ LIBRARY PANEL
+    // ══════════════════════════════════════════════════════════
+    let mjLibFilter = 'all';
+    let mjLibSearch = '';
+
+    function renderMJLibrary() {
+        const container = document.getElementById('mjLibraryItems');
+        if (!container) return;
+        let items = libraryData;
+        if (mjLibFilter !== 'all') {
+            items = items.filter(i => i.type === mjLibFilter);
+        }
+        if (mjLibSearch) {
+            const q = mjLibSearch.toLowerCase();
+            items = items.filter(i => i.name.toLowerCase().includes(q) || (i.description || '').toLowerCase().includes(q));
+        }
+        if (libraryData.length === 0) {
+            container.innerHTML = `<div class="lib-empty"><i class="fa-solid fa-book" style="font-size:1.2rem;display:block;margin-bottom:6px;color:var(--border-color);"></i>Bibliothèque vide.</div>`;
+            return;
+        }
+        if (items.length === 0) {
+            container.innerHTML = `<div class="lib-empty"><i class="fa-solid fa-magnifying-glass"></i><br>Aucun résultat.</div>`;
+            return;
+        }
+        const typeIcons  = { inventory: 'fa-box', skills: 'fa-bolt', quests: 'fa-scroll', spells: 'fa-hat-wizard' };
+        const typeColors = { inventory: '#4a90d9', skills: '#48bb78', quests: '#fc8181', spells: '#9b59b6' };
+        container.innerHTML = items.map(item => {
+            const globalIdx = libraryData.indexOf(item);
+            const icon  = typeIcons[item.type]  || 'fa-star';
+            const color = typeColors[item.type] || 'var(--text-muted)';
+            return `<div class="lib-item" data-type="${item.type}" draggable="true"
+                         ondragstart="onMJLibDragStart(event,${globalIdx})"
+                         ondragend="onMJLibDragEnd(event)">
+                <div class="lib-item-header">
+                    <i class="fa-solid ${icon}" style="color:${color};font-size:0.68rem;flex-shrink:0;"></i>
+                    <span class="lib-item-name">${item.name}</span>
+                </div>
+                ${item.description ? `<div class="lib-item-desc">${item.description}</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function setMJLibFilter(filter) {
+        mjLibFilter = filter;
+        document.querySelectorAll('[id^="mjLibTab_"]').forEach(t => t.classList.remove('active'));
+        const btn = document.getElementById(`mjLibTab_${filter}`);
+        if (btn) btn.classList.add('active');
+        renderMJLibrary();
+    }
+
+
+    function onMJLibSearch(query) { mjLibSearch = query.trim(); renderMJLibrary(); }
+
+    function onMJLibDragStart(event, idx) {
+        draggedLibIdx = idx;
+        event.dataTransfer.effectAllowed = 'copy';
+        event.dataTransfer.setData('text/plain', String(idx));
+        event.currentTarget.classList.add('lib-dragging');
+    }
+
+    function onMJLibDragEnd(event) {
+        event.currentTarget.classList.remove('lib-dragging');
+        draggedLibIdx = -1;
+    }
+
+    // ── MJ JOIN QR ─────────────────────────────────────────────
+    // ── ADJUST BARS ────────────────────────────────────────────
+    function getCharacterBars(char) {
+        if (char.bars && Array.isArray(char.bars) && char.bars.length > 0) return char.bars;
+        return [{ id: 'hp', name: 'Santé', current: char.hpCurrent ?? 10, max: char.hpMax ?? 10, color: 'linear-gradient(90deg,#9b1c1c,#e53e3e)' }];
+    }
+
+    function renderBarsHTML(char, isMJ = false) {
+        // Only display the first bar (HP/Santé) — extra custom bars are ignored in the UI
+        const bars = getCharacterBars(char).slice(0, 1);
+        return bars.map(bar => {
+            const pct  = Math.max(0, Math.min(100, (bar.current / bar.max) * 100));
+            const color = bar.color || 'linear-gradient(90deg,#d4af37,#f7d070)';
+            return `
+                <div class="stat-bar-container">
+                    <div class="stat-bar-header">
+                        <span style="color:var(--accent-gold-light);">${bar.name}</span>
+                        <span id="bar-text-${char.id}-${bar.id}">${bar.current} / ${bar.max}</span>
+                    </div>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" id="bar-fill-${char.id}-${bar.id}" style="width:${pct}%;background:${color};"></div>
+                    </div>
+                    ${isMJ ? `<div class="bar-controls">
+                        <button class="btn btn-sm btn-danger" onclick="adjustBar('${char.id}','${bar.id}',-5)">-5</button>
+                        <button class="btn btn-sm btn-danger" onclick="adjustBar('${char.id}','${bar.id}',-1)">-1</button>
+                        <button class="btn btn-sm" onclick="adjustBar('${char.id}','${bar.id}',1)">+1</button>
+                        <button class="btn btn-sm" onclick="adjustBar('${char.id}','${bar.id}',5)">+5</button>
+                    </div>` : ''}
+                </div>`;
+        }).join('');
+    }
+
+    async function adjustBar(charId, barId, delta) {
+        const char = appData.characters[charId];
+        if (!char) return;
+        if (!char.bars) char.bars = getCharacterBars(char);
+        const bar = char.bars.find(b => b.id === barId);
+        if (bar) {
+            bar.current = Math.max(0, Math.min(bar.max, bar.current + delta));
+            if (bar.id === 'hp') char.hpCurrent = bar.current;
+            await saveCharacterToServer(char);
+            await saveAction(`${bar.name} de ${char.name} : ${delta > 0 ? '+' : ''}${delta} (${bar.current}/${bar.max})`);
+            // Update compact summary bar live (first bar only)
+            const bars = getCharacterBars(char);
+            const firstBar = bars[0];
+            if (firstBar && bar.id === firstBar.id) {
+                const pct = Math.max(0, Math.min(100, (firstBar.current / firstBar.max) * 100));
+                const fillEl = document.getElementById(`mjbar-fill-${charId}`);
+                const txtEl  = document.getElementById(`mjbar-txt-${charId}`);
+                if (fillEl) fillEl.style.width = pct + '%';
+                if (txtEl)  txtEl.textContent = `${firstBar.current} / ${firstBar.max}`;
+            }
+        }
+    }
+
+    function renderHistory() {
+        const el = document.getElementById('historyLog');
+        if (el) el.innerHTML = appData.history.map(e => `<div style="margin-bottom:3px;"><span style="color:var(--accent-gold)">[${e.time}]</span> ${e.text}</div>`).join('');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  PNJ MANAGEMENT
+    // ══════════════════════════════════════════════════════════
+    let tempPnjAttacks = [];
+
+    function renderMJPnjList() {
+        const container = document.getElementById('pnjList');
+        if (!container) return;
+        const pnjList = appData.pnj || [];
+        if (pnjList.length === 0) {
+            container.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:16px;">Aucun PNJ pour l\'instant.</div>';
+            return;
+        }
+        // Remember which blocks were expanded
+        const expanded = new Set();
+        container.querySelectorAll('.pnj-block.expanded').forEach(el => {
+            expanded.add(el.dataset.pnjIdx);
+        });
+
+        container.innerHTML = pnjList.map((pnj, idx) => {
+            const hpCur = pnj.hpCurrent ?? pnj.hpMax ?? 10;
+            const hpMax = pnj.hpMax || 10;
+            const hpPct = Math.max(0, Math.min(100, (hpCur / hpMax) * 100));
+            const hpColor = pnj.type === 'boss' ? '#f6d860' : (pnj.type === 'monstre' ? '#fc8181' : '#7ab8f5');
+            const isExpanded = expanded.has(String(idx)) ? 'expanded' : '';
+
+            const attacksHTML = (pnj.attacks || []).length > 0 ? `
+                <div style="margin-top:8px;">
+                    <div style="font-size:0.72rem;color:var(--accent-gold-light);font-family:var(--font-title);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px;"><i class="fa-solid fa-swords"></i> Attaques</div>
+                    ${(pnj.attacks || []).map(a => `
+                        <div class="pnj-attack-row">
+                            <span class="pnj-attack-name">${a.name}</span>
+                            <span class="pnj-attack-dice">${a.dice || ''}</span>
+                            ${a.desc ? `<span style="font-size:0.72rem;color:var(--text-muted);font-style:italic;flex:1;">${a.desc}</span>` : ''}
+                        </div>`).join('')}
+                </div>` : '';
+
+            const notesHTML = pnj.notes ? `<div style="font-size:0.78rem;color:var(--text-muted);font-style:italic;margin-top:6px;line-height:1.4;">${pnj.notes}</div>` : '';
+
+            return `
+                <div class="pnj-block ${isExpanded}" data-pnj-idx="${idx}">
+                    <!-- Summary row -->
+                    <div class="pnj-row" onclick="togglePnjBlock(${idx})">
+                        <span class="pnj-type-badge pnj-type-${pnj.type || 'pnj'}">${pnj.type || 'PNJ'}</span>
+                        <span class="pnj-name">${pnj.name}</span>
+                        <div style="flex:1;min-width:60px;max-width:100px;margin:0 8px;">
+                            <div style="height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+                                <div style="height:100%;width:${hpPct}%;background:${hpColor};border-radius:2px;"></div>
+                            </div>
+                        </div>
+                        <span class="pnj-hp"><i class="fa-solid fa-heart" style="font-size:0.6rem;"></i> <span id="pnjhp-${idx}">${hpCur} / ${hpMax}</span></span>
+                        <div class="pnj-actions" onclick="event.stopPropagation()">
+                            <button class="btn btn-sm btn-danger" onclick="adjustPnjHp(${idx},-1)" title="-1 PV">-1</button>
+                            <button class="btn btn-sm" onclick="adjustPnjHp(${idx},1)" title="+1 PV">+1</button>
+                        </div>
+                        <i class="fa-solid fa-chevron-down pnj-expand-icon"></i>
+                    </div>
+                    <!-- Detail panel -->
+                    <div class="pnj-detail">
+                        <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+                            <button class="btn btn-sm" onclick="openEditPnjModal(${idx})"><i class="fa-solid fa-pen"></i> Éditer</button>
+                        </div>
+                        ${notesHTML}
+                        ${attacksHTML}
+                        <!-- Manual HP control -->
+                        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;">
+                            <span style="font-size:0.72rem;color:var(--text-muted);">PV :</span>
+                            <button class="btn btn-sm btn-danger" onclick="adjustPnjHp(${idx},-5)">-5</button>
+                            <button class="btn btn-sm btn-danger" onclick="adjustPnjHp(${idx},-1)">-1</button>
+                            <button class="btn btn-sm" onclick="adjustPnjHp(${idx},1)">+1</button>
+                            <button class="btn btn-sm" onclick="adjustPnjHp(${idx},5)">+5</button>
+                        </div>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    function togglePnjBlock(idx) {
+        const container = document.getElementById('pnjList');
+        if (!container) return;
+        const block = container.querySelector(`.pnj-block[data-pnj-idx="${idx}"]`);
+        if (block) block.classList.toggle('expanded');
+    }
+
+    async function adjustPnjHp(idx, delta) {
+        const pnj = appData.pnj[idx];
+        if (!pnj) return;
+        pnj.hpCurrent = Math.max(0, Math.min(pnj.hpMax || 100, (pnj.hpCurrent ?? pnj.hpMax ?? 10) + delta));
+        await savePnjToServer(appData.pnj);
+        renderMJPnjList();
+    }
+
+    function openNewPnjModal() {
+        document.getElementById('pnjModalTitle').innerHTML = '<i class="fa-solid fa-skull-crossbones"></i> Nouveau PNJ';
+        document.getElementById('editPnjId').value = '';
+        document.getElementById('editPnjName').value = '';
+        document.getElementById('editPnjType').value = 'pnj';
+        document.getElementById('editPnjHpCurrent').value = '10';
+        document.getElementById('editPnjHpMax').value = '10';
+        document.getElementById('editPnjNotes').value = '';
+        tempPnjAttacks = [];
+        renderPnjAttacksList();
+        document.getElementById('pnjModal').style.display = 'block';
+    }
+
+    function openEditPnjModal(idx) {
+        const pnj = appData.pnj[idx];
+        if (!pnj) return;
+        document.getElementById('pnjModalTitle').innerHTML = `<i class="fa-solid fa-skull-crossbones"></i> ${pnj.name}`;
+        document.getElementById('editPnjId').value = String(idx);
+        document.getElementById('editPnjName').value = pnj.name || '';
+        document.getElementById('editPnjType').value = pnj.type || 'pnj';
+        document.getElementById('editPnjHpCurrent').value = pnj.hpCurrent ?? pnj.hpMax ?? 10;
+        document.getElementById('editPnjHpMax').value = pnj.hpMax ?? 10;
+        document.getElementById('editPnjNotes').value = pnj.notes || '';
+        tempPnjAttacks = (pnj.attacks || []).map(a => ({ ...a }));
+        renderPnjAttacksList();
+        document.getElementById('pnjModal').style.display = 'block';
+    }
+
+    function closePnjModal() {
+        document.getElementById('pnjModal').style.display = 'none';
+    }
+
+    function addPnjAttack() {
+        const name = document.getElementById('newAttackName').value.trim();
+        if (!name) return;
+        const dice = document.getElementById('newAttackDice').value.trim() || '1d6';
+        const desc = document.getElementById('newAttackDesc').value.trim();
+        tempPnjAttacks.push({ name, dice, description: desc });
+        document.getElementById('newAttackName').value = '';
+        document.getElementById('newAttackDice').value = '';
+        document.getElementById('newAttackDesc').value = '';
+        renderPnjAttacksList();
+    }
+
+    function removePnjAttack(idx) {
+        tempPnjAttacks.splice(idx, 1);
+        renderPnjAttacksList();
+    }
+
+    function renderPnjAttacksList() {
+        const el = document.getElementById('editPnjAttacks');
+        if (!el) return;
+        el.innerHTML = tempPnjAttacks.map((a, idx) => `
+            <div style="display:flex;align-items:center;gap:8px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:4px;padding:5px 10px;margin-bottom:4px;">
+                <span style="font-weight:bold;font-size:0.85rem;flex:1;">${a.name}</span>
+                <span style="color:var(--accent-gold);font-size:0.8rem;font-family:var(--font-title);">${a.dice}</span>
+                ${a.description ? `<span style="font-size:0.72rem;color:var(--text-muted);font-style:italic;flex:1;">${a.description}</span>` : ''}
+                <button type="button" onclick="removePnjAttack(${idx})" style="background:none;border:none;color:var(--accent-red);cursor:pointer;font-size:0.85rem;">✕</button>
+            </div>
+        `).join('');
+    }
+
+    async function savePnj(e) {
+        e.preventDefault();
+        const idxStr = document.getElementById('editPnjId').value;
+        const pnjData = {
+            name: document.getElementById('editPnjName').value.trim(),
+            type: document.getElementById('editPnjType').value,
+            hpCurrent: parseInt(document.getElementById('editPnjHpCurrent').value) || 10,
+            hpMax: parseInt(document.getElementById('editPnjHpMax').value) || 10,
+            notes: document.getElementById('editPnjNotes').value.trim(),
+            attacks: tempPnjAttacks.map(a => ({ ...a }))
+        };
+        pnjData.id = pnjData.id || 'pnj_' + Date.now();
+        if (idxStr !== '') {
+            appData.pnj[parseInt(idxStr)] = pnjData;
+        } else {
+            pnjData.id = 'pnj_' + Date.now();
+            appData.pnj.push(pnjData);
+        }
+        await savePnjToServer(appData.pnj);
+        await saveAction(`PNJ "${pnjData.name}" sauvegardé`);
+        closePnjModal();
+        renderMJPnjList();
+    }
+
+    async function deletePnj() {
+        const idxStr = document.getElementById('editPnjId').value;
+        if (idxStr === '') return;
+        const idx = parseInt(idxStr);
+        const name = appData.pnj[idx]?.name || '?';
+        if (!confirm(`Supprimer "${name}" ?`)) return;
+        appData.pnj.splice(idx, 1);
+        await savePnjToServer(appData.pnj);
+        await saveAction(`PNJ "${name}" supprimé`);
+        closePnjModal();
+        renderMJPnjList();
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  PLAYER VIEW
+    // ══════════════════════════════════════════════════════════
+    function initPlayerView() {
+        document.getElementById('playerView').style.display = 'block';
+        document.getElementById('mjView').style.display = 'none';
+        document.getElementById('campaignView').style.display = 'none';
+        renderPlayerSheet();
+        populateMapSelectors();
+    }
+
+    function renderExpandableItem(raw, iconClass) {
+        const item = normalizeItem(raw);
+        const name = String(item.name || '');
+        const desc = String(item.description || '');
+        const hasDesc = desc.length > 0;
+        return `
+            <li class="item-row${hasDesc ? ' item-expandable' : ''}" ${hasDesc ? 'onclick="toggleItemDesc(this)"' : ''}>
+                <div class="item-title-row">
+                    <span class="item-title"><i class="${iconClass}" style="color:var(--accent-gold);margin-right:8px;"></i>${name}</span>
+                    ${hasDesc ? '<i class="fa-solid fa-chevron-down item-chevron"></i>' : ''}
+                </div>
+                ${hasDesc ? `<div class="item-desc">${desc}</div>` : ''}
+            </li>`;
+    }
+
+    function toggleItemDesc(li) { li.classList.toggle('expanded'); }
+
+    function renderPlayerSheet() {
+        const char = appData.characters[selectedCharId];
+        if (!char) return;
+
+        // ── Snapshot expanded items before rebuilding lists (prevents collapse on polling) ──
+        const getExpandedNames = (listId) => {
+            const names = new Set();
+            const list = document.getElementById(listId);
+            if (list) list.querySelectorAll('.item-row.expanded').forEach(li => {
+                const t = li.querySelector('.item-title');
+                if (t) names.add(t.textContent.replace(/×\d+$/, '').trim());
+            });
+            return names;
+        };
+        const expInv    = getExpandedNames('p-inventory-list');
+        const expSkills = getExpandedNames('p-skills-list');
+        const expQuests = getExpandedNames('p-quests-list');
+
+        document.getElementById('roleBadgeContainer').innerHTML = `<span class="role-badge badge-player">${char.name}</span>`;
+        document.getElementById('p-avatar').src = char.avatar || '';
+        document.getElementById('p-name').textContent = char.name;
+        document.getElementById('p-class').textContent = char.class;
+        document.getElementById('p-bars-container').innerHTML = renderBarsHTML(char, false);
+        document.getElementById('p-description').textContent = char.description || '';
+
+        // Inventory with stacking: group identical names, show ×N badge
+        const inventory = char.inventory || [];
+        const invStackMap = new Map();
+        inventory.forEach((item, idx) => {
+            const name = ((item.name || item) + '').trim();
+            if (!invStackMap.has(name)) invStackMap.set(name, { qty: 1, item });
+            else invStackMap.get(name).qty++;
+        });
+        document.getElementById('p-inventory-list').innerHTML = [...invStackMap.values()].map(({ qty, item }) => {
+            const raw = typeof item === 'object' ? item : { name: item };
+            const name = String(raw.name || '');
+            const desc = String(raw.description || '');
+            const hasDesc = desc.length > 0;
+            const qtyBadge = qty > 1 ? `<span style="font-size:0.68rem;background:rgba(74,144,217,0.25);color:#7ab8f5;border:1px solid rgba(74,144,217,0.4);border-radius:3px;padding:0 5px;margin-left:6px;flex-shrink:0;">×${qty}</span>` : '';
+            return `<li class="item-row${hasDesc ? ' item-expandable' : ''}" ${hasDesc ? 'onclick="toggleItemDesc(this)"' : ''}>
+                <div class="item-title-row">
+                    <span class="item-title"><i class="fa-solid fa-box" style="color:var(--accent-gold);margin-right:8px;"></i>${name}${qtyBadge}</span>
+                    ${hasDesc ? '<i class="fa-solid fa-chevron-down item-chevron"></i>' : ''}
+                </div>
+                ${hasDesc ? `<div class="item-desc">${desc}</div>` : ''}
+            </li>`;
+        }).join('') || '<li style="color:var(--text-muted);font-size:0.85rem;padding:8px 0;">Aucun objet.</li>';
+
+        // Skills now live in the Capacités tab
+        document.getElementById('p-skills-list').innerHTML = (char.skills || []).map(s => renderExpandableItem(s, 'fa-solid fa-bolt')).join('')
+            || '<li style="color:var(--text-muted);font-size:0.85rem;padding:8px 0;">Aucune capacité.</li>';
+
+        document.getElementById('p-quests-list').innerHTML = (char.quests || []).map(q => renderExpandableItem(q, 'fa-solid fa-scroll')).join('')
+            || '<li style="color:var(--text-muted);font-size:0.85rem;padding:8px 0;">Aucun objectif.</li>';
+
+        // Wallet (read-only display for players)
+        const walletCard = document.getElementById('p-wallet-card');
+        const walletDisplay = document.getElementById('p-wallet-display');
+        const w = char.wallet;
+        if (walletCard && walletDisplay) {
+            if (w && (w.gold || w.silver || w.bronze)) {
+                walletCard.style.display = '';
+                const coins = [
+                    { key: 'gold',   label: 'Or',    cls: 'coin-gold'   },
+                    { key: 'silver', label: 'Argent', cls: 'coin-silver' },
+                    { key: 'bronze', label: 'Bronze', cls: 'coin-bronze' },
+                ];
+                walletDisplay.innerHTML = `<div style="display:flex;gap:16px;justify-content:center;padding:8px 0;">
+                    ${coins.map(c => `<div style="text-align:center;">
+                        <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:3px;">${c.label}</div>
+                        <div style="font-size:1.15rem;font-weight:bold;" class="${c.cls}">${w[c.key] ?? 0}</div>
+                    </div>`).join('')}
+                </div>`;
+            } else {
+                walletCard.style.display = 'none';
+            }
+        }
+
+        // CA badge
+        const caBadge = document.getElementById('p-ca-badge');
+        if (caBadge) {
+            if (char.ca) { caBadge.style.display = 'flex'; document.getElementById('p-ca-value').textContent = char.ca; }
+            else { caBadge.style.display = 'none'; }
+        }
+
+        // Traits
+        const traitsCard = document.getElementById('p-traits-card');
+        const traitsGrid = document.getElementById('p-traits-grid');
+        if (traitsCard && traitsGrid) {
+            traitsCard.style.display = '';
+            traitsGrid.innerHTML = FIXED_TRAITS.map(name => {
+                const found = (char.traits || []).find(t => t.name === name);
+                const val = found ? found.value : 10;
+                const mod = Math.floor((val - 10) / 2);
+                return `<div class="trait-badge">
+                    <span class="trait-name">${name}</span>
+                    <span class="trait-value">${val}</span>
+                    <span style="font-size:0.65rem;color:var(--text-muted);">${mod >= 0 ? '+' : ''}${mod}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // Skill points
+        const spCard = document.getElementById('p-skillpoints-card');
+        const spGrid = document.getElementById('p-skillpoints-grid');
+        if (spCard && spGrid) {
+            spCard.style.display = '';
+            spGrid.innerHTML = FIXED_SKILL_POINTS.map(name => {
+                const found = (char.skillPoints || []).find(s => s.name === name);
+                const val = found ? found.value : 0;
+                return `<div class="skillpoint-row">
+                    <span class="sp-name">${formatSkillName(name)}</span>
+                    <span class="sp-value">${val >= 0 ? '+' : ''}${val}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // ── Re-apply expanded state after rebuilding lists ──
+        const reapplyExpanded = (listId, names) => {
+            if (!names.size) return;
+            const list = document.getElementById(listId);
+            if (!list) return;
+            list.querySelectorAll('.item-row.item-expandable').forEach(li => {
+                const t = li.querySelector('.item-title');
+                if (t && names.has(t.textContent.replace(/×\d+$/, '').trim()))
+                    li.classList.add('expanded');
+            });
+        };
+        reapplyExpanded('p-inventory-list', expInv);
+        reapplyExpanded('p-skills-list',    expSkills);
+        reapplyExpanded('p-quests-list',    expQuests);
+
+        // Spells
+        renderPlayerSpells(char);
+    }
+
+    function renderPlayerSpells(char) {
+        const container = document.getElementById('p-spells-list');
+        if (!container) return;
+        const spells = char.spells || [];
+        if (spells.length === 0) {
+            container.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;text-align:center;padding:16px;"><i class="fa-solid fa-hat-wizard" style="font-size:1.5rem;display:block;margin-bottom:8px;color:var(--border-color);"></i>Aucun sort.</div>';
+            return;
+        }
+        container.innerHTML = spells.map((spell, idx) => {
+            const available = spell.available !== false;
+            const slots = spell.slots || 1;
+            const usedSlots = spell.usedSlots || 0;
+            const slotsLeft = slots - usedSlots;
+            const slotDots = Array.from({ length: slots }, (_, i) =>
+                `<span class="spell-slot ${i < usedSlots ? 'used' : ''}"></span>`).join('');
+            const exhausted = available && slotsLeft <= 0;
+            return `
+                <div class="spell-card ${!available ? 'unavailable' : exhausted ? 'exhausted' : ''}">
+                    <div class="spell-card-header">
+                        <span class="spell-level-badge">Niv. ${spell.level || 0}</span>
+                        <span class="spell-name">${spell.name}</span>
+                        ${!available ? '<i class="fa-solid fa-lock spell-locked-icon" title="Verrouillé par le MJ"></i>' : ''}
+                        ${exhausted ? '<span style="font-size:0.65rem;color:#888;margin-left:auto;">épuisé</span>' : ''}
+                    </div>
+                    ${spell.description ? `<div class="spell-desc" style="display:block;">${spell.description}</div>` : ''}
+                    <div class="spell-slots">
+                        ${slotDots}
+                        <span style="font-size:0.72rem;color:var(--text-muted);margin-left:4px;">${slotsLeft}/${slots} empl.</span>
+                        ${available && slotsLeft > 0 ? `<button class="spell-use-btn" onclick="playerUseSpell(${idx})">Lancer</button>` : ''}
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    async function playerUseSpell(spellIdx) {
+        const char = appData.characters[selectedCharId];
+        if (!char || !char.spells) return;
+        const spell = char.spells[spellIdx];
+        if (!spell || spell.available === false) return;
+        const slots = spell.slots || 1;
+        const used  = spell.usedSlots || 0;
+        if (used >= slots) return;
+        spell.usedSlots = used + 1;
+        await saveCharacterToServer(char);
+        renderPlayerSpells(char);
+    }
+
+    // ── MJ toggles spell availability ──────────────────────────
+    async function toggleSpellAvailability(charId, spellIdx) {
+        const char = appData.characters[charId];
+        if (!char || !char.spells) return;
+        const spell = char.spells[spellIdx];
+        if (!spell) return;
+        spell.available = spell.available === false ? true : false;
+        await saveCharacterToServer(char);
+        await saveAction(`Sort "${spell.name}" ${spell.available ? 'activé' : 'désactivé'} pour ${char.name}`);
+    }
+
+    function switchPlayerTab(tabName, btnElem) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        btnElem.classList.add('active');
+    }
+
+    function switchMJTab(tabName, btnElem) {
+        document.querySelectorAll('.mj-tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.mj-tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`mjPanel-${tabName}`).classList.add('active');
+        (btnElem || document.getElementById(`mjTab-${tabName}`)).classList.add('active');
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  FORMATTING HELPERS
+    // ══════════════════════════════════════════════════════════
+    function formatSkillName(name) {
+        const m = name.match(/^(.+?)\s*\(([^)]+)\)$/);
+        if (!m) return name;
+        return `<span style="font-weight:bold;color:var(--text-muted);">${m[1]}</span> <span style="font-size:0.65rem;font-weight:normal;color:var(--border-color);">(${m[2]})</span>`;
+    }
+
+    function normalizeItem(item) {
+        if (!item && item !== 0) return { name: '', description: '' };
+        if (typeof item === 'string') return { name: item, description: '' };
+        if (typeof item === 'object') return { name: String(item.name || ''), description: String(item.description || '') };
+        return { name: String(item), description: '' };
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  CHARACTER MODAL
+    // ══════════════════════════════════════════════════════════
+    let tempEditLists       = { inventory: [], skills: [], quests: [], spells: [] };
+    let tempEditBars        = [];
+    let tempEditTraits      = [];
+    let tempEditSkillPoints = [];
+
+    function closeCharModal() {
+        document.getElementById('charModal').style.display = 'none';
+        draggedLibIdx = -1;
+    }
+
+    function openEditCharModal(charId) {
+        const char = appData.characters[charId];
+        if (!char) return;
+
+        document.getElementById('modalTitle').textContent = `Éditer ${char.name}`;
+        document.getElementById('editCharId').value = char.id;
+        document.getElementById('editName').value = char.name;
+        document.getElementById('editClass').value = char.class;
+        document.getElementById('editAvatar').value = char.avatar || '';
+        document.getElementById('editCA').value = char.ca || 10;
+        document.getElementById('editDescription').value = char.description || '';
+
+        tempEditLists = {
+            inventory: (char.inventory || []).map(normalizeItem),
+            skills:    (char.skills    || []).map(normalizeItem),
+            quests:    (char.quests    || []).map(normalizeItem),
+            spells:    (char.spells    || []).map(s => ({ ...s }))
+        };
+        tempEditBars        = getCharacterBars(char).map(b => ({ ...b }));
+        tempEditTraits      = FIXED_TRAITS.map(name => { const s = (char.traits || []).find(t => t.name === name); return { name, value: s ? s.value : 10 }; });
+        tempEditSkillPoints = FIXED_SKILL_POINTS.map(name => { const s = (char.skillPoints || []).find(x => x.name === name); return { name, value: s ? s.value : 0 }; });
+
+        renderListEditors();
+        injectBarsMaxSection();
+        injectTraitsSection();
+        injectSkillPointsSection();
+        document.getElementById('charModal').style.display = 'block';
+
+        libCurrentFilter = 'all'; libSearchQuery = '';
+        document.getElementById('libSearchInput').value = '';
+        document.querySelectorAll('.lib-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('libTab_all').classList.add('active');
+        loadLibrary();
+    }
+
+
+    function renderListEditors() {
+        ['inventory','skills','quests'].forEach(type => {
+            const listElem = document.getElementById(`edit${type.charAt(0).toUpperCase() + type.slice(1)}List`);
+            if (!listElem) return;
+            listElem.innerHTML = tempEditLists[type].map((raw, idx) => {
+                const item = normalizeItem(raw);
+                return `<li style="flex-direction:column;align-items:flex-start;gap:2px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
+                        <span style="font-weight:bold;">${item.name}</span>
+                        <button type="button" onclick="removeListItem('${type}',${idx})"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    ${item.description ? `<span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;">${item.description}</span>` : ''}
+                </li>`;
+            }).join('');
+        });
+        // Spells list
+        const spellsEl = document.getElementById('editSpellsList');
+        if (spellsEl) {
+            spellsEl.innerHTML = tempEditLists.spells.map((spell, idx) => `
+                <li style="flex-direction:column;align-items:flex-start;gap:2px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
+                        <span style="font-weight:bold;">
+                            <span style="font-size:0.65rem;background:rgba(155,89,182,0.3);padding:1px 5px;border-radius:3px;color:#c39bd3;margin-right:6px;">Niv.${spell.level||0}</span>
+                            ${spell.name}
+                            <span style="font-size:0.68rem;color:var(--text-muted);margin-left:4px;">(${spell.slots||1} empl.)</span>
+                        </span>
+                        <div style="display:flex;gap:4px;">
+                            <button type="button" onclick="toggleSpellAvailabilityEdit(${idx})" style="background:none;border:1px solid var(--border-color);color:${(spell.available!==false)?'#68d391':'var(--text-muted)'};border-radius:3px;padding:1px 5px;cursor:pointer;font-size:0.7rem;" title="Toggle disponibilité">
+                                ${(spell.available!==false) ? '✓' : '✗'}
+                            </button>
+                            <button type="button" onclick="removeListItem('spells',${idx})"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                    ${spell.description ? `<span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;">${spell.description}</span>` : ''}
+                </li>`).join('');
+        }
+    }
+
+    function toggleSpellAvailabilityEdit(idx) {
+        tempEditLists.spells[idx].available = tempEditLists.spells[idx].available === false ? true : false;
+        renderListEditors();
+    }
+
+    function addListItem(type) {
+        const inputs = {
+            inventory: ['newInvInput','newInvDesc'],
+            skills:    ['newSkillInput','newSkillDesc'],
+            quests:    ['newQuestInput','newQuestDesc']
+        };
+        const [nameId, descId] = inputs[type];
+        const nameEl = document.getElementById(nameId);
+        const descEl = document.getElementById(descId);
+        if (nameEl && nameEl.value.trim() !== '') {
+            tempEditLists[type].push({ name: nameEl.value.trim(), description: descEl.value.trim() });
+            nameEl.value = ''; descEl.value = '';
+            renderListEditors();
+        }
+    }
+
+    function addSpellItem() {
+        const name = document.getElementById('newSpellName').value.trim();
+        if (!name) return;
+        const level = parseInt(document.getElementById('newSpellLevel').value) || 1;
+        const slots = parseInt(document.getElementById('newSpellSlots').value) || 1;
+        const desc  = document.getElementById('newSpellDesc').value.trim();
+        tempEditLists.spells.push({ name, level, slots, usedSlots: 0, description: desc, available: true });
+        document.getElementById('newSpellName').value = '';
+        document.getElementById('newSpellDesc').value = '';
+        renderListEditors();
+    }
+
+    function removeListItem(type, idx) {
+        tempEditLists[type].splice(idx, 1);
+        renderListEditors();
+    }
+
+    function injectBarsMaxSection() {
+        const section = document.getElementById('editBarsMaxSection');
+        if (!section) return;
+        if (tempEditBars.length === 0) { section.innerHTML = ''; return; }
+        section.innerHTML =
+            `<label style="display:block;margin-bottom:6px;"><i class="fa-solid fa-heart-pulse"></i> Points de vie maximum</label>` +
+            `<div style="display:flex;flex-wrap:wrap;gap:12px;">` +
+            tempEditBars.map((bar, idx) =>
+                `<div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:0.85rem;color:var(--text-muted);">${bar.name} :</span>
+                    <input type="number" id="barMaxInput_${idx}" value="${bar.max}" min="1" style="width:65px;font-size:0.85rem;padding:3px 6px;">
+                </div>`).join('') + `</div>`;
+    }
+
+    function injectTraitsSection() {
+        const section = document.getElementById('editTraitsSection');
+        if (!section) return;
+        section.innerHTML =
+            `<label style="display:block;margin-bottom:8px;"><i class="fa-solid fa-brain"></i> Caractéristiques</label>` +
+            `<div style="display:flex;flex-wrap:wrap;gap:8px;">` +
+            tempEditTraits.map((t, idx) =>
+                `<div style="display:flex;align-items:center;gap:4px;background:rgba(20,16,34,0.85);border:1px solid var(--border-color);border-radius:6px;padding:5px 8px;">
+                    <span style="font-size:0.8rem;color:var(--text-muted);">${t.name}</span>
+                    <input type="number" id="traitVal_${idx}" value="${t.value}" min="0" max="99" style="width:48px;font-size:0.85rem;padding:2px 4px;text-align:center;">
+                </div>`).join('') + `</div>`;
+    }
+
+    function readTraitValues() {
+        tempEditTraits.forEach((t, idx) => {
+            const input = document.getElementById(`traitVal_${idx}`);
+            if (input) t.value = Math.max(0, parseInt(input.value) || 0);
+        });
+    }
+
+    function injectSkillPointsSection() {
+        const section = document.getElementById('editSkillPointsSection');
+        if (!section) return;
+        section.innerHTML =
+            `<label style="display:block;margin-bottom:8px;"><i class="fa-solid fa-star-half-stroke"></i> Compétences</label>` +
+            `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:5px;">` +
+            tempEditSkillPoints.map((s, idx) =>
+                `<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(20,16,34,0.75);border:1px solid var(--border-color);border-radius:6px;padding:4px 8px;">
+                    <span style="font-size:0.75rem;color:var(--text-muted);">${formatSkillName(s.name)}</span>
+                    <input type="number" id="spVal_${idx}" value="${s.value}" min="-99" max="99" style="width:48px;font-size:0.85rem;padding:2px 4px;text-align:center;">
+                </div>`).join('') + `</div>`;
+    }
+
+    function readSkillPointValues() {
+        tempEditSkillPoints.forEach((s, idx) => {
+            const input = document.getElementById(`spVal_${idx}`);
+            if (input) s.value = parseInt(input.value) || 0;
+        });
+    }
+
+    async function saveCharacter(e) {
+        e.preventDefault();
+        const charId = document.getElementById('editCharId').value || 'char_' + Date.now();
+
+        tempEditBars.forEach((bar, idx) => {
+            const input = document.getElementById(`barMaxInput_${idx}`);
+            if (input) bar.max = Math.max(1, parseInt(input.value) || 1);
+        });
+        readTraitValues();
+        readSkillPointValues();
+
+        const charData = {
+            ...appData.characters[charId],
+            id:          charId,
+            name:        document.getElementById('editName').value,
+            class:       document.getElementById('editClass').value,
+            avatar:      document.getElementById('editAvatar').value.trim(),
+            ca:          parseInt(document.getElementById('editCA').value) || 0,
+            description: document.getElementById('editDescription').value,
+            bars:        tempEditBars.map(b => ({ ...b, current: Math.min(b.current, b.max) })),
+            traits:      tempEditTraits.map(t => ({ ...t })),
+            skillPoints: tempEditSkillPoints.map(s => ({ ...s })),
+            inventory:   tempEditLists.inventory,
+            skills:      tempEditLists.skills,
+            quests:      tempEditLists.quests,
+            spells:      tempEditLists.spells
+        };
+
+        appData.characters[charId] = charData;
+        await saveCharacterToServer(charData);
+        await saveAction(`Mise à jour de ${charData.name}`);
+        closeCharModal();
+    }
+
+    async function deleteCharacter() {
+        const charId = document.getElementById('editCharId').value;
+        if (!charId) return;
+        const char = appData.characters[charId];
+        if (!confirm(`Supprimer ${char?.name || 'ce personnage'} ?`)) return;
+        delete appData.characters[charId];
+        await fetch(`/api/campaigns/${currentCampaignId}/delete-character`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ id: charId })
+        });
+        await saveAction(`Suppression de ${char?.name || charId}`);
+        closeCharModal();
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  LIBRARY
+    // ══════════════════════════════════════════════════════════
+    let libraryData      = [];
+    let libCurrentFilter = 'all';
+    let libSearchQuery   = '';
+    let draggedLibIdx    = -1;
+
+    async function loadLibrary() {
+        const container = document.getElementById('libraryItems');
+        if (!container) return;
+        container.innerHTML = `<div class="lib-empty"><i class="fa-solid fa-spinner fa-spin"></i> Chargement...</div>`;
+        try {
+            const t = Date.now();
+            // Load global library + campaign-specific library in parallel
+            const [globalRes, campaignRes] = await Promise.all([
+                fetch(`bibliotheque/bibliotheque.json?t=${t}`),
+                fetch(`campaigns/${currentCampaignId}/bibliotheque/bibliotheque.json?t=${t}`)
+            ]);
+            const globalItems   = globalRes.ok   ? await globalRes.json()   : [];
+            const campaignItems = campaignRes.ok  ? await campaignRes.json() : [];
+            // Merge: campaign items first (they may override global), then global items not duplicated
+            const campaignNames = new Set(campaignItems.map(i => i.name + '|' + i.type));
+            const deduped = globalItems.filter(i => !campaignNames.has(i.name + '|' + i.type));
+            libraryData = [...campaignItems, ...deduped];
+        } catch(e) { libraryData = []; }
+        renderLibrary();
+        renderMJLibrary();
+    }
+
+    function renderLibrary() {
+        const container = document.getElementById('libraryItems');
+        if (!container) return;
+        let items = libraryData;
+        if (libCurrentFilter !== 'all') items = items.filter(i => i.type === libCurrentFilter);
+        if (libSearchQuery) {
+            const q = libSearchQuery.toLowerCase();
+            items = items.filter(i => i.name.toLowerCase().includes(q) || (i.description || '').toLowerCase().includes(q));
+        }
+        if (libraryData.length === 0) {
+            container.innerHTML = `<div class="lib-empty">
+                <i class="fa-solid fa-book" style="font-size:1.5rem;margin-bottom:8px;display:block;color:var(--border-color);"></i>
+                Bibliothèque vide.<br>Créez le fichier :<br>
+                <code>campaigns/${currentCampaignId}/bibliotheque/bibliotheque.json</code>
+                <small style="display:block;margin-top:8px;color:var(--border-color);">Format : [{name, description, type}]<br>type = inventory | skills | quests | spells</small>
+            </div>`;
+            return;
+        }
+        if (items.length === 0) {
+            container.innerHTML = `<div class="lib-empty"><i class="fa-solid fa-magnifying-glass"></i><br>Aucun résultat.</div>`;
+            return;
+        }
+        const typeIcons  = { inventory: 'fa-box', skills: 'fa-bolt', quests: 'fa-scroll', spells: 'fa-hat-wizard' };
+        const typeLabels = { inventory: 'Objet', skills: 'Capacité', quests: 'Quête', spells: 'Sort' };
+        container.innerHTML = items.map(item => {
+            const globalIdx = libraryData.indexOf(item);
+            const icon  = typeIcons[item.type]  || 'fa-star';
+            const label = typeLabels[item.type] || item.type;
+            return `
+                <div class="lib-item" data-type="${item.type}" draggable="true"
+                     ondragstart="onLibItemDragStart(event,${globalIdx})"
+                     ondragend="onLibItemDragEnd(event)">
+                    <div class="lib-item-header">
+                        <i class="fa-solid ${icon}" style="color:var(--text-muted);font-size:0.7rem;flex-shrink:0;"></i>
+                        <span class="lib-item-name">${item.name}</span>
+                        <button class="lib-add-btn" type="button" onclick="addFromLibraryItem(${globalIdx})" title="Ajouter">+</button>
+                    </div>
+                    ${item.description ? `<div class="lib-item-desc">${item.description}</div>` : ''}
+                    <div class="lib-item-footer">
+                        <span class="lib-type-badge lib-type-${item.type}">${label}</span>
+                        <span style="font-size:0.6rem;color:var(--border-color);font-style:italic;">glisser ou +</span>
+                    </div>
+                </div>`;
+        }).join('');
+    }
+
+    function setLibFilter(filter) {
+        libCurrentFilter = filter;
+        document.querySelectorAll('.lib-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(`libTab_${filter}`).classList.add('active');
+        renderLibrary();
+    }
+
+    function onLibSearch(query) { libSearchQuery = query.trim(); renderLibrary(); }
+
+    function addFromLibraryItem(globalIdx) {
+        const item = libraryData[globalIdx];
+        if (!item) return;
+        const type = ['inventory','skills','quests','spells'].includes(item.type) ? item.type : 'inventory';
+        if (type === 'spells') {
+            tempEditLists.spells.push({ name: item.name, level: item.level || 1, slots: item.slots || 1, usedSlots: 0, description: item.description || '', available: true });
+        } else {
+            tempEditLists[type].push({ name: item.name, description: item.description || '' });
+        }
+        renderListEditors();
+        const targetEl = document.getElementById(type === 'inventory' ? 'newInvInput' : type === 'skills' ? 'newSkillInput' : type === 'quests' ? 'newQuestInput' : 'newSpellName');
+        if (targetEl) {
+            const box = targetEl.closest('.list-editor-box');
+            if (box) { box.classList.add('just-added'); setTimeout(() => box.classList.remove('just-added'), 700); }
+        }
+    }
+
+    function onLibItemDragStart(event, idx) {
+        draggedLibIdx = idx;
+        event.dataTransfer.effectAllowed = 'copy';
+        event.dataTransfer.setData('text/plain', String(idx));
+        event.currentTarget.classList.add('lib-dragging');
+    }
+
+    function onLibItemDragEnd(event) { event.currentTarget.classList.remove('lib-dragging'); }
+
+    function onDropZoneDragOver(event, type) {
+        if (draggedLibIdx < 0) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+        event.currentTarget.classList.add('drag-over');
+    }
+
+    function onDropZoneDragLeave(event) { event.currentTarget.classList.remove('drag-over'); }
+
+    function onDropZoneDrop(event, type) {
+        event.preventDefault();
+        event.currentTarget.classList.remove('drag-over');
+        if (draggedLibIdx < 0) return;
+        const item = libraryData[draggedLibIdx];
+        if (!item) return;
+        if (type === 'spells') {
+            tempEditLists.spells.push({ name: item.name, level: item.level || 1, slots: item.slots || 1, usedSlots: 0, description: item.description || '', available: true });
+        } else {
+            tempEditLists[type].push({ name: item.name, description: item.description || '' });
+        }
+        renderListEditors();
+        event.currentTarget.classList.add('just-added');
+        setTimeout(() => event.currentTarget.classList.remove('just-added'), 700);
+        draggedLibIdx = -1;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    //  DICE PANEL
+    // ══════════════════════════════════════════════════════════
+    let diceCount = 1;
+    const diceLog = [];
+
+    function toggleDicePanel() { document.getElementById('dicePanel').classList.toggle('open'); }
+
+    function selectMult(btn, n) {
+        diceCount = n;
+        document.querySelectorAll('.mult-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function rollDie(sides) {
+        const rolls = Array.from({ length: diceCount }, () => Math.floor(Math.random() * sides) + 1);
+        const total = rolls.reduce((a, b) => a + b, 0);
+        const numEl = document.getElementById('diceResultNum');
+        const labelEl = document.getElementById('diceResultLabel');
+        const detailEl = document.getElementById('diceResultDetail');
+        if (!numEl) return;
+        numEl.classList.add('rolling');
+        labelEl.textContent = `${diceCount}d${sides}`;
+        detailEl.textContent = '';
+        let ticks = 0;
+        const ticker = setInterval(() => {
+            ticks++;
+            numEl.textContent = Math.floor(Math.random() * sides) + 1;
+            if (ticks >= 10) {
+                clearInterval(ticker);
+                numEl.textContent = total;
+                numEl.classList.remove('rolling');
+                if (diceCount > 1) {
+                    const lo = Math.min(...rolls), hi = Math.max(...rolls);
+                    detailEl.innerHTML = rolls.map(r =>
+                        r === hi ? `<span style="color:#f7d070;font-weight:bold;">${r}</span>` :
+                        r === lo ? `<span style="color:#9b6b6b;">${r}</span>` : r).join(' + ');
+                } else { detailEl.textContent = ''; }
+                diceLog.unshift({ label: `${diceCount}d${sides}`, total, rolls });
+                if (diceLog.length > 6) diceLog.pop();
+                renderDiceHistory();
+            }
+        }, 50);
+    }
+
+    function renderDiceHistory() {
+        const el = document.getElementById('diceHistoryList');
+        if (!el || diceLog.length === 0) return;
+        el.innerHTML = diceLog.map(r =>
+            `<div class="dice-history-item">
+                <span>${r.label}</span>
+                ${r.rolls && r.rolls.length > 1 ? `<span style="color:var(--text-muted);font-size:0.68rem;">(${r.rolls.join('+')})</span>` : ''}
+                <span class="h-total">${r.total}</span>
+            </div>`).join('');
+    }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+{
+  "id": "thorin_forgepierre",
+  "name": "Thorin Forgepierre",
+  "class": "Nain Guerrier (Niveau 5)",
+  "avatar": "",
+  "ca": 18,
+  "description": "Descendant d'une longue lignée de forgeurs de légende, Thorin a quitté les profondeurs de Khaz-Dûm pour reprendre le marteau ancestral de son clan, volé par un nécromancien. Bourru mais loyal, il se bat comme une montagne et encaisse autant.",
+  "bars": [
+    {
+      "id": "hp",
+      "name": "Santé",
+      "current": 37,
+      "max": 45,
+      "color": "linear-gradient(90deg, #9b1c1c, #e53e3e)"
+    },
+    {
+      "id": "rage",
+      "name": "Charges de Rage",
+      "current": 2,
+      "max": 2,
+      "color": "linear-gradient(90deg, #7c3aed, #c084fc)"
+    }
+  ],
+  "traits": [
+    {
+      "name": "Force",
+      "value": 18
+    },
+    {
+      "name": "Dextérité",
+      "value": 10
+    },
+    {
+      "name": "Constitution",
+      "value": 16
+    },
+    {
+      "name": "Intelligence",
+      "value": 10
+    },
+    {
+      "name": "Sagesse",
+      "value": 12
+    },
+    {
+      "name": "Charisme",
+      "value": 8
+    }
+  ],
+  "skillPoints": [
+    {
+      "name": "Acrobaties (DEX)",
+      "value": 0
+    },
+    {
+      "name": "Arcanes (INT)",
+      "value": 0
+    },
+    {
+      "name": "Athlétisme (FOR)",
+      "value": 7
+    },
+    {
+      "name": "Discrétion (DEX)",
+      "value": -1
+    },
+    {
+      "name": "Dressage (SAG)",
+      "value": 1
+    },
+    {
+      "name": "Escamotage (DEX)",
+      "value": 0
+    },
+    {
+      "name": "Histoire (INT)",
+      "value": 3
+    },
+    {
+      "name": "Intimidation (CHA)",
+      "value": 4
+    },
+    {
+      "name": "Investigation (INT)",
+      "value": 0
+    },
+    {
+      "name": "Médecine (SAG)",
+      "value": 1
+    },
+    {
+      "name": "Nature (INT)",
+      "value": 0
+    },
+    {
+      "name": "Perception (SAG)",
+      "value": 1
+    },
+    {
+      "name": "Perspicacité (SAG)",
+      "value": 1
+    },
+    {
+      "name": "Persuasion (CHA)",
+      "value": -1
+    },
+    {
+      "name": "Religion (INT)",
+      "value": 3
+    },
+    {
+      "name": "Représentation (CHA)",
+      "value": -1
+    },
+    {
+      "name": "Survie (SAG)",
+      "value": 1
+    },
+    {
+      "name": "Tromperie (CHA)",
+      "value": -1
+    }
+  ],
+  "inventory": [
+    {
+      "name": "Hache de guerre runique",
+      "description": "Acier nain gravé de runes ancestrales. +1 aux jets d'attaque et de dégâts. Brille faiblement près des morts-vivants."
+    },
+    {
+      "name": "Bouclier de granit nain",
+      "description": "Bouclier en granit enchanté. CA +2. Peut absorber 10 points de dégâts une fois par repos long (réaction)."
+    },
+    {
+      "name": "Armure de plaques",
+      "description": "Armure de plaques en acier sombre. CA de base 16, bonus bouclier inclus = 18."
+    },
+    {
+      "name": "Potion de Soin Majeure",
+      "description": "Restaure 4d4+4 PV. ×2 en stock."
+    },
+    {
+      "name": "Anneau de Résistance au Feu",
+      "description": "Résistance aux dégâts de feu (moitié des dégâts)."
+    },
+    {
+      "name": "Potion de Soin Majeure",
+      "description": "Restaure 4d4+4 PV. Rareté peu commune. Valeur : 100 PO."
+    },
+    {
+      "name": "Potion de Soin Majeure",
+      "description": "Restaure 4d4+4 PV. Rareté peu commune. Valeur : 100 PO."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Rage barbare",
+      "description": "1 action bonus. Pendant 1 minute : +2 aux jets de dégâts à la mêlée, résistance aux dégâts contondants/perforants/tranchants. 2 charges par repos long."
+    },
+    {
+      "name": "Style de combat : Défense",
+      "description": "+1 à la CA tant que vous portez une armure."
+    },
+    {
+      "name": "Explosion de mort (Nain)",
+      "description": "Lorsqu'un nain réduit un ennemi à 0 PV à la mêlée, il peut utiliser une réaction pour faire une attaque supplémentaire."
+    },
+    {
+      "name": "Second souffle",
+      "description": "1 action bonus. Regagne 1d10 + 5 PV. 1 fois par repos court."
+    },
+    {
+      "name": "Résistance naine",
+      "description": "Avantage aux jets de sauvegarde contre le poison, résistance aux dégâts de poison."
+    },
+    {
+      "name": "Esquive instinctive",
+      "description": "Réaction. Lorsqu'une attaque à distance vous touche, réduisez les dégâts de moitié. 1 fois par repos court."
+    }
+  ],
+  "quests": [
+    {
+      "name": "Marteau des Ancêtres",
+      "description": "Retrouver le Marteau de Dûrnak, volé il y a trois générations par Malachar. Selon les archives naines, il serait conservé dans la tour du nécromancien au cœur de la Forêt des Murmures."
+    },
+    {
+      "name": "Venger le Clan Forgepierre",
+      "description": "Malachar a corrompu dix-sept nains avec sa magie noire. Thorin jure sur sa barbe de les délivrer ou de les venger."
+    },
+    {
+      "name": "Payer la dette à l'auberge de Garth",
+      "description": "12 pièces d'or dues à Garth pour trois nuits de chambre et 'une ou deux' chopes de bière. Garth fait confiance, mais jusqu'à quand…"
+    }
+  ],
+  "spells": [
+    {
+      "name": "Contresort",
+      "level": 3,
+      "slots": 1,
+      "usedSlots": 0,
+      "description": "Réaction. Annule automatiquement tout sort de niveau ≤ 3. Niveaux supérieurs : JS INT DD (10 + niveau).",
+      "available": true
+    },
+    {
+      "name": "Contresort",
+      "level": 3,
+      "slots": 1,
+      "usedSlots": 0,
+      "description": "Réaction. Annule automatiquement tout sort de niveau ≤ 3. Niveaux supérieurs : JS INT DD (10 + niveau).",
+      "available": true
+    },
+    {
+      "name": "Téléportation Mineure",
+      "level": 1,
+      "slots": 1,
+      "usedSlots": 0,
+      "description": "Cantrip. Déplacement magique jusqu'à 9m dans un espace visible. Pas d'attaque d'opportunité.",
+      "available": true
+    },
+    {
+      "name": "Convocation de Familier",
+      "level": 1,
+      "slots": 1,
+      "usedSlots": 0,
+      "description": "Rituel (10 min). Invoque un familier (chouette, chat, corbeau…). Le familier peut transmettre des sensations et délivrer des sorts tactiles.",
+      "available": true
+    }
+  ],
+  "wallet": {
+    "gold": 3,
+    "silver": 3,
+    "bronze": 5
+  },
+  "hpCurrent": 37
+}
